@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHUYÊN TIN // SYS.ARCH — Cổng Thông Tin Lớp Chuyên Tin Học</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Be Vietnam Pro, JetBrains Mono, Playfair Display, Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#060608',
+                        charcoal: '#0d0e12',
+                        panel: '#111318',
+                        alabaster: '#f3f4f6',
+                        techgrey: '#71717a',
+                        champagne: '#d4af37',
+                        champagneDim: 'rgba(212, 175, 55, 0.16)',
+                        cyanTerm: '#00f5d4',
+                        cyanDim: 'rgba(0, 245, 212, 0.12)',
+                        hairline: 'rgba(255, 255, 255, 0.08)'
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        display: ['"Space Grotesk"', '"Be Vietnam Pro"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           STRICT ZERO BORDER-RADIUS & ARCHITECTURAL TECH DESIGN TOKENS
+           ========================================================================== */
+        *, *::before, *::after {
+            border-radius: 0px !important;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-obsidian: #060608;
+            --bg-charcoal: #0d0e12;
+            --text-alabaster: #f3f4f6;
+            --text-muted: #71717a;
+            --accent-gold: #d4af37;
+            --accent-cyan: #00f5d4;
+            --line-color: rgba(255, 255, 255, 0.085);
+            --line-gold: rgba(212, 175, 55, 0.35);
+            --line-cyan: rgba(0, 245, 212, 0.35);
+        }
+
+        html {
+            background-color: var(--bg-obsidian);
+            color: var(--text-alabaster);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            selection-background-color: var(--accent-gold);
+            selection-color: #060608;
+        }
+
+        ::selection {
+            background: var(--accent-gold);
+            color: #060608;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Custom Architectural Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060608;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f5d4;
+        }
+
+        /* Exposed Structural Grid Background Overlay */
+        .structural-grid-bg {
+            background-size: 64px 64px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Hairline Borders */
+        .hairline-t { border-top: 1px solid var(--line-color); }
+        .hairline-b { border-bottom: 1px solid var(--line-color); }
+        .hairline-l { border-left: 1px solid var(--line-color); }
+        .hairline-r { border-right: 1px solid var(--line-color); }
+        .hairline-all { border: 1px solid var(--line-color); }
+
+        /* Crosshair (+) Markers at Structural Intersections */
+        .crosshair-box {
+            position: relative;
+        }
+        .crosshair-tl::before,
+        .crosshair-tr::after,
+        .crosshair-bl::before,
+        .crosshair-br::after {
+            content: '+';
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1;
+            color: rgba(212, 175, 55, 0.65);
+            pointer-events: none;
+            z-index: 20;
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .crosshair-tl::before { top: -6px; left: -6px; }
+        .crosshair-tr::after { top: -6px; right: -6px; }
+
+        /* Corner L-Bracket Accents */
+        .corner-brackets {
+            position: relative;
+        }
+        .corner-brackets::before,
+        .corner-brackets::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 15;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .corner-brackets::before {
+            top: -1px;
+            left: -1px;
+            border-top: 2px solid var(--accent-gold);
+            border-left: 2px solid var(--accent-gold);
+        }
+        .corner-brackets::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-gold);
+        }
+        .corner-brackets:hover::before,
+        .corner-brackets:hover::after {
+            width: 18px;
+            height: 18px;
+            border-color: var(--accent-cyan);
+        }
+
+        /* Luxury Tech Button */
+        .btn-arch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(13, 14, 18, 0.9);
+            color: var(--text-alabaster);
+            overflow: hidden;
+            transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+            cursor: pointer;
+        }
+        .btn-arch::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent-gold);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 0;
+        }
+        .btn-arch:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .btn-arch:hover {
+            color: #060608;
+            border-color: var(--accent-gold);
+        }
+        .btn-arch > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-arch-gold {
+            border-color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+        }
+
+        .btn-arch-cyan::before {
+            background: var(--accent-cyan);
+        }
+        .btn-arch-cyan:hover {
+            border-color: var(--accent-cyan);
+            color: #060608;
+        }
+
+        /* Scroll Decay & Emergence Engine Core Classes */
+        .scroll-node,
+        .scroll-card {
+            will-change: opacity, transform, filter;
+            transform-origin: center center;
+        }
+
+        /* Horizon Scanline Indicators on Viewport Edges */
+        .horizon-marker {
+            position: fixed;
+            left: 0;
+            right: 0;
+            height: 1px;
+            pointer-events: none;
+            z-index: 40;
+            transition: opacity 0.3s ease;
+        }
+        .horizon-marker.show-guides {
+            background: linear-gradient(90deg, rgba(212,175,55,0.7) 0%, rgba(212,175,55,0.12) 15%, transparent 50%, rgba(0,245,212,0.12) 85%, rgba(0,245,212,0.7) 100%);
+        }
+
+        /* Subtle Scanline Overlay */
+        .crt-overlay {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.22) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        /* Blinking Terminal Cursor */
+        @keyframes cursorBlink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: cursorBlink 1s infinite;
+        }
+
+        /* Active Nav Link */
+        .nav-item.active {
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.07);
+            border-bottom: 2px solid #d4af37;
+        }
+        .nav-item.active .nav-hex {
+            color: #00f5d4;
+        }
+
+        /* Card Hover Architectural Glow */
+        .arch-card {
+            background: linear-gradient(180deg, rgba(17, 19, 24, 0.88) 0%, rgba(9, 10, 14, 0.94) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.085);
+            position: relative;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .arch-card:hover {
+            border-color: rgba(212, 175, 55, 0.45);
+            box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.04);
+        }
+
+        /* Table / Spec Row Hover */
+        .spec-row {
+            transition: background-color 0.2s ease, padding-left 0.2s ease;
+        }
+        .spec-row:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding-left: 0.5rem;
+        }
+    </style>
+</head>
+<body class="structural-grid-bg selection:bg-champagne selection:text-obsidian">
+
+    <!-- ==========================================================================
+         INTERACTIVE BACKGROUND CANVAS (GEOMETRIC NODE TOPOLOGY & BINARY MATRIX)
+         ========================================================================== -->
+    <canvas id="topology-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-55"></canvas>
+    <div class="fixed inset-0 crt-overlay z-0 opacity-30"></div>
+
+    <!-- ==========================================================================
+         VIEWPORT DECAY / EMERGENCE HORIZON MARKERS (VISUAL TELEMETRY RULERS)
+         ========================================================================== -->
+    <div id="top-decay-horizon" class="horizon-marker" style="top: 165px;">
+        <div class="hidden xl:flex justify-between items-center px-3 -mt-2.5 font-mono text-[9px] tracking-widest text-champagne/60">
+            <span>[▲ TOP_DECAY_ZONE // OPACITY → 0.0]</span>
+            <span>[BLUR: 6PX // SHIFT: -25PX ▲]</span>
+        </div>
+    </div>
+    <div id="bottom-emerge-horizon" class="horizon-marker" style="bottom: 130px;">
+        <div class="hidden xl:flex justify-between items-center px-3 -mt-2.5 font-mono text-[9px] tracking-widest text-cyanTerm/60">
+            <span>[▼ BTM_EMERGE_ZONE // OPACITY → 1.0]</span>
+            <span>[SYNC: RAF_60FPS // GLIDE: +30PX→0 ▼]</span>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         FIXED ARCHITECTURAL SIDE RULERS (LEFT & RIGHT TELEMETRY RAILS)
+         ========================================================================== -->
+    <aside class="hidden lg:flex fixed left-0 top-0 bottom-0 w-12 hairline-r bg-obsidian/80 backdrop-blur-sm z-30 flex-col justify-between items-center py-20 select-none">
+        <div class="font-mono text-[10px] text-techgrey tracking-widest [writing-mode:vertical-rl] rotate-180">
+            SYS.ARCH // CHUYEN_TIN_HOC // 0x7FFF00
+        </div>
+        <div class="flex flex-col items-center gap-2 font-mono text-[9px] text-champagne">
+            <span>+</span>
+            <div class="w-[1px] h-16 bg-white/15 relative overflow-hidden">
+                <div id="scroll-progress-bar" class="w-full bg-champagne transition-none" style="height: 0%"></div>
+            </div>
+            <span id="scroll-pct-label">00%</span>
+            <span>+</span>
+        </div>
+        <div class="font-mono text-[10px] text-cyanTerm/80 tracking-widest [writing-mode:vertical-rl] rotate-180">
+            DECAY_ENGINE: ACTIVE
+        </div>
+    </aside>
+
+    <aside class="hidden lg:flex fixed right-0 top-0 bottom-0 w-12 hairline-l bg-obsidian/80 backdrop-blur-sm z-30 flex-col justify-between items-center py-20 select-none">
+        <div class="font-mono text-[10px] text-techgrey tracking-widest [writing-mode:vertical-rl]">
+            COMPILER: GCC 14.2.0 // -O3 -std=c++23
+        </div>
+        <div class="flex flex-col items-center gap-3 font-mono text-[9px] text-techgrey">
+            <span class="text-white/40">Y_POS</span>
+            <span id="rail-y-offset" class="text-alabaster">0000</span>
+            <span class="text-white/20">───</span>
+            <span class="text-white/40">FPS</span>
+            <span id="rail-fps" class="text-cyanTerm">60</span>
+        </div>
+        <div class="font-mono text-[10px] text-champagne/80 tracking-widest [writing-mode:vertical-rl]">
+            [O(log N) COMPLEXITY]
+        </div>
+    </aside>
+
+    <!-- ==========================================================================
+         STICKY TOP ARCHITECTURAL NAVIGATION BAR
+         ========================================================================== -->
+    <header class="sticky top-0 z-50 bg-obsidian/90 backdrop-blur-md hairline-b">
+        <!-- Top Micro Telemetry Strip -->
+        <div class="hairline-b bg-charcoal/90 px-4 lg:px-16 py-1.5 flex flex-wrap items-center justify-between text-[10px] font-mono tracking-wider text-techgrey">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5 text-cyanTerm">
+                    <span class="w-1.5 h-1.5 bg-cyanTerm inline-block animate-pulse"></span>
+                    KERNEL_ONLINE
+                </span>
+                <span class="hidden sm:inline text-white/20">|</span>
+                <span class="hidden sm:inline">MEM_ADDR: <strong id="active-mem-addr" class="text-champagne">0x00A1_ROOT</strong></span>
+                <span class="hidden md:inline text-white/20">|</span>
+                <span class="hidden md:inline">SCROLL_FX: <strong id="hud-node-stats" class="text-alabaster">DECAY:00 / ACTIVE:42 / EMERGE:00</strong></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="toggle-horizon-btn" class="hover:text-champagne transition-colors uppercase flex items-center gap-1 cursor-pointer" title="Bật/tắt vạch kẻ vùng mờ cuộn">
+                    <span>[HORIZON_LASER: <strong id="laser-state" class="text-cyanTerm">ON</strong>]</span>
+                </button>
+                <span class="text-white/20">|</span>
+                <span id="live-system-clock" class="text-alabaster">UTC+7 // 00:00:00.00</span>
+            </div>
+        </div>
+
+        <!-- Main Navigation Row -->
+        <div class="px-4 lg:px-16 flex items-stretch justify-between h-16">
+            <!-- Brand Identity -->
+            <a href="#trang-chu" class="flex items-center gap-3 pr-6 hairline-r group">
+                <div class="w-9 h-9 border border-champagne/60 bg-champagne/10 flex items-center justify-center font-mono text-xs font-bold text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                    &lt;/&gt;
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-display font-bold tracking-wider text-sm text-alabaster">CHUYÊN TIN</span>
+                        <span class="font-mono text-[10px] px-1.5 py-0.5 bg-white/5 border border-white/15 text-champagne">K24—27</span>
+                    </div>
+                    <p class="font-mono text-[9px] text-techgrey tracking-widest uppercase">ARCHITECTURAL INFORMATICS</p>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links (5 Required Sections) -->
+            <nav class="hidden md:flex items-stretch flex-1 justify-center">
+                <a href="#trang-chu" data-section="trang-chu" data-addr="0x00A1_ROOT" class="nav-item active flex items-center gap-2.5 px-5 lg:px-7 hairline-r font-mono text-xs uppercase tracking-wider text-techgrey hover:text-alabaster transition-all">
+                    <span class="nav-hex text-[10px] text-champagne/70">01//</span>
+                    <span>Trang chủ</span>
+                </a>
+                <a href="#thong-tin" data-section="thong-tin" data-addr="0x00B2_SYS_INFO" class="nav-item flex items-center gap-2.5 px-5 lg:px-7 hairline-r font-mono text-xs uppercase tracking-wider text-techgrey hover:text-alabaster transition-all">
+                    <span class="nav-hex text-[10px] text-champagne/70">02//</span>
+                    <span>Thông tin</span>
+                </a>
+                <a href="#ki-niem" data-section="ki-niem" data-addr="0x00C3_MEM_DUMP" class="nav-item flex items-center gap-2.5 px-5 lg:px-7 hairline-r font-mono text-xs uppercase tracking-wider text-techgrey hover:text-alabaster transition-all">
+                    <span class="nav-hex text-[10px] text-champagne/70">03//</span>
+                    <span>Kỉ niệm</span>
+                </a>
+                <a href="#mang-xa-hoi" data-section="mang-xa-hoi" data-addr="0x00D4_NET_NODES" class="nav-item flex items-center gap-2.5 px-5 lg:px-7 hairline-r font-mono text-xs uppercase tracking-wider text-techgrey hover:text-alabaster transition-all">
+                    <span class="nav-hex text-[10px] text-champagne/70">04//</span>
+                    <span>Mạng xã hội</span>
+                </a>
+                <a href="#lien-he" data-section="lien-he" data-addr="0x00E5_IO_STREAM" class="nav-item flex items-center gap-2.5 px-5 lg:px-7 hairline-r font-mono text-xs uppercase tracking-wider text-techgrey hover:text-alabaster transition-all">
+                    <span class="nav-hex text-[10px] text-champagne/70">05//</span>
+                    <span>Liên hệ</span>
+                </a>
+            </nav>
+
+            <!-- Right Quick Terminal Button & Mobile Menu Toggle -->
+            <div class="flex items-center pl-4 gap-3">
+                <a href="#terminal-console" class="hidden xl:inline-flex items-center gap-2 px-3.5 py-2 border border-cyanTerm/40 bg-cyanDim font-mono text-[11px] text-cyanTerm hover:bg-cyanTerm hover:text-obsidian transition-colors">
+                    <span>$_ CLI_SHELL</span>
+                </a>
+                <button id="mobile-menu-btn" class="md:hidden p-2.5 border border-white/15 text-alabaster font-mono text-xs uppercase">
+                    [MENU]
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-charcoal hairline-b">
+            <div class="grid grid-cols-1 divide-y divide-white/10 font-mono text-xs">
+                <a href="#trang-chu" class="mobile-nav-link px-6 py-3.5 flex justify-between items-center text-alabaster hover:bg-white/5">
+                    <span>01 // TRANG CHỦ</span>
+                    <span class="text-champagne text-[10px]">0x00A1</span>
+                </a>
+                <a href="#thong-tin" class="mobile-nav-link px-6 py-3.5 flex justify-between items-center text-alabaster hover:bg-white/5">
+                    <span>02 // THÔNG TIN</span>
+                    <span class="text-champagne text-[10px]">0x00B2</span>
+                </a>
+                <a href="#ki-niem" class="mobile-nav-link px-6 py-3.5 flex justify-between items-center text-alabaster hover:bg-white/5">
+                    <span>03 // KỈ NIỆM</span>
+                    <span class="text-champagne text-[10px]">0x00C3</span>
+                </a>
+                <a href="#mang-xa-hoi" class="mobile-nav-link px-6 py-3.5 flex justify-between items-center text-alabaster hover:bg-white/5">
+                    <span>04 // MẠNG XÃ HỘI</span>
+                    <span class="text-champagne text-[10px]">0x00D4</span>
+                </a>
+                <a href="#lien-he" class="mobile-nav-link px-6 py-3.5 flex justify-between items-center text-alabaster hover:bg-white/5">
+                    <span>05 // LIÊN HỆ</span>
+                    <span class="text-champagne text-[10px]">0x00E5</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+         MAIN ARCHITECTURAL CONTAINER
+         ========================================================================== -->
+    <main class="relative z-10 max-w-[1440px] mx-auto lg:px-12">
+
+        <!-- ======================================================================
+             SECTION 01 // TRANG CHỦ (HOME / ROOT)
+             ====================================================================== -->
+        <section id="trang-chu" class="hairline-l hairline-r hairline-b pt-10 pb-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Top Section Metadata Bar -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-techgrey">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-champagne text-obsidian font-bold">SEC_01</span>
+                    <span class="text-alabaster tracking-widest">0x00A1 // ROOT_DIRECTORY // TRANG CHỦ</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span>COMPLEXITY: <strong class="text-cyanTerm">O(1) INIT</strong></span>
+                    <span class="text-white/20">//</span>
+                    <span>BUILD: <strong class="text-champagne">v4.2026.RELEASE</strong></span>
+                </div>
+            </div>
+
+            <!-- Hero Architectural Split Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 hairline-b">
+                
+                <!-- Left Column: Editorial & Technical Manifesto (7 cols) -->
+                <div class="lg:col-span-7 py-10 lg:pr-10 lg:hairline-r flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node inline-flex items-center gap-2 px-3 py-1 border border-champagne/40 bg-champagneDim mb-6">
+                            <span class="w-2 h-2 bg-champagne"></span>
+                            <span class="font-mono text-[11px] uppercase tracking-widest text-champagne">LỚP CHUYÊN TIN HỌC — SPECIALIZED INFORMATICS UNIT</span>
+                        </div>
+
+                        <h1 class="scroll-node font-display font-bold text-4xl sm:text-6xl xl:text-7xl tracking-tight leading-[1.04] text-alabaster mb-4">
+                            TƯ DUY <span class="font-serif italic font-normal text-champagne">THUẬT TOÁN</span>.<br>
+                            KIẾN TRÚC <span class="text-cyanTerm font-mono">HỆ THỐNG</span>.
+                        </h1>
+
+                        <div class="scroll-node my-6 p-4 border-l-2 border-champagne bg-white/[0.02] font-mono text-xs text-techgrey leading-relaxed">
+                            <span class="text-champagne">// MANIFESTO_DECLARATION.H</span><br>
+                            #define CLASS_IDENTITY "Nơi những dòng code C++ chạy xuyên đêm, nơi cấu trúc dữ liệu giao thoa cùng ký ức thanh xuân rực rỡ nhất."
+                        </div>
+
+                        <p class="scroll-node text-base sm:text-lg text-alabaster/80 font-light leading-relaxed mb-8 max-w-2xl">
+                            Không đi theo lối mòn của những giao diện đại trà, tập thể <strong class="text-alabaster font-medium">Chuyên Tin Học</strong> được định hình bởi sự chính xác tuyệt đối của từng bit nhị phân, độ phức tạp tối ưu <code class="font-mono text-cyanTerm text-sm px-1.5 py-0.5 bg-white/5 border border-white/10">O(log N)</code> và tinh thần tiên phong của những kỹ sư phần mềm, nhà nghiên cứu thuật toán tương lai.
+                        </p>
+                    </div>
+
+                    <!-- Hero CTA Buttons -->
+                    <div class="scroll-node flex flex-wrap items-center gap-4 pt-4 hairline-t">
+                        <a href="#thong-tin" class="btn-arch btn-arch-gold">
+                            <span>KHÁM PHÁ HỆ THỐNG</span>
+                            <span>→</span>
+                        </a>
+                        <a href="#ki-niem" class="btn-arch btn-arch-cyan">
+                            <span>[0x00C3] KHO LƯU TRỮ KỈ NIỆM</span>
+                        </a>
+                        <div class="ml-auto hidden sm:flex items-center gap-2 font-mono text-[11px] text-techgrey">
+                            <span>STATUS:</span>
+                            <span class="text-cyanTerm">COMPILING_DREAMS...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Interactive Mini-Terminal & Compiler Block (5 cols) -->
+                <div id="terminal-console" class="lg:col-span-5 py-10 lg:pl-10 flex flex-col justify-between">
+                    <div class="scroll-card arch-card corner-brackets h-full flex flex-col justify-between">
+                        <!-- Terminal Header -->
+                        <div class="scroll-node hairline-b px-4 py-3 bg-charcoal flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-champagne inline-block"></span>
+                                <span class="w-2.5 h-2.5 bg-cyanTerm inline-block"></span>
+                                <span class="font-mono text-xs text-alabaster font-medium ml-1">bash — chuyentin@kernel:~</span>
+                            </div>
+                            <span class="font-mono text-[10px] text-techgrey">[TTY_01 // UTF-8]</span>
+                        </div>
+
+                        <!-- Terminal Output Stream -->
+                        <div id="terminal-output" class="p-5 font-mono text-xs space-y-2.5 overflow-y-auto max-h-[310px] text-alabaster/90">
+                            <div class="scroll-node text-techgrey">
+                                $ g++ -O3 -std=c++23 olympiad_solver.cpp -o chuyentin
+                            </div>
+                            <div class="scroll-node text-cyanTerm">
+                                [✔] Compilation finished in 0.14s (0 warnings, 0 errors)
+                            </div>
+                            <div class="scroll-node text-techgrey">
+                                $ ./chuyentin --inspect-class
+                            </div>
+                            <div class="scroll-node pl-3 border-l border-champagne/50 space-y-1 text-[11px]">
+                                <div><span class="text-champagne">UNIT_NAME:</span> Lớp Chuyên Tin Học (IT Specialized)</div>
+                                <div><span class="text-champagne">CORE_STACK:</span> C++23, Python, Rust, TypeScript, Linux</div>
+                                <div><span class="text-champagne">KEY_ALGO:</span> Dinic MaxFlow, Heavy-Light Decomp, FFT</div>
+                                <div><span class="text-champagne">UPTIME:</span> 1,095 Ngày Thanh Xuân Không Ngủ</div>
+                            </div>
+                            <div class="scroll-node text-techgrey pt-1">
+                                Nhập lệnh bên dưới: <span class="text-champagne">help</span>, <span class="text-champagne">roster</span>, <span class="text-champagne">awards</span>, <span class="text-champagne">quote</span>, <span class="text-champagne">clear</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive CLI Input Row -->
+                        <form id="terminal-form" class="scroll-node hairline-t bg-obsidian px-4 py-3 flex items-center gap-2">
+                            <span class="font-mono text-xs text-cyanTerm font-bold">root@chuyentin:~$</span>
+                            <input 
+                                id="terminal-input" 
+                                type="text" 
+                                placeholder="Gõ lệnh (vd: awards, roster, quote)..." 
+                                autocomplete="off"
+                                class="w-full bg-transparent font-mono text-xs text-alabaster focus:outline-none placeholder:text-techgrey/50"
+                            >
+                            <button type="submit" class="px-2.5 py-1 border border-white/15 font-mono text-[10px] text-champagne hover:bg-champagne hover:text-obsidian transition-colors">
+                                EXEC
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Class Telemetry Metrics Bar (4 Architectural Columns) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10 hairline-b">
+                <!-- Metric 1 -->
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-techgrey mb-3">
+                        <span>0x01 // THREAD_COUNT</span>
+                        <span class="text-cyanTerm">[ACTIVE]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-alabaster tracking-tight mb-1">
+                        35<span class="text-champagne font-mono text-2xl">_NODES</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-techgrey">Thành viên chính thức — 35 bộ vi xử lý độc bản</p>
+                </div>
+
+                <!-- Metric 2 -->
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-techgrey mb-3">
+                        <span>0x02 // CODE_COMMITS</span>
+                        <span class="text-champagne">[VERIFIED]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-alabaster tracking-tight mb-1">
+                        428K<span class="text-cyanTerm font-mono text-2xl">+</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-techgrey">Dòng code C++, Python & Web đã biên dịch</p>
+                </div>
+
+                <!-- Metric 3 -->
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-techgrey mb-3">
+                        <span>0x03 // ALGO_ARCHIVE</span>
+                        <span class="text-cyanTerm">[O(N log N)]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-alabaster tracking-tight mb-1">
+                        2,450<span class="text-champagne font-mono text-2xl">_AC</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-techgrey">Bài toán Accepted trên Codeforces, VNOI & DMOJ</p>
+                </div>
+
+                <!-- Metric 4 -->
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-techgrey mb-3">
+                        <span>0x04 // HONORS_INDEX</span>
+                        <span class="text-champagne">[GOLD_STD]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-alabaster tracking-tight mb-1">
+                        28<span class="text-cyanTerm font-mono text-2xl">_MEDALS</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-techgrey">Giải HSG Quốc gia, Olympic 30/4 & Hackathon</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 02 // THÔNG TIN (INFORMATION / SYS_INFO)
+             ====================================================================== -->
+        <section id="thong-tin" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-techgrey">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-cyanTerm text-obsidian font-bold">SEC_02</span>
+                    <span class="text-alabaster tracking-widest">0x00B2 // SYS_INFO // THÔNG TIN & CẤU TRÚC LỚP</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>ARCHITECTURE: <strong class="text-champagne">DISTRIBUTED_CLUSTER</strong></span>
+                </div>
+            </div>
+
+            <div class="py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 hairline-b">
+                <div class="lg:col-span-5">
+                    <p class="scroll-node font-mono text-xs text-champagne uppercase tracking-widest mb-2">// SYSTEM SPECIFICATION</p>
+                    <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-alabaster tracking-tight leading-tight">
+                        KIẾN TRÚC ĐÀO TẠO & <span class="font-serif italic font-normal text-champagne">ĐỘI NGŨ VẬN HÀNH</span>.
+                    </h2>
+                </div>
+                <div class="lg:col-span-7 flex flex-col justify-end">
+                    <p class="scroll-node text-techgrey text-sm sm:text-base leading-relaxed">
+                        Mỗi thành viên trong lớp Chuyên Tin được rèn luyện như một kỹ sư toàn diện: vững vàng về lý thuyết đồ thị, quy hoạch động trong lập trình thi đấu, đồng thời làm chủ kiến trúc phần mềm hiện đại, trí tuệ nhân tạo và bảo mật hệ thống.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 4 Core Training Domains Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 hairline-b divide-y md:divide-y-0 md:divide-x divide-white/10">
+                
+                <!-- Domain 01 -->
+                <article class="scroll-card arch-card p-6 lg:p-7 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] text-champagne mb-4 pb-3 hairline-b">
+                            <span>MOD_01 // CP_CORE</span>
+                            <span class="text-cyanTerm">C++23</span>
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-3">
+                            Thuật Toán & Lập Trình Thi Đấu
+                        </h3>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Chuyên sâu Cấu trúc dữ liệu nâng cao (Segment Tree Beats, Fenwick, Treap), Lý thuyết đồ thị, Luồng cực đại và Quy hoạch động tối ưu hóa.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t font-mono text-[10px] space-y-1.5 text-alabaster/80">
+                        <div class="flex justify-between"><span>TIME_LIMIT:</span><span class="text-cyanTerm">1.00s</span></div>
+                        <div class="flex justify-between"><span>MEM_LIMIT:</span><span class="text-champagne">256 MB</span></div>
+                        <div class="flex justify-between"><span>BENCHMARK:</span><span>VOI / ICPC / IOI</span></div>
+                    </div>
+                </article>
+
+                <!-- Domain 02 -->
+                <article class="scroll-card arch-card p-6 lg:p-7 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] text-champagne mb-4 pb-3 hairline-b">
+                            <span>MOD_02 // AI_NEURAL</span>
+                            <span class="text-cyanTerm">PYTORCH</span>
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-3">
+                            Trí Tuệ Nhân Tạo & Khoa Học Dữ Liệu
+                        </h3>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Nghiên cứu thị giác máy tính (Computer Vision), xử lý ngôn ngữ tự nhiên (NLP) và huấn luyện mô hình học sâu ứng dụng thực tiễn.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t font-mono text-[10px] space-y-1.5 text-alabaster/80">
+                        <div class="flex justify-between"><span>PRECISION:</span><span class="text-cyanTerm">FP16 / INT8</span></div>
+                        <div class="flex justify-between"><span>FRAMEWORK:</span><span class="text-champagne">PyTorch / CUDA</span></div>
+                        <div class="flex justify-between"><span>BENCHMARK:</span><span>KHKT Quốc Gia</span></div>
+                    </div>
+                </article>
+
+                <!-- Domain 03 -->
+                <article class="scroll-card arch-card p-6 lg:p-7 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] text-champagne mb-4 pb-3 hairline-b">
+                            <span>MOD_03 // FULLSTACK</span>
+                            <span class="text-cyanTerm">TS / RUST</span>
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-3">
+                            Kiến Trúc Web & Hệ Thống Phân Tán
+                        </h3>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Thiết kế giao diện chuẩn công nghiệp, xây dựng RESTful/gRPC API, quản trị cơ sở dữ liệu PostgreSQL, Docker và hạ tầng Linux Server.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t font-mono text-[10px] space-y-1.5 text-alabaster/80">
+                        <div class="flex justify-between"><span>LATENCY:</span><span class="text-cyanTerm">&lt; 12ms P99</span></div>
+                        <div class="flex justify-between"><span>UPTIME_SLA:</span><span class="text-champagne">99.98%</span></div>
+                        <div class="flex justify-between"><span>STACK:</span><span>Next / Go / Linux</span></div>
+                    </div>
+                </article>
+
+                <!-- Domain 04 -->
+                <article class="scroll-card arch-card p-6 lg:p-7 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] text-champagne mb-4 pb-3 hairline-b">
+                            <span>MOD_04 // CYBER_SEC</span>
+                            <span class="text-cyanTerm">CTF_ROOT</span>
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-3">
+                            An Toàn Thông Tin & Phần Cứng IoT
+                        </h3>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Mật mã học (Cryptography), dịch ngược mã nguồn (Reverse Engineering), khai thác lỗ hổng Web và lập trình vi điều khiển nhúng.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t font-mono text-[10px] space-y-1.5 text-alabaster/80">
+                        <div class="flex justify-between"><span>ENCRYPTION:</span><span class="text-cyanTerm">AES-256-GCM</span></div>
+                        <div class="flex justify-between"><span>FIRMWARE:</span><span class="text-champagne">ESP32 / ARM</span></div>
+                        <div class="flex justify-between"><span>PRIVILEGE:</span><span>UID=0 (ROOT)</span></div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Executive Board / System Daemons & Interactive Algorithm Inspector -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 pt-12 gap-8">
+                
+                <!-- Left: Class Executive Board (System Processes Table - 7 cols) -->
+                <div class="lg:col-span-7 scroll-card arch-card corner-brackets p-6 sm:p-8">
+                    <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-6">
+                        <div>
+                            <span class="font-mono text-[10px] text-champagne uppercase tracking-widest">PROCESS TABLE // BAN CÁN SỰ & ĐIỀU HÀNH LỚP</span>
+                            <h3 class="font-display font-bold text-2xl text-alabaster mt-1">ACTIVE SYSTEM DAEMONS</h3>
+                        </div>
+                        <span class="font-mono text-xs px-2.5 py-1 bg-white/5 border border-white/10 text-cyanTerm">TOP // 6 CORE NODES</span>
+                    </div>
+
+                    <div class="divide-y divide-white/10 font-mono text-xs">
+                        <!-- Header Row -->
+                        <div class="scroll-node grid grid-cols-12 py-2.5 text-[10px] text-techgrey uppercase tracking-wider">
+                            <div class="col-span-2">PID</div>
+                            <div class="col-span-4">CHỨC VỤ // ROLE</div>
+                            <div class="col-span-4">ĐỊNH DANH // OPERATOR</div>
+                            <div class="col-span-2 text-right">STATUS</div>
+                        </div>
+
+                        <!-- Row 0: Advisor -->
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3.5 items-center">
+                            <div class="col-span-2 text-champagne font-bold">0x000</div>
+                            <div class="col-span-4 text-alabaster font-sans font-medium">Giáo Viên Chủ Nhiệm</div>
+                            <div class="col-span-4 text-alabaster/90">ThS. Nguyễn Hoàng Minh</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-champagne/20 text-champagne text-[10px]">KERNEL_ARCH</span></div>
+                        </div>
+
+                        <!-- Row 1: Class Monitor -->
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3.5 items-center">
+                            <div class="col-span-2 text-cyanTerm">0x001</div>
+                            <div class="col-span-4 text-alabaster font-sans font-medium">Lớp Trưởng (SysAdmin)</div>
+                            <div class="col-span-4 text-alabaster/90">Trần Gia Bảo</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cyanDim text-cyanTerm text-[10px]">ROOT_EXEC</span></div>
+                        </div>
+
+                        <!-- Row 2: VP Academic -->
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3.5 items-center">
+                            <div class="col-span-2 text-cyanTerm">0x002</div>
+                            <div class="col-span-4 text-alabaster font-sans font-medium">Lớp Phó Học Tập</div>
+                            <div class="col-span-4 text-alabaster/90">Lê Vũ Phương Anh</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cyanDim text-cyanTerm text-[10px]">ALGO_LEAD</span></div>
+                        </div>
+
+                        <!-- Row 3: Secretary -->
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3.5 items-center">
+                            <div class="col-span-2 text-cyanTerm">0x003</div>
+                            <div class="col-span-4 text-alabaster font-sans font-medium">Bí Thư Chi Đoàn</div>
+                            <div class="col-span-4 text-alabaster/90">Phạm Quốc Khánh</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-white/10 text-alabaster text-[10px]">SYNC_NODE</span></div>
+                        </div>
+
+                        <!-- Row 4: VP Events & Life -->
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3.5 items-center">
+                            <div class="col-span-2 text-cyanTerm">0x004</div>
+                            <div class="col-span-4 text-alabaster font-sans font-medium">Lớp Phó Phong Trào</div>
+                            <div class="col-span-4 text-alabaster/90">Đặng Minh Quân</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-white/10 text-alabaster text-[10px]">IO_EVENTS</span></div>
+                        </div>
+
+                        <!-- Row 5: Dev Lead -->
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3.5 items-center">
+                            <div class="col-span-2 text-cyanTerm">0x005</div>
+                            <div class="col-span-4 text-alabaster font-sans font-medium">Trưởng Ban Kỹ Thuật</div>
+                            <div class="col-span-4 text-alabaster/90">Võ Hoàng Khôi</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-champagne/20 text-champagne text-[10px]">DEV_OPS</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Class Signature Algorithm Preview (5 cols) -->
+                <div class="lg:col-span-5 scroll-card arch-card corner-brackets p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between pb-4 hairline-b mb-4">
+                            <div>
+                                <span class="font-mono text-[10px] text-cyanTerm uppercase tracking-widest">SOURCE_INSPECTOR // C++23</span>
+                                <h3 class="font-display font-bold text-xl text-alabaster mt-1">BẢN SẮC THUẬT TOÁN</h3>
+                            </div>
+                            <div class="flex gap-1">
+                                <button data-algo="segtree" class="algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-champagne text-obsidian font-bold">SEG_TREE</button>
+                                <button data-algo="dijkstra" class="algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-white/5 text-techgrey hover:text-alabaster">DIJKSTRA</button>
+                                <button data-algo="dp" class="algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-white/5 text-techgrey hover:text-alabaster">BITMASK_DP</button>
+                            </div>
+                        </div>
+
+                        <!-- Code Block Display -->
+                        <pre id="algo-code-view" class="scroll-node bg-obsidian p-4 border border-white/10 font-mono text-[11px] leading-relaxed text-alabaster overflow-x-auto"><code><span class="text-champagne">// Lazy Propagation Segment Tree — O(log N)</span>
+<span class="text-cyanTerm">void</span> update(<span class="text-cyanTerm">int</span> id, <span class="text-cyanTerm">int</span> l, <span class="text-cyanTerm">int</span> r, <span class="text-cyanTerm">int</span> u, <span class="text-cyanTerm">int</span> v, <span class="text-cyanTerm">long long</span> val) {
+    <span class="text-champagne">if</span> (v &lt; l || r &lt; u) <span class="text-champagne">return</span>;
+    <span class="text-champagne">if</span> (u &lt;= l &amp;&amp; r &lt;= v) {
+        st[id].sum += val * (r - l + 1);
+        st[id].lazy += val;
+        <span class="text-champagne">return</span>;
+    }
+    pushDown(id, l, r);
+    <span class="text-cyanTerm">int</span> mid = (l + r) &gt;&gt; 1;
+    update(id &lt;&lt; 1, l, mid, u, v, val);
+    update(id &lt;&lt; 1 | 1, mid + 1, r, u, v, val);
+    st[id].sum = st[id &lt;&lt; 1].sum + st[id &lt;&lt; 1 | 1].sum;
+}</code></pre>
+                    </div>
+
+                    <div class="scroll-node mt-6 pt-4 hairline-t flex items-center justify-between font-mono text-[11px] text-techgrey">
+                        <span>COMPLEXITY: <strong id="algo-complexity" class="text-cyanTerm">Time O(Q log N) // Space O(4N)</strong></span>
+                        <span class="text-champagne">[READY]</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 03 // KỈ NIỆM (MEMORIES / MEM_DUMP ARCHIVE)
+             ====================================================================== -->
+        <section id="ki-niem" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-techgrey">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-champagne text-obsidian font-bold">SEC_03</span>
+                    <span class="text-alabaster tracking-widest">0x00C3 // MEM_DUMP // BẢO TÀNG DỮ LIỆU KỈ NIỆM</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>STORAGE: <strong class="text-cyanTerm">IMMUTABLE_SNAPSHOTS</strong></span>
+                </div>
+            </div>
+
+            <!-- Title & Filter Bar -->
+            <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
+                <div>
+                    <p class="scroll-node font-mono text-xs text-champagne uppercase tracking-widest mb-2">// CHRONOLOGICAL MEMORY BLOCKS</p>
+                    <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-alabaster tracking-tight">
+                        NHỮNG KHUNG HÌNH <span class="font-serif italic font-normal text-champagne">KHÔNG THỂ GHI ĐÈ</span>.
+                    </h2>
+                </div>
+
+                <!-- Interactive Sector Filter Buttons -->
+                <div class="scroll-node flex flex-wrap gap-2 font-mono text-xs">
+                    <button data-filter="all" class="mem-filter-btn px-4 py-2 border border-champagne bg-champagne text-obsidian font-bold uppercase">
+                        [ALL_SECTORS // 06]
+                    </button>
+                    <button data-filter="olympiad" class="mem-filter-btn px-4 py-2 border border-white/15 bg-charcoal text-techgrey hover:text-alabaster uppercase">
+                        [OLYMPIAD_LAB]
+                    </button>
+                    <button data-filter="hackathon" class="mem-filter-btn px-4 py-2 border border-white/15 bg-charcoal text-techgrey hover:text-alabaster uppercase">
+                        [HACKATHON]
+                    </button>
+                    <button data-filter="offline" class="mem-filter-btn px-4 py-2 border border-white/15 bg-charcoal text-techgrey hover:text-alabaster uppercase">
+                        [OFFLINE_TRIP]
+                    </button>
+                </div>
+            </div>
+
+            <!-- Memory Exhibition Grid (6 Architectural Frames) -->
+            <div id="memory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
+
+                <!-- Memory Frame 01 -->
+                <article data-category="olympiad" class="memory-item scroll-card arch-card corner-brackets flex flex-col justify-between group cursor-pointer" onclick="openMemoryModal(0)">
+                    <div>
+                        <div class="scroll-node px-4 py-2.5 hairline-b bg-charcoal flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-champagne">ADDR // 0x7F01_VOI_NIGHT</span>
+                            <span class="text-cyanTerm">23:45:12 UTC+7</span>
+                        </div>
+                        <!-- Architectural Blueprint / Visual Frame -->
+                        <div class="scroll-node relative h-52 bg-obsidian overflow-hidden hairline-b">
+                            <svg class="w-full h-full" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="220" fill="#08090d"/>
+                                <!-- Grid lines -->
+                                <g stroke="rgba(255,255,255,0.06)" stroke-width="1">
+                                    <line x1="0" y1="44" x2="400" y2="44"/><line x1="0" y1="88" x2="400" y2="88"/>
+                                    <line x1="0" y1="132" x2="400" y2="132"/><line x1="0" y1="176" x2="400" y2="176"/>
+                                    <line x1="80" y1="0" x2="80" y2="220"/><line x1="160" y1="0" x2="160" y2="220"/>
+                                    <line x1="240" y1="0" x2="240" y2="220"/><line x1="320" y1="0" x2="320" y2="220"/>
+                                </g>
+                                <!-- Binary Tree Visualization -->
+                                <g stroke="#d4af37" stroke-width="1.5" opacity="0.85">
+                                    <line x1="200" y1="40" x2="120" y2="95"/>
+                                    <line x1="200" y1="40" x2="280" y2="95"/>
+                                    <line x1="120" y1="95" x2="80" y2="155"/>
+                                    <line x1="120" y1="95" x2="160" y2="155"/>
+                                    <line x1="280" y1="95" x2="240" y2="155"/>
+                                    <line x1="280" y1="95" x2="320" y2="155"/>
+                                </g>
+                                <g fill="#060608" stroke="#00f5d4" stroke-width="1.5">
+                                    <rect x="184" y="26" width="32" height="24"/>
+                                    <rect x="104" y="83" width="32" height="24"/>
+                                    <rect x="264" y="83" width="32" height="24"/>
+                                    <rect x="64" y="143" width="32" height="24"/>
+                                    <rect x="144" y="143" width="32" height="24"/>
+                                    <rect x="224" y="143" width="32" height="24"/>
+                                    <rect x="304" y="143" width="32" height="24"/>
+                                </g>
+                                <text x="190" y="42" fill="#f3f4f6" font-family="JetBrains Mono" font-size="9">ROOT</text>
+                                <text x="16" y="204" fill="#d4af37" font-family="JetBrains Mono" font-size="10">LAB_02 // PRE-OLYMPIAD TRAINING</text>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 right-3 px-2 py-0.5 bg-obsidian/90 border border-champagne/50 font-mono text-[10px] text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                                [INSPECT_DUMP]
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="scroll-node font-mono text-[10px] text-cyanTerm uppercase tracking-widest mb-1">
+                                SECTOR: OLYMPIAD_LAB // 12.12.2025
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-2 group-hover:text-champagne transition-colors">
+                                Đêm Trắng Phòng Lab Trước Kỳ Thi HSG Quốc Gia
+                            </h3>
+                            <p class="scroll-node text-xs text-techgrey leading-relaxed">
+                                Ánh đèn màn hình phản chiếu lên những ly cà phê muối lúc 11 giờ đêm. 15 máy trạm chạy full-load bộ test cây phân đoạn và quy hoạch động trên cây.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="scroll-node px-5 py-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                        <span>CHECKSUM: SHA256_9A4F</span>
+                        <span class="text-alabaster">CLICK ĐỂ XEM CHI TIẾT →</span>
+                    </div>
+                </article>
+
+                <!-- Memory Frame 02 -->
+                <article data-category="hackathon" class="memory-item scroll-card arch-card corner-brackets flex flex-col justify-between group cursor-pointer" onclick="openMemoryModal(1)">
+                    <div>
+                        <div class="scroll-node px-4 py-2.5 hairline-b bg-charcoal flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-champagne">ADDR // 0x7F02_HACKATHON_36H</span>
+                            <span class="text-cyanTerm">04:12:00 UTC+7</span>
+                        </div>
+                        <div class="scroll-node relative h-52 bg-obsidian overflow-hidden hairline-b">
+                            <svg class="w-full h-full" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="220" fill="#08090d"/>
+                                <g stroke="rgba(0,245,212,0.12)" stroke-width="1">
+                                    <rect x="30" y="25" width="340" height="150" fill="none"/>
+                                    <line x1="30" y1="55" x2="370" y2="55"/>
+                                    <line x1="140" y1="55" x2="140" y2="175"/>
+                                </g>
+                                <!-- Waveform / Telemetry bars -->
+                                <polyline fill="none" stroke="#00f5d4" stroke-width="2" points="155,140 180,110 205,125 230,80 255,95 280,68 305,85 330,62 355,75"/>
+                                <polyline fill="none" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="4 2" points="155,155 190,140 225,148 260,118 295,125 330,100 355,105"/>
+                                <text x="42" y="44" fill="#00f5d4" font-family="JetBrains Mono" font-size="10">BUILD_PIPELINE // 36H NON-STOP</text>
+                                <text x="42" y="80" fill="#f3f4f6" font-family="JetBrains Mono" font-size="9">&gt; DEPLOY: OK</text>
+                                <text x="42" y="100" fill="#d4af37" font-family="JetBrains Mono" font-size="9">&gt; LATENCY: 8ms</text>
+                                <text x="42" y="120" fill="#71717a" font-family="JetBrains Mono" font-size="9">&gt; RANK: #1 FIRST</text>
+                                <text x="16" y="204" fill="#d4af37" font-family="JetBrains Mono" font-size="10">CHAMPIONSHIP // AI VISION SYSTEM</text>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 right-3 px-2 py-0.5 bg-obsidian/90 border border-champagne/50 font-mono text-[10px] text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                                [INSPECT_DUMP]
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="scroll-node font-mono text-[10px] text-cyanTerm uppercase tracking-widest mb-1">
+                                SECTOR: HACKATHON // 22.03.2026
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-2 group-hover:text-champagne transition-colors">
+                                36 Giờ Chinh Phục Ngôi Vô Địch Hackathon
+                            </h3>
+                            <p class="scroll-node text-xs text-techgrey leading-relaxed">
+                                Bản vá lỗi cuối cùng được push lên nhánh main đúng 4 phút trước giờ đóng cổng nộp bài. Cả hội trường vỡ òa khi demo chạy mượt ở tốc độ 60 FPS.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="scroll-node px-5 py-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                        <span>CHECKSUM: SHA256_B82E</span>
+                        <span class="text-alabaster">CLICK ĐỂ XEM CHI TIẾT →</span>
+                    </div>
+                </article>
+
+                <!-- Memory Frame 03 -->
+                <article data-category="offline" class="memory-item scroll-card arch-card corner-brackets flex flex-col justify-between group cursor-pointer" onclick="openMemoryModal(2)">
+                    <div>
+                        <div class="scroll-node px-4 py-2.5 hairline-b bg-charcoal flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-champagne">ADDR // 0x7F03_DALAT_CLUSTER</span>
+                            <span class="text-cyanTerm">05:30:00 UTC+7</span>
+                        </div>
+                        <div class="scroll-node relative h-52 bg-obsidian overflow-hidden hairline-b">
+                            <svg class="w-full h-full" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="220" fill="#08090d"/>
+                                <!-- Topographic Mountain Wireframe -->
+                                <polygon points="20,175 110,65 195,175" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+                                <polygon points="120,175 230,45 340,175" fill="none" stroke="#00f5d4" stroke-width="1.5"/>
+                                <polygon points="240,175 315,85 385,175" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                                <circle cx="310" cy="48" r="14" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+                                <line x1="0" y1="175" x2="400" y2="175" stroke="rgba(255,255,255,0.2)"/>
+                                <text x="16" y="30" fill="#00f5d4" font-family="JetBrains Mono" font-size="9">ALTITUDE: 1,500M // TEMP: 14°C</text>
+                                <text x="16" y="204" fill="#d4af37" font-family="JetBrains Mono" font-size="10">OFFLINE_SYNC // CAMPFIRE ACOUSTIC</text>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 right-3 px-2 py-0.5 bg-obsidian/90 border border-champagne/50 font-mono text-[10px] text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                                [INSPECT_DUMP]
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="scroll-node font-mono text-[10px] text-cyanTerm uppercase tracking-widest mb-1">
+                                SECTOR: OFFLINE_TRIP // 18.05.2026
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-2 group-hover:text-champagne transition-colors">
+                                Chuyến Đi Đà Lạt & Đêm Lửa Trại Tạm Rời Bàn Phím
+                            </h3>
+                            <p class="scroll-node text-xs text-techgrey leading-relaxed">
+                                Lần hiếm hoi cả 35 thành viên đồng loạt đóng nắp laptop, cùng ngồi quanh đốm lửa hồng giữa sương lạnh cao nguyên và hát vang những bản nhạc thanh xuân.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="scroll-node px-5 py-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                        <span>CHECKSUM: SHA256_C41D</span>
+                        <span class="text-alabaster">CLICK ĐỂ XEM CHI TIẾT →</span>
+                    </div>
+                </article>
+
+                <!-- Memory Frame 04 -->
+                <article data-category="olympiad" class="memory-item scroll-card arch-card corner-brackets flex flex-col justify-between group cursor-pointer" onclick="openMemoryModal(3)">
+                    <div>
+                        <div class="scroll-node px-4 py-2.5 hairline-b bg-charcoal flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-champagne">ADDR // 0x7F04_LAN_CONTEST</span>
+                            <span class="text-cyanTerm">16:20:00 UTC+7</span>
+                        </div>
+                        <div class="scroll-node relative h-52 bg-obsidian overflow-hidden hairline-b">
+                            <svg class="w-full h-full" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="220" fill="#08090d"/>
+                                <!-- Matrix Grid Nodes -->
+                                <g stroke="#d4af37" stroke-width="1" fill="none">
+                                    <rect x="45" y="35" width="90" height="55"/>
+                                    <rect x="155" y="35" width="90" height="55"/>
+                                    <rect x="265" y="35" width="90" height="55"/>
+                                    <rect x="45" y="110" width="90" height="55"/>
+                                    <rect x="155" y="110" width="90" height="55" stroke="#00f5d4" stroke-width="2"/>
+                                    <rect x="265" y="110" width="90" height="55"/>
+                                </g>
+                                <text x="60" y="67" fill="#71717a" font-family="JetBrains Mono" font-size="10">NODE_01</text>
+                                <text x="170" y="67" fill="#71717a" font-family="JetBrains Mono" font-size="10">NODE_02</text>
+                                <text x="280" y="67" fill="#71717a" font-family="JetBrains Mono" font-size="10">NODE_03</text>
+                                <text x="60" y="142" fill="#71717a" font-family="JetBrains Mono" font-size="10">NODE_04</text>
+                                <text x="165" y="142" fill="#00f5d4" font-family="JetBrains Mono" font-size="10">AC // 100/100</text>
+                                <text x="280" y="142" fill="#71717a" font-family="JetBrains Mono" font-size="10">NODE_06</text>
+                                <text x="16" y="204" fill="#d4af37" font-family="JetBrains Mono" font-size="10">LOCAL_JUDGE // THEMIS CONTEST</text>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 right-3 px-2 py-0.5 bg-obsidian/90 border border-champagne/50 font-mono text-[10px] text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                                [INSPECT_DUMP]
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="scroll-node font-mono text-[10px] text-cyanTerm uppercase tracking-widest mb-1">
+                                SECTOR: OLYMPIAD_LAB // 05.10.2025
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-2 group-hover:text-champagne transition-colors">
+                                Những Chiều Chấm Bài Qua Mạng LAN Nội Bộ
+                            </h3>
+                            <p class="scroll-node text-xs text-techgrey leading-relaxed">
+                                Cảm giác hồi hộp nhìn trình chấm Themis chạy từng test case một, rồi cả phòng vỡ òa khi dòng chữ xanh lá Full 100 điểm hiện lên trên bảng xếp hạng.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="scroll-node px-5 py-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                        <span>CHECKSUM: SHA256_E09A</span>
+                        <span class="text-alabaster">CLICK ĐỂ XEM CHI TIẾT →</span>
+                    </div>
+                </article>
+
+                <!-- Memory Frame 05 -->
+                <article data-category="hackathon" class="memory-item scroll-card arch-card corner-brackets flex flex-col justify-between group cursor-pointer" onclick="openMemoryModal(4)">
+                    <div>
+                        <div class="scroll-node px-4 py-2.5 hairline-b bg-charcoal flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-champagne">ADDR // 0x7F05_IOT_ROBOTICS</span>
+                            <span class="text-cyanTerm">14:10:33 UTC+7</span>
+                        </div>
+                        <div class="scroll-node relative h-52 bg-obsidian overflow-hidden hairline-b">
+                            <svg class="w-full h-full" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="220" fill="#08090d"/>
+                                <!-- Circuit PCB Traces -->
+                                <g stroke="#00f5d4" stroke-width="1.5" fill="none" opacity="0.75">
+                                    <path d="M 40 50 L 120 50 L 150 80 L 250 80"/>
+                                    <path d="M 40 130 L 100 130 L 130 100 L 250 100"/>
+                                    <path d="M 360 60 L 300 60 L 280 90 L 250 90"/>
+                                </g>
+                                <rect x="165" y="55" width="70" height="70" fill="#0d0e12" stroke="#d4af37" stroke-width="2"/>
+                                <text x="180" y="95" fill="#d4af37" font-family="JetBrains Mono" font-size="11">ESP32</text>
+                                <text x="16" y="204" fill="#d4af37" font-family="JetBrains Mono" font-size="10">HARDWARE_LAB // SOLDERING &amp; FIRMWARE</text>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 right-3 px-2 py-0.5 bg-obsidian/90 border border-champagne/50 font-mono text-[10px] text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                                [INSPECT_DUMP]
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="scroll-node font-mono text-[10px] text-cyanTerm uppercase tracking-widest mb-1">
+                                SECTOR: HACKATHON // 14.01.2026
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-2 group-hover:text-champagne transition-colors">
+                                Xưởng Phần Cứng & Robot Tự Hành Dò Đường
+                            </h3>
+                            <p class="scroll-node text-xs text-techgrey leading-relaxed">
+                                Mùi nhựa thông hàn mạch quyện cùng những dòng code C nhúng nạp vào vi điều khiển. Chỉnh từng hệ số PID để xe đua bám cua ở tốc độ tối đa.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="scroll-node px-5 py-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                        <span>CHECKSUM: SHA256_F17B</span>
+                        <span class="text-alabaster">CLICK ĐỂ XEM CHI TIẾT →</span>
+                    </div>
+                </article>
+
+                <!-- Memory Frame 06 -->
+                <article data-category="offline" class="memory-item scroll-card arch-card corner-brackets flex flex-col justify-between group cursor-pointer" onclick="openMemoryModal(5)">
+                    <div>
+                        <div class="scroll-node px-4 py-2.5 hairline-b bg-charcoal flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-champagne">ADDR // 0x7F06_YEARBOOK_RAW</span>
+                            <span class="text-cyanTerm">17:50:00 UTC+7</span>
+                        </div>
+                        <div class="scroll-node relative h-52 bg-obsidian overflow-hidden hairline-b">
+                            <svg class="w-full h-full" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="220" fill="#08090d"/>
+                                <!-- Architectural Frame Target -->
+                                <rect x="60" y="30" width="280" height="140" fill="none" stroke="rgba(212,175,55,0.5)" stroke-width="1"/>
+                                <line x1="200" y1="20" x2="200" y2="180" stroke="rgba(255,255,255,0.1)"/>
+                                <line x1="40" y1="100" x2="360" y2="100" stroke="rgba(255,255,255,0.1)"/>
+                                <circle cx="200" cy="100" r="38" fill="none" stroke="#00f5d4" stroke-width="1.5"/>
+                                <text x="148" y="104" fill="#f3f4f6" font-family="JetBrains Mono" font-size="12">35 / 35 ONLINE</text>
+                                <text x="16" y="204" fill="#d4af37" font-family="JetBrains Mono" font-size="10">FINAL_SNAPSHOT // SUNSET COURTYARD</text>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                            <span class="absolute bottom-3 right-3 px-2 py-0.5 bg-obsidian/90 border border-champagne/50 font-mono text-[10px] text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                                [INSPECT_DUMP]
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="scroll-node font-mono text-[10px] text-cyanTerm uppercase tracking-widest mb-1">
+                                SECTOR: OFFLINE_TRIP // 29.05.2026
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-xl text-alabaster mb-2 group-hover:text-champagne transition-colors">
+                                Chiều Hoàng Hôn Sân Trường & Kỷ Yếu Chuyên Tin
+                            </h3>
+                            <p class="scroll-node text-xs text-techgrey leading-relaxed">
+                                Bức ảnh tập thể đầy đủ 35 thành viên cùng thầy chủ nhiệm dưới nắng chiều vàng rực. Chương trình cấp 3 khép lại với mã trạng thái `EXIT_SUCCESS (0)`.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="scroll-node px-5 py-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                        <span>CHECKSUM: SHA256_00FF</span>
+                        <span class="text-alabaster">CLICK ĐỂ XEM CHI TIẾT →</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 04 // MẠNG XÃ HỘI (SOCIAL MEDIA / NET_NODES)
+             ====================================================================== -->
+        <section id="mang-xa-hoi" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-techgrey">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-cyanTerm text-obsidian font-bold">SEC_04</span>
+                    <span class="text-alabaster tracking-widest">0x00D4 // NET_NODES // HỆ THỐNG MẠNG XÃ HỘI & KÊNH KẾT NỐI</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="ping-all-btn" class="px-3 py-1 border border-champagne/60 text-champagne hover:bg-champagne hover:text-obsidian transition-colors cursor-pointer">
+                        [PING_ALL_ENDPOINTS]
+                    </button>
+                </div>
+            </div>
+
+            <div class="py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 hairline-b">
+                <div class="lg:col-span-6">
+                    <p class="scroll-node font-mono text-xs text-champagne uppercase tracking-widest mb-2">// EXTERNAL NETWORK INTERFACES</p>
+                    <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-alabaster tracking-tight">
+                        CÁC NÚT MẠNG <span class="font-serif italic font-normal text-champagne">TRỰC TUYẾN</span>.
+                    </h2>
+                </div>
+                <div class="lg:col-span-6 flex flex-col justify-end">
+                    <p class="scroll-node text-techgrey text-sm sm:text-base leading-relaxed">
+                        Kết nối trực tiếp tới hệ sinh thái truyền thông, kho mã nguồn mở GitHub, máy chủ thảo luận thuật toán Discord và nhóm luyện tập Codeforces chính thức của lớp.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 6 Active Network Server Nodes Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
+
+                <!-- Node 1: GitHub Organization -->
+                <div class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="text-champagne">NODE_01 // GIT_REMOTE</span>
+                            <span class="flex items-center gap-1.5 text-cyanTerm">
+                                <span class="w-1.5 h-1.5 bg-cyanTerm inline-block"></span>
+                                SSH_22 // ONLINE
+                            </span>
+                        </div>
+                        <div class="scroll-node flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-2xl text-alabaster">GitHub Organization</h3>
+                            <span class="font-mono text-xs text-champagne node-ping" data-base="14">14ms</span>
+                        </div>
+                        <p class="scroll-node font-mono text-xs text-cyanTerm mb-3">github.com/chuyentin-arch</p>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Kho lưu trữ 84+ repositories: thư viện mẫu C++ Competitive Programming (icpc-notebook), các đồ án Web, AI và công cụ chấm bài tự động.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
+                        <span class="font-mono text-[10px] text-techgrey">REPOS: 84 // STARS: 1.2K</span>
+                        <a href="#lien-he" class="btn-arch py-2 px-4 text-[11px]">CONNECT →</a>
+                    </div>
+                </div>
+
+                <!-- Node 2: Facebook Page -->
+                <div class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="text-champagne">NODE_02 // SOCIAL_FEED</span>
+                            <span class="flex items-center gap-1.5 text-cyanTerm">
+                                <span class="w-1.5 h-1.5 bg-cyanTerm inline-block"></span>
+                                HTTPS_443 // ONLINE
+                            </span>
+                        </div>
+                        <div class="scroll-node flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-2xl text-alabaster">Facebook Fanpage</h3>
+                            <span class="font-mono text-xs text-champagne node-ping" data-base="19">19ms</span>
+                        </div>
+                        <p class="scroll-node font-mono text-xs text-cyanTerm mb-3">fb.com/chuyentin.official</p>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Nhật ký hoạt động thường ngày của lớp, chuyên mục giải thích thuật toán bằng infographic, meme lập trình viên và thông báo sự kiện.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
+                        <span class="font-mono text-[10px] text-techgrey">FOLLOWERS: 8,500+</span>
+                        <a href="#lien-he" class="btn-arch py-2 px-4 text-[11px]">CONNECT →</a>
+                    </div>
+                </div>
+
+                <!-- Node 3: Codeforces Group -->
+                <div class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="text-champagne">NODE_03 // CP_ARENA</span>
+                            <span class="flex items-center gap-1.5 text-cyanTerm">
+                                <span class="w-1.5 h-1.5 bg-cyanTerm inline-block"></span>
+                                JUDGE // ONLINE
+                            </span>
+                        </div>
+                        <div class="scroll-node flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-2xl text-alabaster">Codeforces & VNOI</h3>
+                            <span class="font-mono text-xs text-champagne node-ping" data-base="28">28ms</span>
+                        </div>
+                        <p class="scroll-node font-mono text-xs text-cyanTerm mb-3">codeforces.com/group/chuyentin</p>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Đấu trường tổ chức Mashup Contest định kỳ mỗi tối thứ Bảy cùng bảng xếp hạng Rating của các thành viên (Candidate Master & Expert).
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
+                        <span class="font-mono text-[10px] text-techgrey">CONTESTS: 62 ROUNDS</span>
+                        <a href="#lien-he" class="btn-arch py-2 px-4 text-[11px]">CONNECT →</a>
+                    </div>
+                </div>
+
+                <!-- Node 4: Discord Server -->
+                <div class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="text-champagne">NODE_04 // VOICE_RTC</span>
+                            <span class="flex items-center gap-1.5 text-cyanTerm">
+                                <span class="w-1.5 h-1.5 bg-cyanTerm inline-block"></span>
+                                UDP_5000 // ONLINE
+                            </span>
+                        </div>
+                        <div class="scroll-node flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-2xl text-alabaster">Discord War-Room</h3>
+                            <span class="font-mono text-xs text-champagne node-ping" data-base="11">11ms</span>
+                        </div>
+                        <p class="scroll-node font-mono text-xs text-cyanTerm mb-3">discord.gg/chuyentin-kernel</p>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Trạm liên lạc âm thanh xuyên đêm với bot thông báo lịch thi Codeforces/AtCoder, kênh chia sẻ màn hình chữa đề và phòng nhạc Lo-Fi.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
+                        <span class="font-mono text-[10px] text-techgrey">BOTS: 4 CUSTOM DAEMONS</span>
+                        <a href="#lien-he" class="btn-arch py-2 px-4 text-[11px]">CONNECT →</a>
+                    </div>
+                </div>
+
+                <!-- Node 5: YouTube Archive -->
+                <div class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="text-champagne">NODE_05 // MEDIA_STREAM</span>
+                            <span class="flex items-center gap-1.5 text-cyanTerm">
+                                <span class="w-1.5 h-1.5 bg-cyanTerm inline-block"></span>
+                                4K_60FPS // ONLINE
+                            </span>
+                        </div>
+                        <div class="scroll-node flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-2xl text-alabaster">YouTube Lecture & Vlog</h3>
+                            <span class="font-mono text-xs text-champagne node-ping" data-base="22">22ms</span>
+                        </div>
+                        <p class="scroll-node font-mono text-xs text-cyanTerm mb-3">youtube.com/@ChuyenTinOfficial</p>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Lưu trữ các buổi seminar chuyên đề thuật toán do chính học sinh trong lớp trình bày cùng chuỗi vlog hậu trường các chuyến đi.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
+                        <span class="font-mono text-[10px] text-techgrey">VIDEOS: 48 ARCHIVES</span>
+                        <a href="#lien-he" class="btn-arch py-2 px-4 text-[11px]">CONNECT →</a>
+                    </div>
+                </div>
+
+                <!-- Node 6: Tech Blog & Documentation -->
+                <div class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="text-champagne">NODE_06 // DOCS_WIKI</span>
+                            <span class="flex items-center gap-1.5 text-cyanTerm">
+                                <span class="w-1.5 h-1.5 bg-cyanTerm inline-block"></span>
+                                STATIC_CDN // ONLINE
+                            </span>
+                        </div>
+                        <div class="scroll-node flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-2xl text-alabaster">Chuyên Tin Wiki & Blog</h3>
+                            <span class="font-mono text-xs text-champagne node-ping" data-base="8">8ms</span>
+                        </div>
+                        <p class="scroll-node font-mono text-xs text-cyanTerm mb-3">wiki.chuyentin.edu.vn</p>
+                        <p class="scroll-node text-xs text-techgrey leading-relaxed mb-6">
+                            Cơ sở tri thức tổng hợp lời giải chi tiết (Editorial) các kỳ thi HSG, tài liệu ôn thi chuyên Tin và cẩm nang cài đặt môi trường Linux.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
+                        <span class="font-mono text-[10px] text-techgrey">ARTICLES: 310+ DOCS</span>
+                        <a href="#lien-he" class="btn-arch py-2 px-4 text-[11px]">CONNECT →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 05 // LIÊN HỆ (CONTACT / IO_STREAM PACKET TRANSMISSION)
+             ====================================================================== -->
+        <section id="lien-he" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-techgrey">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-champagne text-obsidian font-bold">SEC_05</span>
+                    <span class="text-alabaster tracking-widest">0x00E5 // IO_STREAM // GIAO THỨC LIÊN HỆ & TRUYỀN TẢI GÓI TIN</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>ENDPOINT: <strong class="text-cyanTerm">POST /api/v2/io-stream</strong></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 pt-10 gap-8">
+                
+                <!-- Left Column: Packet Transmission Contact Form (7 cols) -->
+                <div class="lg:col-span-7 scroll-card arch-card corner-brackets p-6 sm:p-10">
+                    <div class="scroll-node pb-6 hairline-b mb-8">
+                        <span class="font-mono text-xs text-champagne uppercase tracking-widest">// INITIALIZE PACKET TRANSMISSION</span>
+                        <h2 class="font-display font-bold text-3xl sm:text-4xl text-alabaster mt-1">
+                            GỬI THÔNG ĐIỆP TỚI LỚP CHUYÊN TIN
+                        </h2>
+                        <p class="text-xs sm:text-sm text-techgrey mt-2">
+                            Điền thông tin bên dưới để khởi tạo gói tin JSON. Hệ thống sẽ tự động đóng gói dữ liệu theo thời gian thực ở bảng điều khiển bên phải.
+                        </p>
+                    </div>
+
+                    <form id="io-contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="scroll-node">
+                                <label class="block font-mono text-[11px] text-champagne uppercase tracking-wider mb-2">
+                                    01 // SENDER_NAME (HỌ VÀ TÊN) *
+                                </label>
+                                <input 
+                                    id="sender-name" 
+                                    type="text" 
+                                    required
+                                    placeholder="Nguyễn Văn A" 
+                                    class="w-full px-4 py-3 bg-obsidian border border-white/15 font-mono text-xs text-alabaster focus:border-champagne focus:outline-none transition-colors"
+                                >
+                            </div>
+                            <div class="scroll-node">
+                                <label class="block font-mono text-[11px] text-champagne uppercase tracking-wider mb-2">
+                                    02 // RETURN_ADDR (EMAIL / LIÊN HỆ) *
+                                </label>
+                                <input 
+                                    id="sender-email" 
+                                    type="email" 
+                                    required
+                                    placeholder="developer@domain.vn" 
+                                    class="w-full px-4 py-3 bg-obsidian border border-white/15 font-mono text-xs text-alabaster focus:border-champagne focus:outline-none transition-colors"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="scroll-node">
+                            <label class="block font-mono text-[11px] text-champagne uppercase tracking-wider mb-2">
+                                03 // PACKET_HEADER (CHỦ ĐỀ GIAO TIẾP)
+                            </label>
+                            <select 
+                                id="packet-topic" 
+                                class="w-full px-4 py-3 bg-obsidian border border-white/15 font-mono text-xs text-alabaster focus:border-champagne focus:outline-none transition-colors"
+                            >
+                                <option value="COLLABORATION_PROJECT">Hợp tác dự án phần mềm / Hackathon</option>
+                                <option value="ALGO_EXCHANGE">Giao lưu chuyên đề Thuật toán & Olympic</option>
+                                <option value="ALUMNI_NETWORK">Kết nối Cựu học sinh Chuyên Tin</option>
+                                <option value="ADMISSION_QUERY">Tư vấn ôn thi vào lớp Chuyên Tin</option>
+                            </select>
+                        </div>
+
+                        <div class="scroll-node">
+                            <label class="block font-mono text-[11px] text-champagne uppercase tracking-wider mb-2">
+                                04 // PAYLOAD_BODY (NỘI DUNG THÔNG ĐIỆP) *
+                            </label>
+                            <textarea 
+                                id="packet-message" 
+                                rows="4" 
+                                required
+                                placeholder="Nhập nội dung gói tin cần truyền tải tới máy chủ Lớp Chuyên Tin..." 
+                                class="w-full px-4 py-3 bg-obsidian border border-white/15 font-mono text-xs text-alabaster focus:border-champagne focus:outline-none transition-colors"
+                            ></textarea>
+                        </div>
+
+                        <div class="scroll-node pt-2 flex flex-wrap items-center justify-between gap-4">
+                            <button type="submit" class="btn-arch btn-arch-gold">
+                                <span>[TRANSMIT_PACKET // POST]</span>
+                                <span>↗</span>
+                            </button>
+                            <span id="form-status-badge" class="font-mono text-xs text-cyanTerm">
+                                STATUS: AWAITING_INPUT...
+                            </span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Column: Live JSON Payload Preview & Physical Coordinates (5 cols) -->
+                <div class="lg:col-span-5 flex flex-col justify-between gap-6">
+                    
+                    <!-- Live JSON Inspector Box -->
+                    <div class="scroll-card arch-card corner-brackets p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="scroll-node flex items-center justify-between pb-3 hairline-b mb-4 font-mono text-[10px]">
+                                <span class="text-cyanTerm">LIVE_PAYLOAD_INSPECTOR.JSON</span>
+                                <span class="text-champagne">MIME: application/json</span>
+                            </div>
+                            <pre id="json-live-preview" class="scroll-node bg-obsidian p-4 border border-white/10 font-mono text-[11px] leading-relaxed text-alabaster/90 overflow-x-auto">{
+  "protocol": "CHUYENTIN_IO_v2",
+  "method": "POST",
+  "headers": {
+    "X-Class-Unit": "CHUYEN_TIN_K24_27",
+    "Content-Encoding": "UTF-8"
+  },
+  "payload": {
+    "sender": "ANONYMOUS_NODE",
+    "return_addr": "pending@localhost",
+    "topic": "COLLABORATION_PROJECT",
+    "body": "Waiting for keystroke stream...",
+    "byte_length": 0
+  }
+}</pre>
+                        </div>
+                        <div class="scroll-node mt-4 pt-3 hairline-t font-mono text-[10px] text-techgrey flex justify-between">
+                            <span>ENCRYPTION: TLS_1.3</span>
+                            <span id="payload-hash" class="text-champagne">CRC32: 0x00000000</span>
+                        </div>
+                    </div>
+
+                    <!-- Physical Location & Advisor Coordinates -->
+                    <div class="scroll-card arch-card p-6">
+                        <div class="scroll-node font-mono text-[10px] text-champagne uppercase tracking-widest pb-3 hairline-b mb-4">
+                            PHYSICAL_COORDINATES // ĐỊA ĐIỂM TRỰC TIẾP
+                        </div>
+                        <div class="space-y-2.5 font-mono text-xs">
+                            <div class="scroll-node flex justify-between">
+                                <span class="text-techgrey">PHÒNG HỌC:</span>
+                                <span class="text-alabaster">Phòng Lab Tin 01 — Tầng 3 Khu A</span>
+                            </div>
+                            <div class="scroll-node flex justify-between">
+                                <span class="text-techgrey">GV CHỦ NHIỆM:</span>
+                                <span class="text-champagne">ThS. Nguyễn Hoàng Minh</span>
+                            </div>
+                            <div class="scroll-node flex justify-between">
+                                <span class="text-techgrey">EMAIL HỆ THỐNG:</span>
+                                <span class="text-cyanTerm">contact@chuyentin.edu.vn</span>
+                            </div>
+                            <div class="scroll-node flex justify-between">
+                                <span class="text-techgrey">GIỜ TRỰC LAB:</span>
+                                <span class="text-alabaster">07:00 — 21:30 (Thứ 2 — Thứ 7)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         ARCHITECTURAL FOOTER
+         ========================================================================== -->
+    <footer class="relative z-10 hairline-t bg-charcoal/90 max-w-[1440px] mx-auto lg:px-12">
+        <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 font-mono text-xs text-techgrey">
+            <div>
+                <div class="text-alabaster font-bold tracking-wider mb-1">
+                    CHUYÊN TIN HỌC // ARCHITECTURAL PORTAL
+                </div>
+                <p class="text-[11px]">
+                    Designed with 0px Border-Radius Precision • Scroll Decay &amp; Emergence Engine Active
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-[11px]">
+                <a href="#trang-chu" class="hover:text-champagne transition-colors">[↑ RETURN_TO_0x00A1]</a>
+                <span>//</span>
+                <span class="text-cyanTerm">EXIT_CODE: 0 (SUCCESS)</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         MEMORY ARCHIVE INSPECTION MODAL (NO ALERT() - CUSTOM ARCHITECTURAL MODAL)
+         ========================================================================== -->
+    <div id="memory-modal" class="fixed inset-0 z-50 hidden bg-obsidian/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="arch-card corner-brackets max-w-2xl w-full bg-charcoal border border-champagne/60 p-6 sm:p-8 relative">
+            <div class="flex items-center justify-between pb-4 hairline-b mb-6 font-mono text-xs">
+                <span id="modal-addr" class="text-champagne font-bold">ADDR // 0x7F01</span>
+                <button onclick="closeMemoryModal()" class="px-3 py-1 border border-white/20 text-alabaster hover:bg-champagne hover:text-obsidian transition-colors cursor-pointer">
+                    [ESC // ĐÓNG]
+                </button>
+            </div>
+            <div id="modal-sector" class="font-mono text-[11px] text-cyanTerm uppercase tracking-widest mb-2"></div>
+            <h3 id="modal-title" class="font-display font-bold text-2xl sm:text-3xl text-alabaster mb-4"></h3>
+            <p id="modal-desc" class="text-sm sm:text-base text-alabaster/85 leading-relaxed mb-6"></p>
+            <div class="p-4 bg-obsidian border border-white/10 font-mono text-xs space-y-1.5 text-techgrey">
+                <div><span class="text-champagne">PARTICIPANTS:</span> <span id="modal-meta-members" class="text-alabaster"></span></div>
+                <div><span class="text-champagne">LOCATION_TAG:</span> <span id="modal-meta-loc" class="text-cyanTerm"></span></div>
+                <div><span class="text-champagne">MEMORY_STATUS:</span> <span class="text-alabaster">LOCKED_IN_ROM (PERMANENT)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         CORE JAVASCRIPT SYSTEMS:
+         1. GRANULAR SCROLL DECAY & EMERGENCE ENGINE (TOP FADE-OUT / BOTTOM FADE-IN)
+         2. INTERACTIVE TERMINAL SHELL & ALGORITHM SWITCHER
+         3. LIVE JSON CONTACT PACKET BUILDER & MEMORY FILTER/MODAL
+         4. GEOMETRIC TOPOLOGY CANVAS
+         ========================================================================== -->
+    <script>
+        /* --------------------------------------------------------------------------
+           1. GRANULAR SCROLL DECAY & EMERGENCE ENGINE
+              ("Khi cuộn xuống thì khi gần không thấy mục trên thì sẽ bắt đầu mờ và
+               biến mất, chữ ở dưới hiện ra, hiệu ứng áp dụng cho tất cả mọi thứ trong thẻ")
+           -------------------------------------------------------------------------- */
+        const scrollState = {
+            nodes: [],
+            cards: [],
+            laserGuidesVisible: true,
+            lastFrameTime: performance.now(),
+            frameCount: 0,
+            fps: 60
+        };
+
+        function collectScrollElements() {
+            // Collect all granular inner elements inside cards and sections
+            scrollState.nodes = Array.from(document.querySelectorAll('.scroll-node'));
+            // Collect all outer card frames so borders/backgrounds also decay & emerge smoothly
+            scrollState.cards = Array.from(document.querySelectorAll('.scroll-card'));
+        }
+
+        // Smoothstep interpolation helper: 0.0 -> 1.0 with zero derivative at endpoints
+        function smoothStep(edge0, edge1, x) {
+            const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+            return t * t * (3 - 2 * t);
+        }
+
+        function updateScrollDecayEngine(now) {
+            // FPS calculation for telemetry rail
+            scrollState.frameCount++;
+            if (now - scrollState.lastFrameTime >= 500) {
+                scrollState.fps = Math.min(60, Math.round((scrollState.frameCount * 1000) / (now - scrollState.lastFrameTime)));
+                const fpsEl = document.getElementById('rail-fps');
+                if (fpsEl) fpsEl.textContent = scrollState.fps;
+                scrollState.frameCount = 0;
+                scrollState.lastFrameTime = now;
+            }
+
+            const vh = window.innerHeight;
+            const scrollY = window.scrollY || window.pageYOffset;
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+            const scrollPct = Math.min(100, Math.round((scrollY / maxScroll) * 100));
+
+            // Update left/right telemetry rails
+            const yOffsetEl = document.getElementById('rail-y-offset');
+            if (yOffsetEl) yOffsetEl.textContent = String(Math.round(scrollY)).padStart(4, '0');
+            const pctBar = document.getElementById('scroll-progress-bar');
+            if (pctBar) pctBar.style.height = scrollPct + '%';
+            const pctLabel = document.getElementById('scroll-pct-label');
+            if (pctLabel) pctLabel.textContent = String(scrollPct).padStart(2, '0') + '%';
+
+            /* 
+             * Define the Top Decay Zone and Bottom Emergence Zone:
+             * Sticky Header is ~92px tall.
+             * - As an element's reference point approaches the top of the viewport
+             *   (between Y = 225px down to Y = 72px), it progressively fades out, blurs, and shifts up.
+             * - As an element enters from the bottom of the viewport
+             *   (between Y = vh - 10px up to Y = vh - 175px), it progressively fades in, unblurs, and glides up to 0.
+             */
+            const topDecayStart = 225; // Starts fading out when approaching top
+            const topDecayEnd   = 68;  // Completely invisible right as it reaches header edge
+
+            const btmEmergeStart = vh - 12;  // Just entering bottom edge of screen
+            const btmEmergeEnd   = vh - 175; // Fully emerged and sharp
+
+            // Update visual horizon markers position
+            const topHorizon = document.getElementById('top-decay-horizon');
+            const btmHorizon = document.getElementById('bottom-emerge-horizon');
+            if (topHorizon) topHorizon.style.top = topDecayStart + 'px';
+            if (btmHorizon) btmHorizon.style.top = btmEmergeEnd + 'px';
+
+            let decayingCount = 0;
+            let activeCount = 0;
+            let emergingCount = 0;
+
+            // Process all granular inner elements (headings, paragraphs, badges, rows, buttons, etc.)
+            for (let i = 0; i < scrollState.nodes.length; i++) {
+                const el = scrollState.nodes[i];
+                if (el.offsetParent === null) continue; // skip hidden elements
+
+                const rect = el.getBoundingClientRect();
+                // Use element's visual center-top anchor for accurate per-element decay
+                const topAnchor = rect.top + Math.min(rect.height * 0.45, 45);
+                const btmAnchor = rect.top + Math.min(rect.height * 0.25, 30);
+
+                let opacity = 1;
+                let translateY = 0;
+                let scale = 1;
+                let blur = 0;
+
+                // 1. Check Top Exit Decay (approaching top edge while scrolling down)
+                if (topAnchor < topDecayStart) {
+                    const tTop = smoothStep(topDecayEnd, topDecayStart, topAnchor);
+                    opacity = tTop;
+                    translateY = -(1 - tTop) * 26; // Shift upward -26px
+                    scale = 1 - (1 - tTop) * 0.025;
+                    blur = (1 - tTop) * 6;         // Blur up to 6px
+                    decayingCount++;
+                } 
+                // 2. Check Bottom Entry Emergence (entering from bottom edge)
+                else if (btmAnchor > btmEmergeEnd) {
+                    const tBtm = smoothStep(btmEmergeStart, btmEmergeEnd, btmAnchor);
+                    opacity = tBtm;
+                    translateY = (1 - tBtm) * 32;  // Glide up from +32px to 0
+                    scale = 1 - (1 - tBtm) * 0.025;
+                    blur = (1 - tBtm) * 6;
+                    emergingCount++;
+                } else {
+                    activeCount++;
+                }
+
+                // Apply computed styles with high precision
+                el.style.opacity = opacity.toFixed(3);
+                if (opacity >= 0.995) {
+                    el.style.transform = 'translate3d(0px, 0px, 0px) scale(1)';
+                    el.style.filter = 'none';
+                } else {
+                    el.style.transform = `translate3d(0px, ${translateY.toFixed(1)}px, 0px) scale(${scale.toFixed(3)})`;
+                    el.style.filter = `blur(${blur.toFixed(2)}px)`;
+                }
+            }
+
+            // Process card frames using their bottom edge for top decay and top edge for bottom entry
+            // so the card frame stays intact while its inner children decay one by one, then vanishes!
+            for (let j = 0; j < scrollState.cards.length; j++) {
+                const card = scrollState.cards[j];
+                if (card.offsetParent === null) continue;
+
+                const rect = card.getBoundingClientRect();
+                let cardOpacity = 1;
+                let cardY = 0;
+
+                if (rect.bottom < topDecayStart + 20) {
+                    const tCardTop = smoothStep(topDecayEnd, topDecayStart + 20, rect.bottom);
+                    cardOpacity = tCardTop;
+                    cardY = -(1 - tCardTop) * 18;
+                } else if (rect.top > btmEmergeEnd + 25) {
+                    const tCardBtm = smoothStep(btmEmergeStart + 10, btmEmergeEnd + 25, rect.top);
+                    cardOpacity = tCardBtm;
+                    cardY = (1 - tCardBtm) * 22;
+                }
+
+                card.style.opacity = cardOpacity.toFixed(3);
+                card.style.transform = cardOpacity >= 0.995
+                    ? 'translate3d(0px, 0px, 0px)'
+                    : `translate3d(0px, ${cardY.toFixed(1)}px, 0px)`;
+            }
+
+            // Update HUD node telemetry counter
+            const hudStats = document.getElementById('hud-node-stats');
+            if (hudStats) {
+                hudStats.textContent = `DECAY:${String(decayingCount).padStart(2, '0')} / ACTIVE:${String(activeCount).padStart(2, '0')} / EMERGE:${String(emergingCount).padStart(2, '0')}`;
+            }
+
+            // Update active navigation item based on scroll position
+            updateActiveSectionSpy();
+
+            requestAnimationFrame(updateScrollDecayEngine);
+        }
+
+        /* --------------------------------------------------------------------------
+           2. ACTIVE SECTION SCROLL SPY & LASER HORIZON TOGGLE
+           -------------------------------------------------------------------------- */
+        const sectionIds = ['trang-chu', 'thong-tin', 'ki-niem', 'mang-xa-hoi', 'lien-he'];
+        function updateActiveSectionSpy() {
+            const triggerLine = window.innerHeight * 0.35;
+            let currentId = sectionIds[0];
+
+            for (const id of sectionIds) {
+                const sec = document.getElementById(id);
+                if (sec) {
+                    const rect = sec.getBoundingClientRect();
+                    if (rect.top <= triggerLine) {
+                        currentId = id;
+                    }
+                }
+            }
+
+            document.querySelectorAll('.nav-item').forEach(link => {
+                const isMatch = link.getAttribute('data-section') === currentId;
+                link.classList.toggle('active', isMatch);
+                if (isMatch) {
+                    const addrEl = document.getElementById('active-mem-addr');
+                    if (addrEl) addrEl.textContent = link.getAttribute('data-addr');
+                }
+            });
+        }
+
+        // Horizon Laser Guide Toggle
+        const toggleHorizonBtn = document.getElementById('toggle-horizon-btn');
+        const topHorizonEl = document.getElementById('top-decay-horizon');
+        const btmHorizonEl = document.getElementById('bottom-emerge-horizon');
+        const laserStateLabel = document.getElementById('laser-state');
+
+        function applyHorizonState() {
+            if (scrollState.laserGuidesVisible) {
+                topHorizonEl.classList.add('show-guides');
+                btmHorizonEl.classList.add('show-guides');
+                topHorizonEl.style.opacity = '1';
+                btmHorizonEl.style.opacity = '1';
+                laserStateLabel.textContent = 'ON';
+                laserStateLabel.className = 'text-cyanTerm';
+            } else {
+                topHorizonEl.classList.remove('show-guides');
+                btmHorizonEl.classList.remove('show-guides');
+                topHorizonEl.style.opacity = '0';
+                btmHorizonEl.style.opacity = '0';
+                laserStateLabel.textContent = 'OFF';
+                laserStateLabel.className = 'text-techgrey';
+            }
+        }
+        toggleHorizonBtn.addEventListener('click', () => {
+            scrollState.laserGuidesVisible = !scrollState.laserGuidesVisible;
+            applyHorizonState();
+        });
+
+        /* --------------------------------------------------------------------------
+           3. INTERACTIVE CLI MINI-TERMINAL
+           -------------------------------------------------------------------------- */
+        const terminalForm = document.getElementById('terminal-form');
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalOutput = document.getElementById('terminal-output');
+
+        const cliResponses = {
+            help: `<span class="text-champagne">LỆNH HỖ TRỢ:</span>
+  • <span class="text-cyanTerm">roster</span>  : Xem thống kê đội hình 35 thành viên Chuyên Tin
+  • <span class="text-cyanTerm">awards</span>  : Danh sách thành tích HSG Quốc gia & Olympic
+  • <span class="text-cyanTerm">quote</span>   : Châm ngôn bất hủ của lớp Chuyên Tin
+  • <span class="text-cyanTerm">compile</span> : Chạy thử trình biên dịch ảo C++23
+  • <span class="text-cyanTerm">clear</span>   : Xóa màn hình terminal`,
+            roster: `<span class="text-cyanTerm">[ROSTER_QUERY // 35 ACTIVE NODES]</span>
+  • Đội tuyển Quốc gia (VOI): 08 thành viên
+  • Đội AI & Robotics: 11 thành viên
+  • Đội Web/System & CTF: 16 thành viên
+  • Tỷ lệ thức khuya debug sau 00:00: <span class="text-champagne">100.0%</span>`,
+            awards: `<span class="text-champagne">[HONORS_TABLE // 2024 - 2026]</span>
+  ★ 02 Giải Nhất & 05 Giải Nhì HSG Quốc Gia môn Tin Học
+  ★ 09 Huy chương Vàng Olympic Truyền thống 30/4
+  ★ Quán quân bảng THPT kỳ thi ICPC Quốc gia
+  ★ Giải Nhất cuộc thi Khoa học Kỹ thuật cấp Tỉnh`,
+            quote: `<span class="text-alabaster italic">"Đời người như một đồ thị có hướng không chu trình (DAG) — không thể quay lại đỉnh cũ, chỉ có thể quy hoạch động để tối ưu hóa chặng đường phía trước."</span>`,
+            compile: `<span class="text-cyanTerm">[g++ -O3] Compiling future_engine.cpp...</span>
+  → Linking libyouth.so ... DONE
+  → Memory leak check: 0 bytes lost.
+  → Execution status: <span class="text-champagne">ACCEPTED (0.012s)</span>`
+        };
+
+        terminalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const rawCmd = terminalInput.value.trim();
+            if (!rawCmd) return;
+            const cmd = rawCmd.toLowerCase();
+
+            if (cmd === 'clear') {
+                terminalOutput.innerHTML = `<div class="scroll-node text-techgrey">Terminal buffer cleared. Type <span class="text-champagne">help</span> for commands.</div>`;
+                terminalInput.value = '';
+                collectScrollElements();
+                return;
+            }
+
+            const cmdBlock = document.createElement('div');
+            cmdBlock.className = 'scroll-node space-y-1 pt-1';
+            const reply = cliResponses[cmd] || `<span class="text-champagne">bash: ${rawCmd}: command not found.</span> Gõ <span class="text-cyanTerm">help</span> để xem danh sách lệnh.`;
+            cmdBlock.innerHTML = `
+                <div class="text-techgrey">$ ${rawCmd}</div>
+                <div class="pl-3 border-l border-cyanTerm/50 text-[11px] leading-relaxed">${reply}</div>
+            `;
+            terminalOutput.appendChild(cmdBlock);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            terminalInput.value = '';
+            collectScrollElements();
+        });
+
+        /* --------------------------------------------------------------------------
+           4. ALGORITHM SOURCE CODE SWITCHER (SECTION 02)
+           -------------------------------------------------------------------------- */
+        const algoSnippets = {
+            segtree: {
+                complexity: 'Time O(Q log N) // Space O(4N)',
+                code: `<span class="text-champagne">// Lazy Propagation Segment Tree — O(log N)</span>
+<span class="text-cyanTerm">void</span> update(<span class="text-cyanTerm">int</span> id, <span class="text-cyanTerm">int</span> l, <span class="text-cyanTerm">int</span> r, <span class="text-cyanTerm">int</span> u, <span class="text-cyanTerm">int</span> v, <span class="text-cyanTerm">long long</span> val) {
+    <span class="text-champagne">if</span> (v &lt; l || r &lt; u) <span class="text-champagne">return</span>;
+    <span class="text-champagne">if</span> (u &lt;= l &amp;&amp; r &lt;= v) {
+        st[id].sum += val * (r - l + 1);
+        st[id].lazy += val;
+        <span class="text-champagne">return</span>;
+    }
+    pushDown(id, l, r);
+    <span class="text-cyanTerm">int</span> mid = (l + r) &gt;&gt; 1;
+    update(id &lt;&lt; 1, l, mid, u, v, val);
+    update(id &lt;&lt; 1 | 1, mid + 1, r, u, v, val);
+    st[id].sum = st[id &lt;&lt; 1].sum + st[id &lt;&lt; 1 | 1].sum;
+}`
+            },
+            dijkstra: {
+                complexity: 'Time O((V + E) log V) // Priority Queue',
+                code: `<span class="text-champagne">// Shortest Path Dijkstra — Optimal Routing</span>
+<span class="text-cyanTerm">void</span> dijkstra(<span class="text-cyanTerm">int</span> s) {
+    priority_queue&lt;pii, vector&lt;pii&gt;, greater&lt;pii&gt;&gt; pq;
+    fill(dist, dist + n + 1, INF);
+    dist[s] = 0; pq.push({0, s});
+    <span class="text-champagne">while</span> (!pq.empty()) {
+        <span class="text-cyanTerm">auto</span> [d, u] = pq.top(); pq.pop();
+        <span class="text-champagne">if</span> (d &gt; dist[u]) <span class="text-champagne">continue</span>;
+        <span class="text-champagne">for</span> (<span class="text-cyanTerm">auto</span> [v, w] : adj[u]) {
+            <span class="text-champagne">if</span> (dist[u] + w &lt; dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}`
+            },
+            dp: {
+                complexity: 'Time O(N^2 * 2^N) // Hamiltonian Walk',
+                code: `<span class="text-champagne">// Bitmask Dynamic Programming — Traveling Class Trip</span>
+<span class="text-cyanTerm">for</span> (<span class="text-cyanTerm">int</span> mask = 1; mask &lt; (1 &lt;&lt; n); ++mask) {
+    <span class="text-champagne">for</span> (<span class="text-cyanTerm">int</span> u = 0; u &lt; n; ++u) {
+        <span class="text-champagne">if</span> (!(mask &amp; (1 &lt;&lt; u))) <span class="text-champagne">continue</span>;
+        <span class="text-cyanTerm">int</span> prev = mask ^ (1 &lt;&lt; u);
+        <span class="text-champagne">for</span> (<span class="text-cyanTerm">int</span> v = 0; v &lt; n; ++v) {
+            <span class="text-champagne">if</span> (prev &amp; (1 &lt;&lt; v))
+                dp[mask][u] = min(dp[mask][u], dp[prev][v] + cost[v][u]);
+        }
+    }
+}`
+            }
+        };
+
+        document.querySelectorAll('.algo-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.algo-tab-btn').forEach(b => {
+                    b.className = 'algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-white/5 text-techgrey hover:text-alabaster';
+                });
+                btn.className = 'algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-champagne text-obsidian font-bold';
+                const key = btn.getAttribute('data-algo');
+                document.getElementById('algo-code-view').innerHTML = `<code>${algoSnippets[key].code}</code>`;
+                document.getElementById('algo-complexity').textContent = algoSnippets[key].complexity;
+            });
+        });
+
+        /* --------------------------------------------------------------------------
+           5. MEMORY ARCHIVE FILTER & MODAL INSPECTOR (SECTION 03)
+           -------------------------------------------------------------------------- */
+        const memoryArchiveData = [
+            {
+                addr: 'ADDR // 0x7F01_VOI_NIGHT',
+                sector: 'SECTOR: OLYMPIAD_LAB // 12.12.2025',
+                title: 'Đêm Trắng Phòng Lab Trước Kỳ Thi HSG Quốc Gia',
+                desc: 'Khoảnh khắc 11 giờ đêm tại phòng Lab Tin Học số 1: 15 màn hình hiển thị xanh rực giao diện VS Code và Codeblocks. Những hộp sữa, bánh mì và cà phê muối đặt cạnh chồng tài liệu Giải thuật và Lập trình của thầy Lê Minh Hoàng. Không ai bảo ai, mỗi khi một người bị WA ở test thứ 47, cả nhóm lại xúm vào cùng viết bộ sinh test ngẫu nhiên để tìm phản ví dụ.',
+                members: 'Đội tuyển HSG Quốc gia & Cố vấn học tập',
+                loc: 'Phòng Lab Chuyên Tin 01 — Tầng 3'
+            },
+            {
+                addr: 'ADDR // 0x7F02_HACKATHON_36H',
+                sector: 'SECTOR: HACKATHON // 22.03.2026',
+                title: '36 Giờ Chinh Phục Ngôi Vô Địch Hackathon',
+                desc: '36 tiếng thức trắng liên tục từ lúc phác thảo kiến trúc hệ thống lên bảng kính cho đến khi triển khai mô hình nhận diện thời gian thực. Ở phút 35:56, một lỗi CORS bất ngờ phát sinh trên server production nhưng đã được xử lý gọn gàng bằng cấu hình Nginx chỉ 240 giây trước khi ban giám khảo bấm giờ.',
+                members: 'Team CHUYENTIN_KERNEL (05 thành viên)',
+                loc: 'Hội trường Trung tâm Đổi mới Sáng tạo'
+            },
+            {
+                addr: 'ADDR // 0x7F03_DALAT_CLUSTER',
+                sector: 'SECTOR: OFFLINE_TRIP // 18.05.2026',
+                title: 'Chuyến Đi Đà Lạt & Đêm Lửa Trại Tạm Rời Bàn Phím',
+                desc: 'Chuyến dã ngoại đáng nhớ nhất 3 năm cấp 3. Sau những tháng ngày gắn liền với thuật toán, cả 35 thành viên cùng nhau săn mây lúc 5 giờ sáng, đạp xe quanh hồ Xuân Hương và ngồi bên bếp lửa hồng kể cho nhau nghe những dự định đại học phía trước.',
+                members: 'Toàn thể 35/35 thành viên + GV Chủ nhiệm',
+                loc: 'Đà Lạt — Cao nguyên Lâm Viên (1,500m)'
+            },
+            {
+                addr: 'ADDR // 0x7F04_LAN_CONTEST',
+                sector: 'SECTOR: OLYMPIAD_LAB // 05.10.2025',
+                title: 'Những Chiều Chấm Bài Qua Mạng LAN Nội Bộ',
+                desc: 'Mỗi chiều thứ Sáu, cả lớp lại bước vào kỳ thi thử nội bộ trên phần mềm chấm bài Themis qua mạng LAN. Tiếng gõ bàn phím cơ lách cách dồn dập ở 15 phút cuối giờ và tiếng reo hò khi bài đồ thị khó nhất có người đầu tiên đạt 100/100 điểm.',
+                members: '35 thành viên Lớp Chuyên Tin',
+                loc: 'Mạng nội bộ 192.168.1.0/24'
+            },
+            {
+                addr: 'ADDR // 0x7F05_IOT_ROBOTICS',
+                sector: 'SECTOR: HACKATHON // 14.01.2026',
+                title: 'Xưởng Phần Cứng & Robot Tự Hành Dò Đường',
+                desc: 'Không chỉ viết phần mềm thuần túy, nhóm phần cứng của lớp đã tự thiết kế mạch in PCB, hàn cảm biến quang học và lập trình thuật toán điều khiển PID cho robot tự hành vượt sa bàn phức tạp với thời gian kỷ lục 11.4 giây.',
+                members: 'Nhóm IoT & Embedded Systems Chuyên Tin',
+                loc: 'Phòng Thực hành Vật lý - Tin học'
+            },
+            {
+                addr: 'ADDR // 0x7F06_YEARBOOK_RAW',
+                sector: 'SECTOR: OFFLINE_TRIP // 29.05.2026',
+                title: 'Chiều Hoàng Hôn Sân Trường & Kỷ Yếu Chuyên Tin',
+                desc: 'Khoảnh khắc 35 bộ đồng phục xếp thành ký hiệu </> giữa sân trường ngập nắng vàng. Ba năm thanh xuân được đóng gói trọn vẹn không một lỗi biên dịch, sẵn sàng cho những chân trời công nghệ lớn hơn.',
+                members: 'Tập thể Chuyên Tin Học K24—27',
+                loc: 'Sân chính & Hành lang Khu A'
+            }
+        ];
+
+        function openMemoryModal(index) {
+            const item = memoryArchiveData[index];
+            if (!item) return;
+            document.getElementById('modal-addr').textContent = item.addr;
+            document.getElementById('modal-sector').textContent = item.sector;
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-desc').textContent = item.desc;
+            document.getElementById('modal-meta-members').textContent = item.members;
+            document.getElementById('modal-meta-loc').textContent = item.loc;
+            document.getElementById('memory-modal').classList.remove('hidden');
+        }
+
+        function closeMemoryModal() {
+            document.getElementById('memory-modal').classList.add('hidden');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMemoryModal();
+        });
+
+        document.querySelectorAll('.mem-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mem-filter-btn').forEach(b => {
+                    b.className = 'mem-filter-btn px-4 py-2 border border-white/15 bg-charcoal text-techgrey hover:text-alabaster uppercase';
+                });
+                btn.className = 'mem-filter-btn px-4 py-2 border border-champagne bg-champagne text-obsidian font-bold uppercase';
+
+                const filter = btn.getAttribute('data-filter');
+                document.querySelectorAll('.memory-item').forEach(card => {
+                    const cat = card.getAttribute('data-category');
+                    if (filter === 'all' || cat === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                collectScrollElements();
+            });
+        });
+
+        /* --------------------------------------------------------------------------
+           6. SOCIAL NETWORK PING TELEMETRY SIMULATOR (SECTION 04)
+           -------------------------------------------------------------------------- */
+        const pingAllBtn = document.getElementById('ping-all-btn');
+        pingAllBtn.addEventListener('click', () => {
+            pingAllBtn.textContent = '[PINGING_NODES...]';
+            document.querySelectorAll('.node-ping').forEach(el => {
+                const base = parseInt(el.getAttribute('data-base') || '15', 10);
+                const jitter = Math.floor(Math.random() * 7) - 3;
+                el.textContent = Math.max(4, base + jitter) + 'ms // 0% LOSS';
+                el.classList.add('text-cyanTerm');
+            });
+            setTimeout(() => {
+                pingAllBtn.textContent = '[ALL_6_NODES_VERIFIED]';
+            }, 400);
+        });
+
+        /* --------------------------------------------------------------------------
+           7. LIVE JSON CONTACT PACKET BUILDER & HASH GENERATOR (SECTION 05)
+           -------------------------------------------------------------------------- */
+        const nameInput = document.getElementById('sender-name');
+        const emailInput = document.getElementById('sender-email');
+        const topicInput = document.getElementById('packet-topic');
+        const msgInput = document.getElementById('packet-message');
+        const jsonPreview = document.getElementById('json-live-preview');
+        const payloadHash = document.getElementById('payload-hash');
+        const statusBadge = document.getElementById('form-status-badge');
+
+        function computePseudoCRC32(str) {
+            let hash = 0x811c9dc5;
+            for (let i = 0; i < str.length; i++) {
+                hash ^= str.charCodeAt(i);
+                hash = Math.imul(hash, 0x01000193);
+            }
+            return '0x' + (hash >>> 0).toString(16).toUpperCase().padStart(8, '0');
+        }
+
+        function updateLiveJsonPacket() {
+            const sender = nameInput.value.trim() || 'ANONYMOUS_NODE';
+            const email = emailInput.value.trim() || 'pending@localhost';
+            const topic = topicInput.value;
+            const body = msgInput.value.trim() || 'Waiting for keystroke stream...';
+
+            const packetObj = {
+                protocol: "CHUYENTIN_IO_v2",
+                timestamp: new Date().toISOString(),
+                method: "POST",
+                headers: {
+                    "X-Class-Unit": "CHUYEN_TIN_K24_27",
+                    "Content-Encoding": "UTF-8"
+                },
+                payload: {
+                    sender: sender,
+                    return_addr: email,
+                    topic: topic,
+                    body: body,
+                    byte_length: new Blob([body]).size
+                }
+            };
+
+            const rawJson = JSON.stringify(packetObj, null, 2);
+            jsonPreview.textContent = rawJson;
+            payloadHash.textContent = 'CRC32: ' + computePseudoCRC32(rawJson);
+            statusBadge.textContent = 'STATUS: STREAM_BUFFERING...';
+            statusBadge.className = 'font-mono text-xs text-champagne';
+        }
+
+        [nameInput, emailInput, topicInput, msgInput].forEach(inp => {
+            inp.addEventListener('input', updateLiveJsonPacket);
+        });
+
+        document.getElementById('io-contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            statusBadge.textContent = '[✔] PACKET_TRANSMITTED // HTTP 200 OK';
+            statusBadge.className = 'font-mono text-xs text-cyanTerm font-bold';
+            nameInput.value = '';
+            emailInput.value = '';
+            msgInput.value = '';
+        });
+
+        /* --------------------------------------------------------------------------
+           8. MOBILE MENU & LIVE UTC+7 SYSTEM CLOCK
+           -------------------------------------------------------------------------- */
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            const ms = String(Math.floor(now.getMilliseconds() / 10)).padStart(2, '0');
+            const clockEl = document.getElementById('live-system-clock');
+            if (clockEl) clockEl.textContent = `UTC+7 // ${h}:${m}:${s}.${ms}`;
+        }
+        setInterval(updateClock, 90);
+
+        /* --------------------------------------------------------------------------
+           9. ARCHITECTURAL GEOMETRIC TOPOLOGY CANVAS BACKGROUND
+           -------------------------------------------------------------------------- */
+        const canvas = document.getElementById('topology-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: -1000, y: -1000 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        function initParticles() {
+            const count = Math.min(55, Math.floor((canvas.width * canvas.height) / 28000));
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    tag: '0x' + Math.floor(Math.random() * 255).toString(16).toUpperCase().padStart(2, '0')
+                });
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function animateTopology() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                // Draw sharp square node (0px border-radius!)
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
+                ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
+
+                // Connect nearby nodes with architectural hairlines
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - dist / 150) * 0.08})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+
+                // Subtle mouse interaction tether
+                const mdx = p.x - mouse.x;
+                const mdy = p.y - mouse.y;
+                const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+                if (mDist < 180) {
+                    ctx.strokeStyle = `rgba(0, 245, 212, ${(1 - mDist / 180) * 0.25})`;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+
+            requestAnimationFrame(animateTopology);
+        }
+
+        /* --------------------------------------------------------------------------
+           10. INITIALIZATION ON WINDOW LOAD
+           -------------------------------------------------------------------------- */
+        window.onload = function () {
+            resizeCanvas();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                collectScrollElements();
+            });
+            applyHorizonState();
+            collectScrollElements();
+            requestAnimationFrame(updateScrollDecayEngine);
+            requestAnimationFrame(animateTopology);
+        };
+    </script>
+</body>
+</html>
