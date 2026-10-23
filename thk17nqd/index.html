@@ -443,7 +443,130 @@
 <body class="structural-grid-bg">
 
     <!-- ==========================================================================
-         0. HỆ THỐNG CÂN CHỈNH ĐỘ PHÂN GIẢI (MẶC ĐỊNH ẨN & TỰ ĐỘNG NHẬN DIỆN NGẦM)
+         0A. MODAL ĐĂNG NHẬP / ĐĂNG KÝ TÀI KHOẢN (LƯU TRỮ VĨNH VIỄN & PHÂN QUYỀN ADMIN)
+         ========================================================================== -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-[10005] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="arch-card corner-brackets max-w-md w-full bg-[#020814] border-2 border-aquaTerm p-6 sm:p-8 shadow-[0_0_70px_rgba(0,212,255,0.35)]">
+            
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between pb-4 hairline-b mb-6">
+                <div class="flex items-center gap-2.5">
+                    <span class="thk17-dino-slot w-8 h-8" data-dino-size="w-8 h-8"></span>
+                    <div>
+                        <div class="font-mono text-xs text-aquaTerm font-bold tracking-widest">
+                            THK17 AUTHENTICATION // C++23
+                        </div>
+                        <div class="font-mono text-[10px] text-slateBlue">
+                            Hệ thống tài khoản &amp; Phân quyền Quản trị viên
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="closeAuthModal()" class="px-2.5 py-1 border border-aquaTerm/50 font-mono text-xs text-iceWhite hover:bg-aquaTerm hover:text-abyss font-bold cursor-pointer">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Tabs chuyển đổi Login / Sign Up -->
+            <div class="grid grid-cols-2 mb-6 border border-aquaTerm/40 font-mono text-xs">
+                <button type="button" id="tab-btn-login" onclick="switchAuthTab('login')" class="py-2.5 bg-aquaTerm text-abyss font-bold uppercase tracking-wider cursor-pointer">
+                    [ĐĂNG NHẬP]
+                </button>
+                <button type="button" id="tab-btn-signup" onclick="switchAuthTab('signup')" class="py-2.5 bg-oceanDeep text-slateBlue hover:text-iceWhite uppercase tracking-wider cursor-pointer">
+                    [ĐĂNG KÝ MỚI]
+                </button>
+            </div>
+
+            <!-- Thông báo trạng thái -->
+            <div id="auth-alert-box" class="hidden mb-4 p-3 border font-mono text-xs"></div>
+
+            <!-- FORM 1: ĐĂNG NHẬP (LOGIN) -->
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block font-mono text-[11px] text-aquaTerm uppercase mb-1.5">
+                        TÊN ĐĂNG NHẬP *
+                    </label>
+                    <input 
+                        id="login-username" 
+                        type="text" 
+                        required 
+                        placeholder="Nhập tên tài khoản..." 
+                        autocomplete="username"
+                        class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/45 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                    >
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] text-aquaTerm uppercase mb-1.5">
+                        MẬT KHẨU *
+                    </label>
+                    <input 
+                        id="login-password" 
+                        type="password" 
+                        required 
+                        placeholder="Nhập mật khẩu..." 
+                        autocomplete="current-password"
+                        class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/45 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                    >
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full btn-arch btn-arch-ocean font-bold py-3">
+                        <span>[XÁC NHẬN ĐĂNG NHẬP]</span>
+                        <span>→</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- FORM 2: ĐĂNG KÝ (SIGN UP / SIGN IN) -->
+            <form id="signup-form" class="hidden space-y-4">
+                <div>
+                    <label class="block font-mono text-[11px] text-aquaTerm uppercase mb-1.5">
+                        TÊN TÀI KHOẢN MỚI *
+                    </label>
+                    <input 
+                        id="signup-username" 
+                        type="text" 
+                        required 
+                        placeholder="Ví dụ: hocsinh_thk17..." 
+                        autocomplete="username"
+                        class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/45 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                    >
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] text-aquaTerm uppercase mb-1.5">
+                        MẬT KHẨU *
+                    </label>
+                    <input 
+                        id="signup-password" 
+                        type="password" 
+                        required 
+                        placeholder="Tối thiểu 4 ký tự..." 
+                        autocomplete="new-password"
+                        class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/45 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                    >
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] text-cppLight uppercase mb-1.5">
+                        MÃ QUẢN TRỊ VIÊN (NẾU CÓ - ĐỂ TRỐNG NẾU LÀ THÀNH VIÊN)
+                    </label>
+                    <input 
+                        id="signup-admin-key" 
+                        type="password" 
+                        placeholder="Chỉ nhập nếu bạn là Quản trị viên..." 
+                        class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/30 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                    >
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full btn-arch btn-arch-ocean font-bold py-3">
+                        <span>[TẠO TÀI KHOẢN &amp; LƯU VĨNH VIỄN]</span>
+                        <span>→</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         0B. HỆ THỐNG CÂN CHỈNH ĐỘ PHÂN GIẢI (MẶC ĐỊNH ẨN & TỰ ĐỘNG NHẬN DIỆN NGẦM)
          ========================================================================== -->
     <div id="resolution-calibrator-modal" class="hidden opacity-0 pointer-events-none fixed inset-0 z-[10000] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-opacity duration-500">
         <div class="arch-card corner-brackets max-w-3xl w-full p-5 sm:p-8 border border-aquaTerm/60 shadow-[0_0_60px_rgba(0,136,255,0.25)]">
@@ -593,7 +716,7 @@
     </aside>
 
     <!-- ==========================================================================
-         3. PERSISTENT FIXED TOP NAVIGATION BAR + INLINE GLOBAL WEBSITE SEARCH
+         3. PERSISTENT FIXED TOP NAVIGATION BAR (CÓ LOGIN / SIGN UP Ở TRÊN CÙNG)
          ========================================================================== -->
     <header id="persistent-navbar">
         <div class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
@@ -604,11 +727,33 @@
                 </span>
                 <span class="hidden sm:inline text-white/20">|</span>
                 <span class="hidden sm:inline">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU (PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP)</strong></span>
-                <span class="hidden xl:inline text-white/20">|</span>
-                <span class="hidden xl:inline">SĨ SỐ: <strong class="text-aquaTerm">34 THÀNH VIÊN</strong></span>
             </div>
 
-            <div class="flex items-center gap-3 ml-auto">
+            <!-- Khu vực Login / Sign Up + Độ phân giải + Đồng hồ ở trên cùng -->
+            <div class="flex flex-wrap items-center gap-2.5 ml-auto">
+                <!-- Khi chưa đăng nhập -->
+                <div id="top-auth-guest" class="flex items-center gap-1.5">
+                    <button type="button" onclick="openAuthModal('login')" class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold border border-aquaTerm hover:bg-iceWhite transition-colors cursor-pointer">
+                        [ĐĂNG NHẬP]
+                    </button>
+                    <button type="button" onclick="openAuthModal('signup')" class="px-2.5 py-0.5 bg-[#041024] text-aquaTerm border border-aquaTerm/60 hover:bg-aquaTerm hover:text-abyss font-bold transition-colors cursor-pointer">
+                        [ĐĂNG KÝ]
+                    </button>
+                </div>
+
+                <!-- Khi đã đăng nhập -->
+                <div id="top-auth-user" class="hidden items-center gap-2">
+                    <span class="px-2 py-0.5 bg-[#06244a] border border-aquaTerm text-iceWhite flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-400 inline-block"></span>
+                        <strong id="top-user-name" class="text-aquaTerm">user</strong>
+                        <span id="top-user-badge" class="px-1 bg-aquaTerm text-abyss font-extrabold text-[9px]">ADMIN</span>
+                    </span>
+                    <button type="button" onclick="handleLogout()" class="px-2 py-0.5 bg-red-950/80 border border-red-400/60 text-red-200 hover:bg-red-600 hover:text-white transition-colors cursor-pointer">
+                        [ĐĂNG XUẤT]
+                    </button>
+                </div>
+
+                <span class="hidden sm:inline text-white/20">|</span>
                 <button onclick="openCalibrator()" class="px-2 py-0.5 bg-cppBlue/40 border border-aquaTerm/50 text-iceWhite hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer" title="Xem thông số độ phân giải màn hình">
                     ĐỘ PHÂN GIẢI: <strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
                 </button>
@@ -1415,7 +1560,8 @@
         </section>
 
         <!-- ======================================================================
-             SECTION 03 // KỈ NIỆM (TỰ ĐỘNG NHẬN 1.webp -> 50.webp TRONG FOLDER)
+             SECTION 03 // KỈ NIỆM (1.webp -> 50.webp + TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN,
+             CHỈ QUẢN TRỊ VIÊN MỚI XÓA ĐƯỢC)
              ====================================================================== -->
         <section id="ki-niem" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
@@ -1430,6 +1576,7 @@
                 </div>
             </div>
 
+            <!-- Thanh công cụ Đăng ảnh kỉ niệm lưu vĩnh viễn & Trạng thái quyền Admin -->
             <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
                 <div>
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
@@ -1439,9 +1586,30 @@
                         BỘ NHỚ <span class="font-serif italic font-normal text-cppLight">THANH XUÂN</span> THK17.
                     </h2>
                 </div>
+
+                <!-- Cụm nút Tự đăng ảnh lên web & Thông báo quyền xóa -->
+                <div class="scroll-node flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <input 
+                        type="file" 
+                        id="memory-upload-input" 
+                        accept="image/*" 
+                        multiple 
+                        class="hidden"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="document.getElementById('memory-upload-input').click()" 
+                        class="btn-arch btn-arch-ocean font-bold py-3 px-5"
+                    >
+                        <span>[+ ĐĂNG ẢNH KỈ NIỆM LÊN WEB]</span>
+                    </button>
+                    <div id="memory-permission-status" class="px-3 py-2 bg-[#041024] border border-aquaTerm/35 font-mono text-[11px] text-slateBlue">
+                        QUYỀN XÓA ẢNH: <strong class="text-aquaTerm">CHỈ QUẢN TRỊ VIÊN</strong>
+                    </div>
+                </div>
             </div>
 
-            <!-- Lưới ảnh tự động hiển thị theo thứ tự 1.webp -> 50.webp -->
+            <!-- Lưới ảnh: Gồm ảnh tự đăng lưu vĩnh viễn + ảnh 1.webp -> 50.webp trong folder -->
             <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10"></div>
         </section>
 
@@ -1723,7 +1891,7 @@
                     </div>
                 </div>
 
-                <!-- 2 Bộ đếm tự động toàn cầu (Mọi thiết bị truy cập đều cộng dồn chung) -->
+                <!-- 2 Bộ đếm tự động toàn cầu -->
                 <div class="flex flex-wrap items-center gap-3 text-[11px]">
                     <div class="px-3.5 py-2 bg-abyss border border-aquaTerm/55 flex items-center gap-2">
                         <span class="w-2 h-2 bg-emerald-400 animate-ping inline-block"></span>
@@ -1882,7 +2050,280 @@
         }
 
         /* --------------------------------------------------------------------------
-           0B. DANH SÁCH 34 HỌC SINH LỚP THK17 (2025 - 2028)
+           0B. HỆ THỐNG CƠ SỞ DỮ LIỆU VĨNH VIỄN (INDEXED_DB + LOCALSTORAGE + CLOUD)
+               Lưu trữ Tài khoản (Accounts) & Ảnh Kỉ niệm tự đăng (Uploaded Photos)
+           -------------------------------------------------------------------------- */
+        const DB_NAME = 'THK17_Permanent_System_DB';
+        const DB_VERSION = 2;
+        const STORE_PHOTOS = 'uploaded_memories';
+        const STORE_USERS = 'registered_accounts';
+        const ACCOUNTS_LS_KEY = 'thk17_permanent_accounts_v1';
+        const CURRENT_USER_LS_KEY = 'thk17_active_logged_user_v1';
+
+        let thk17Db = null;
+
+        function openPermanentDB() {
+            return new Promise((resolve) => {
+                if (!window.indexedDB) {
+                    resolve(null);
+                    return;
+                }
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_PHOTOS)) {
+                        db.createObjectStore(STORE_PHOTOS, { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains(STORE_USERS)) {
+                        db.createObjectStore(STORE_USERS, { keyPath: 'username' });
+                    }
+                };
+                req.onsuccess = (e) => {
+                    thk17Db = e.target.result;
+                    resolve(thk17Db);
+                };
+                req.onerror = () => resolve(null);
+            });
+        }
+
+        // Quản lý danh sách Tài khoản lưu vĩnh viễn
+        function getSavedAccountsMap() {
+            let map = {};
+            try {
+                const raw = localStorage.getItem(ACCOUNTS_LS_KEY);
+                if (raw) map = JSON.parse(raw) || {};
+            } catch (_) {}
+
+            // Luôn đảm bảo có sẵn tài khoản Quản trị viên mặc định cho Mai Thiên Phú
+            if (!map['admin']) {
+                map['admin'] = { username: 'admin', passwordHash: btoa('thk17@2528'), role: 'admin', createdAt: '2025-09-05' };
+            }
+            if (!map['maithienphu']) {
+                map['maithienphu'] = { username: 'maithienphu', passwordHash: btoa('thk17@2528'), role: 'admin', createdAt: '2025-09-05' };
+            }
+            return map;
+        }
+
+        function saveAccountPermanently(userObj) {
+            const map = getSavedAccountsMap();
+            const key = userObj.username.toLowerCase();
+            map[key] = userObj;
+            localStorage.setItem(ACCOUNTS_LS_KEY, JSON.stringify(map));
+
+            if (thk17Db) {
+                try {
+                    const tx = thk17Db.transaction(STORE_USERS, 'readwrite');
+                    tx.objectStore(STORE_USERS).put(userObj);
+                } catch (_) {}
+            }
+        }
+
+        async function syncAccountsFromIndexedDB() {
+            await openPermanentDB();
+            if (!thk17Db) return;
+            return new Promise((resolve) => {
+                try {
+                    const tx = thk17Db.transaction(STORE_USERS, 'readonly');
+                    const req = tx.objectStore(STORE_USERS).getAll();
+                    req.onsuccess = () => {
+                        const rows = req.result || [];
+                        const map = getSavedAccountsMap();
+                        rows.forEach(u => {
+                            if (u && u.username) {
+                                map[u.username.toLowerCase()] = u;
+                            }
+                        });
+                        localStorage.setItem(ACCOUNTS_LS_KEY, JSON.stringify(map));
+                        resolve();
+                    };
+                    req.onerror = () => resolve();
+                } catch (_) {
+                    resolve();
+                }
+            });
+        }
+
+        function getCurrentLoggedUser() {
+            try {
+                const raw = localStorage.getItem(CURRENT_USER_LS_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch (_) {
+                return null;
+            }
+        }
+
+        function setCurrentLoggedUser(userObj) {
+            if (!userObj) {
+                localStorage.removeItem(CURRENT_USER_LS_KEY);
+            } else {
+                localStorage.setItem(CURRENT_USER_LS_KEY, JSON.stringify(userObj));
+            }
+            updateAuthHeaderUI();
+            renderAllUploadedMemories();
+        }
+
+        function isCurrentUserAdmin() {
+            const u = getCurrentLoggedUser();
+            return Boolean(u && u.role === 'admin');
+        }
+
+        function updateAuthHeaderUI() {
+            const guestBox = document.getElementById('top-auth-guest');
+            const userBox = document.getElementById('top-auth-user');
+            const nameEl = document.getElementById('top-user-name');
+            const badgeEl = document.getElementById('top-user-badge');
+            const permStatus = document.getElementById('memory-permission-status');
+
+            const u = getCurrentLoggedUser();
+            if (!u) {
+                guestBox?.classList.remove('hidden');
+                userBox?.classList.add('hidden');
+                userBox?.classList.remove('flex');
+                if (permStatus) {
+                    permStatus.innerHTML = `QUYỀN XÓA ẢNH: <strong class="text-aquaTerm">CHỈ QUẢN TRỊ VIÊN</strong>`;
+                }
+            } else {
+                guestBox?.classList.add('hidden');
+                userBox?.classList.remove('hidden');
+                userBox?.classList.add('flex');
+                if (nameEl) nameEl.textContent = u.username;
+                if (badgeEl) {
+                    if (u.role === 'admin') {
+                        badgeEl.textContent = 'QUẢN TRỊ VIÊN';
+                        badgeEl.className = 'px-1.5 py-0.5 bg-aquaTerm text-abyss font-extrabold text-[9px]';
+                    } else {
+                        badgeEl.textContent = 'THÀNH VIÊN';
+                        badgeEl.className = 'px-1.5 py-0.5 bg-cppBlue text-iceWhite font-bold text-[9px]';
+                    }
+                }
+                if (permStatus) {
+                    if (u.role === 'admin') {
+                        permStatus.innerHTML = `TRẠNG THÁI: <strong class="text-emerald-400">QUẢN TRỊ VIÊN (ĐƯỢC PHÉP XÓA ẢNH)</strong>`;
+                    } else {
+                        permStatus.innerHTML = `TÀI KHOẢN: <strong class="text-iceWhite">${u.username}</strong> • <span class="text-slateBlue">CHỈ ADMIN MỚI XÓA ĐƯỢC ẢNH</span>`;
+                    }
+                }
+            }
+        }
+
+        // Điều khiển Modal Đăng nhập / Đăng ký
+        function showAuthAlert(msg, isSuccess = false) {
+            const box = document.getElementById('auth-alert-box');
+            if (!box) return;
+            box.classList.remove('hidden');
+            box.className = `mb-4 p-3 border font-mono text-xs ${
+                isSuccess
+                    ? 'bg-emerald-950/90 border-emerald-400 text-emerald-300'
+                    : 'bg-red-950/90 border-red-400 text-red-200'
+            }`;
+            box.textContent = msg;
+        }
+
+        function switchAuthTab(mode) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const btnLogin = document.getElementById('tab-btn-login');
+            const btnSignup = document.getElementById('tab-btn-signup');
+            const alertBox = document.getElementById('auth-alert-box');
+            if (alertBox) alertBox.classList.add('hidden');
+
+            if (mode === 'signup') {
+                loginForm?.classList.add('hidden');
+                signupForm?.classList.remove('hidden');
+                if (btnSignup) btnSignup.className = 'py-2.5 bg-aquaTerm text-abyss font-bold uppercase tracking-wider cursor-pointer';
+                if (btnLogin) btnLogin.className = 'py-2.5 bg-oceanDeep text-slateBlue hover:text-iceWhite uppercase tracking-wider cursor-pointer';
+            } else {
+                signupForm?.classList.add('hidden');
+                loginForm?.classList.remove('hidden');
+                if (btnLogin) btnLogin.className = 'py-2.5 bg-aquaTerm text-abyss font-bold uppercase tracking-wider cursor-pointer';
+                if (btnSignup) btnSignup.className = 'py-2.5 bg-oceanDeep text-slateBlue hover:text-iceWhite uppercase tracking-wider cursor-pointer';
+            }
+        }
+
+        function openAuthModal(mode = 'login') {
+            const modal = document.getElementById('auth-modal');
+            if (!modal) return;
+            switchAuthTab(mode);
+            modal.classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+        }
+
+        function handleLogout() {
+            setCurrentLoggedUser(null);
+        }
+
+        document.getElementById('login-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const usernameRaw = (document.getElementById('login-username')?.value || '').trim();
+            const passwordRaw = (document.getElementById('login-password')?.value || '').trim();
+            if (!usernameRaw || !passwordRaw) return;
+
+            const accounts = getSavedAccountsMap();
+            const found = accounts[usernameRaw.toLowerCase()];
+
+            if (!found || found.passwordHash !== btoa(passwordRaw)) {
+                showAuthAlert('Sai tên đăng nhập hoặc mật khẩu! Vui lòng kiểm tra lại.', false);
+                return;
+            }
+
+            setCurrentLoggedUser({ username: found.username, role: found.role });
+            showAuthAlert(`Đăng nhập thành công với quyền ${found.role === 'admin' ? 'QUẢN TRỊ VIÊN' : 'THÀNH VIÊN'}!`, true);
+            setTimeout(() => {
+                closeAuthModal();
+                document.getElementById('login-form').reset();
+            }, 600);
+        });
+
+        document.getElementById('signup-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const usernameRaw = (document.getElementById('signup-username')?.value || '').trim();
+            const passwordRaw = (document.getElementById('signup-password')?.value || '').trim();
+            const adminKeyRaw = (document.getElementById('signup-admin-key')?.value || '').trim();
+
+            if (usernameRaw.length < 3) {
+                showAuthAlert('Tên tài khoản phải có ít nhất 3 ký tự!', false);
+                return;
+            }
+            if (passwordRaw.length < 4) {
+                showAuthAlert('Mật khẩu phải có ít nhất 4 ký tự!', false);
+                return;
+            }
+
+            const accounts = getSavedAccountsMap();
+            const key = usernameRaw.toLowerCase();
+            if (accounts[key]) {
+                showAuthAlert('Tên tài khoản này đã tồn tại! Vui lòng chọn tên khác hoặc chuyển sang Đăng nhập.', false);
+                return;
+            }
+
+            // Kiểm tra mã Quản trị viên (THK17ADMIN hoặc thk17@2528)
+            const isAdminRole = (adminKeyRaw === 'THK17ADMIN' || adminKeyRaw === 'thk17@2528');
+            const newUser = {
+                username: usernameRaw,
+                passwordHash: btoa(passwordRaw),
+                role: isAdminRole ? 'admin' : 'member',
+                createdAt: new Date().toISOString()
+            };
+
+            saveAccountPermanently(newUser);
+            setCurrentLoggedUser({ username: newUser.username, role: newUser.role });
+            showAuthAlert(
+                `Đăng ký & lưu tài khoản "${newUser.username}" thành công (${isAdminRole ? 'QUẢN TRỊ VIÊN' : 'THÀNH VIÊN'})!`,
+                true
+            );
+            setTimeout(() => {
+                closeAuthModal();
+                document.getElementById('signup-form').reset();
+            }, 700);
+        });
+
+        /* --------------------------------------------------------------------------
+           0C. DANH SÁCH 34 HỌC SINH LỚP THK17 (2025 - 2028)
            -------------------------------------------------------------------------- */
         const thk17Students = [
             { stt: 1,  name: "Lê Võ Hùng Anh",           role: "Thành viên", isBCS: false },
@@ -2563,14 +3004,185 @@
         });
 
         /* --------------------------------------------------------------------------
-           8. KỈ NIỆM: QUÉT TỰ ĐỘNG 1.webp -> 50.webp TRONG THƯ MỤC
+           8. KỈ NIỆM: QUÉT TỰ ĐỘNG 1.webp -> 50.webp TRONG FOLDER +
+              CHỨC NĂNG TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN & CHỈ ADMIN MỚI XÓA ĐƯỢC
            -------------------------------------------------------------------------- */
         const MAX_MEMORY_WEBP = 50;
+        const UPLOADED_PHOTOS_LS_BACKUP = 'thk17_uploaded_photos_backup_v1';
+        let uploadedMemoriesList = [];
+
+        async function loadPermanentUploadedPhotos() {
+            await openPermanentDB();
+            const mapById = new Map();
+
+            // 1. Nạp từ localStorage backup
+            try {
+                const raw = localStorage.getItem(UPLOADED_PHOTOS_LS_BACKUP);
+                if (raw) {
+                    const arr = JSON.parse(raw) || [];
+                    arr.forEach(item => {
+                        if (item && item.id && item.dataUrl) mapById.set(item.id, item);
+                    });
+                }
+            } catch (_) {}
+
+            // 2. Nạp từ IndexedDB (Dung lượng lớn vĩnh viễn)
+            if (thk17Db) {
+                await new Promise((resolve) => {
+                    try {
+                        const tx = thk17Db.transaction(STORE_PHOTOS, 'readonly');
+                        const req = tx.objectStore(STORE_PHOTOS).getAll();
+                        req.onsuccess = () => {
+                            const rows = req.result || [];
+                            rows.forEach(item => {
+                                if (item && item.id && item.dataUrl) mapById.set(item.id, item);
+                            });
+                            resolve();
+                        };
+                        req.onerror = () => resolve();
+                    } catch (_) {
+                        resolve();
+                    }
+                });
+            }
+
+            uploadedMemoriesList = Array.from(mapById.values()).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+            renderAllUploadedMemories();
+        }
+
+        function persistUploadedPhoto(photoObj) {
+            uploadedMemoriesList.push(photoObj);
+            if (thk17Db) {
+                try {
+                    const tx = thk17Db.transaction(STORE_PHOTOS, 'readwrite');
+                    tx.objectStore(STORE_PHOTOS).put(photoObj);
+                } catch (_) {}
+            }
+            try {
+                localStorage.setItem(UPLOADED_PHOTOS_LS_BACKUP, JSON.stringify(uploadedMemoriesList));
+            } catch (_) {}
+        }
+
+        window.deleteUploadedMemoryPhoto = function (photoId) {
+            if (!isCurrentUserAdmin()) {
+                openAuthModal('login');
+                showAuthAlert('Chỉ Quản trị viên (Admin) mới có quyền xóa ảnh kỉ niệm!', false);
+                return;
+            }
+            uploadedMemoriesList = uploadedMemoriesList.filter(item => item.id !== photoId);
+            if (thk17Db) {
+                try {
+                    const tx = thk17Db.transaction(STORE_PHOTOS, 'readwrite');
+                    tx.objectStore(STORE_PHOTOS).delete(photoId);
+                } catch (_) {}
+            }
+            try {
+                localStorage.setItem(UPLOADED_PHOTOS_LS_BACKUP, JSON.stringify(uploadedMemoriesList));
+            } catch (_) {}
+
+            const domNode = document.getElementById(`uploaded-memory-${photoId}`);
+            if (domNode) domNode.remove();
+            collectScrollElements();
+        };
+
+        function renderAllUploadedMemories() {
+            const grid = document.getElementById('memory-grid');
+            if (!grid) return;
+
+            // Xóa các node ảnh tự đăng cũ trên DOM để render lại theo quyền Admin hiện tại
+            grid.querySelectorAll('.uploaded-memory-card').forEach(el => el.remove());
+
+            const adminMode = isCurrentUserAdmin();
+
+            uploadedMemoriesList.forEach((item, idx) => {
+                const slot = document.createElement('div');
+                slot.id = `uploaded-memory-${item.id}`;
+                slot.style.order = String(100 + idx);
+                slot.className = 'uploaded-memory-card scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45 relative group';
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
+
+                const img = document.createElement('img');
+                img.src = item.dataUrl;
+                img.alt = '';
+                img.className = 'w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
+                wrapper.appendChild(img);
+
+                // Chỉ hiển thị nút Xóa nếu đã đăng nhập là Quản trị viên (Admin)
+                if (adminMode) {
+                    const delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.className = 'absolute top-3 right-3 z-30 px-3 py-1.5 bg-red-950/95 hover:bg-red-600 text-red-200 hover:text-white border border-red-400 font-mono text-[11px] font-bold shadow-lg transition-colors cursor-pointer';
+                    delBtn.textContent = '[🗑 XÓA ẢNH]';
+                    delBtn.onclick = function (ev) {
+                        ev.stopPropagation();
+                        window.deleteUploadedMemoryPhoto(item.id);
+                    };
+                    wrapper.appendChild(delBtn);
+                }
+
+                slot.appendChild(wrapper);
+                grid.appendChild(slot);
+            });
+
+            collectScrollElements();
+        }
+
+        // Nén ảnh tải lên sang chuẩn WebP sắc nét để lưu trữ vĩnh viễn không giới hạn
+        function compressImageFileToWebpDataUrl(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const maxDim = 1100;
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxDim || h > maxDim) {
+                            if (w > h) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            } else {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        const cvs = document.createElement('canvas');
+                        cvs.width = w;
+                        cvs.height = h;
+                        const c = cvs.getContext('2d');
+                        c.drawImage(img, 0, 0, w, h);
+                        resolve(cvs.toDataURL('image/webp', 0.84));
+                    };
+                    img.onerror = () => resolve(e.target.result);
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        document.getElementById('memory-upload-input')?.addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+
+            for (const file of files) {
+                if (!file.type.startsWith('image/')) continue;
+                const webpDataUrl = await compressImageFileToWebpDataUrl(file);
+                const photoObj = {
+                    id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                    dataUrl: webpDataUrl,
+                    createdAt: Date.now()
+                };
+                persistUploadedPhoto(photoObj);
+            }
+            e.target.value = '';
+            renderAllUploadedMemories();
+        });
 
         function initMemoryGallery1To50() {
             const grid = document.getElementById('memory-grid');
             if (!grid) return;
-            grid.innerHTML = '';
 
             for (let i = 1; i <= MAX_MEMORY_WEBP; i++) {
                 const probe = new Image();
@@ -2600,6 +3212,7 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
+                closeAuthModal();
                 if (globalSearchDropdown) globalSearchDropdown.classList.add('hidden');
             }
         });
@@ -2719,7 +3332,6 @@
         const SESSION_ID_KEY = 'thk17_client_session_id';
         const GLOBAL_CACHE_KEY = 'thk17_global_cloud_cache';
 
-        // Định danh kho dữ liệu đám mây dùng chung cho tất cả thiết bị truy cập thk17nqd.vercel.app
         const ABACUS_HIT_URL = 'https://abacus.jasoncameron.dev/hit/thk17nqd_chuyen_nqd_2528/global_visits';
         const ABACUS_GET_URL = 'https://abacus.jasoncameron.dev/get/thk17nqd_chuyen_nqd_2528/global_visits';
         const COUNTERAPI_HIT_URL = 'https://api.counterapi.dev/v1/thk17nqd_chuyen_nqd_2528/global_visits/up';
@@ -2799,7 +3411,6 @@
             }
             refreshOnlineDisplay();
 
-            // 1. Lấy/Cộng dồn TỔNG LƯỢT TRUY CẬP toàn cầu trên Cloud KV (Dùng chung cho mọi thiết bị)
             try {
                 const cloudTotal = await fetchCloudGlobalTotal(initialLoad);
                 if (typeof cloudTotal === 'number' && cloudTotal > 0) {
@@ -2817,7 +3428,6 @@
                 }
             } catch (_) {}
 
-            // 2. Đồng bộ SỐ LƯỢT ĐANG TRUY CẬP HIỆN TẠI qua /api/stats (chỉ lấy online, tuyệt đối không ghi đè lùi tổng truy cập)
             try {
                 const res = await fetch('/api/stats', {
                     method: 'POST',
@@ -2958,10 +3568,13 @@
         /* --------------------------------------------------------------------------
            11. INITIALIZATION ON WINDOW LOAD
            -------------------------------------------------------------------------- */
-        window.onload = function () {
+        window.onload = async function () {
             mountAllThk17Dinos();
             renderRosterGrid('all');
             initMemoryGallery1To50();
+            await syncAccountsFromIndexedDB();
+            updateAuthHeaderUI();
+            await loadPermanentUploadedPhotos();
             syncPersistentCounters(true);
             setInterval(() => syncPersistentCounters(false), 8000);
             calibrateScreenAndBoundaries();
