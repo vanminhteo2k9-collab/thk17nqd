@@ -223,6 +223,25 @@
             color: var(--ocean-aqua);
         }
 
+        /* Nút tải ảnh nhanh trên từng khung ảnh */
+        .img-download-btn {
+            background: rgba(2, 8, 20, 0.92);
+            border: 1px solid #00D4FF;
+            color: #00D4FF;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.85);
+        }
+        .img-download-btn:hover {
+            background: #00D4FF;
+            color: #020814;
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.65);
+        }
+
         #persistent-navbar {
             position: fixed !important;
             top: 0 !important;
@@ -400,7 +419,6 @@
             100% { fill: #FFF3A1; }
         }
 
-        /* Đường chạy tuần tra của Dino (Patrol Track) */
         @keyframes dinoPatrolRun {
             0% { left: 2%; transform: scaleX(1); }
             45% { left: 88%; transform: scaleX(1); }
@@ -907,7 +925,15 @@
                             <span class="text-slateBlue hidden sm:inline">— TRƯỜNG THPT CHUYÊN NGUYỄN QUANG DIÊU</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="text-iceWhite text-[10px]">PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP</span>
+                            <span class="text-iceWhite text-[10px] hidden sm:inline">PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP</span>
+                            <button 
+                                type="button" 
+                                onclick="downloadImageAsset(document.getElementById('hero-cover-img'), 'THK17_AnhBia_nen.webp')" 
+                                class="img-download-btn"
+                                title="Tải ảnh bìa về máy"
+                            >
+                                [⬇ TẢI ẢNH]
+                            </button>
                         </div>
                     </div>
 
@@ -1176,7 +1202,7 @@
                 </div>
             </div>
 
-            <!-- 1. GIÁO VIÊN CHỦ NHIỆM — HÌNH THẦY LÀ PD.webp -->
+            <!-- 1. GIÁO VIÊN CHỦ NHIỆM — HÌNH THẦY LÀ PD.webp (CÓ NÚT TẢI ẢNH) -->
             <div id="gvcn-card-wrapper" class="pt-10 pb-10">
                 <div class="scroll-card arch-card corner-brackets p-6 sm:p-8 border-2 border-oceanBright/70 bg-gradient-to-r from-[#04132c] via-[#072247] to-[#04132c]">
                     <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-6 font-mono text-xs">
@@ -1191,12 +1217,21 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                         <div class="lg:col-span-3 flex flex-col items-center justify-center p-4 bg-abyss/95 border-2 border-aquaTerm/60 text-center">
-                            <div class="w-40 h-40 sm:w-44 sm:h-44 mb-3 border-2 border-aquaTerm bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_25px_rgba(0,212,255,0.3)]">
+                            <div class="w-40 h-40 sm:w-44 sm:h-44 mb-3 border-2 border-aquaTerm bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_25px_rgba(0,212,255,0.3)] group">
                                 <img 
+                                    id="gvcn-pd-img"
                                     src="PD.webp" 
                                     alt="Thầy Nguyễn Phúc Duy — GVCN lớp THK17" 
                                     class="w-full h-full object-cover object-center"
                                 >
+                                <button 
+                                    type="button" 
+                                    onclick="downloadImageAsset(document.getElementById('gvcn-pd-img'), 'GVCN_Thay_Nguyen_Phuc_Duy_PD.webp')" 
+                                    class="img-download-btn absolute bottom-2 right-2 z-20"
+                                    title="Tải ảnh GVCN về máy"
+                                >
+                                    [⬇ TẢI ẢNH]
+                                </button>
                             </div>
                             <span class="font-mono text-[11px] text-aquaTerm font-bold">GIÁO VIÊN CHỦ NHIỆM</span>
                             <span class="font-mono text-[10px] text-slateBlue mt-0.5">CHUYÊN TIN THK17 (25-28)</span>
@@ -1561,7 +1596,7 @@
 
         <!-- ======================================================================
              SECTION 03 // KỈ NIỆM (1.webp -> 50.webp + TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN,
-             CHỈ QUẢN TRỊ VIÊN MỚI XÓA ĐƯỢC)
+             TẢI ẢNH CHO TẤT CẢ ẢNH & CHỈ QUẢN TRỊ VIÊN MỚI XÓA ĐƯỢC)
              ====================================================================== -->
         <section id="ki-niem" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
@@ -1576,7 +1611,7 @@
                 </div>
             </div>
 
-            <!-- Thanh công cụ Đăng ảnh kỉ niệm lưu vĩnh viễn & Trạng thái quyền Admin -->
+            <!-- Thanh công cụ Đăng ảnh kỉ niệm, Tải tất cả ảnh & Trạng thái quyền Admin -->
             <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
                 <div>
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
@@ -1587,8 +1622,8 @@
                     </h2>
                 </div>
 
-                <!-- Cụm nút Tự đăng ảnh lên web & Thông báo quyền xóa -->
-                <div class="scroll-node flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <!-- Cụm nút Tự đăng ảnh + Tải tất cả ảnh + Thông báo quyền xóa -->
+                <div class="scroll-node flex flex-wrap items-center gap-3">
                     <input 
                         type="file" 
                         id="memory-upload-input" 
@@ -1603,13 +1638,21 @@
                     >
                         <span>[+ ĐĂNG ẢNH KỈ NIỆM LÊN WEB]</span>
                     </button>
+                    <button 
+                        type="button" 
+                        onclick="downloadAllMemoryImages()" 
+                        class="btn-arch font-bold py-3 px-5"
+                        title="Tải xuống tất cả ảnh kỉ niệm đang hiển thị"
+                    >
+                        <span>[⬇ TẢI TẤT CẢ ẢNH]</span>
+                    </button>
                     <div id="memory-permission-status" class="px-3 py-2 bg-[#041024] border border-aquaTerm/35 font-mono text-[11px] text-slateBlue">
                         QUYỀN XÓA ẢNH: <strong class="text-aquaTerm">CHỈ QUẢN TRỊ VIÊN</strong>
                     </div>
                 </div>
             </div>
 
-            <!-- Lưới ảnh: Gồm ảnh tự đăng lưu vĩnh viễn + ảnh 1.webp -> 50.webp trong folder -->
+            <!-- Lưới ảnh: Gồm ảnh 1.webp -> 50.webp trong folder + ảnh tự đăng lưu vĩnh viễn (Tất cả đều có nút Tải ảnh) -->
             <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10"></div>
         </section>
 
@@ -1927,6 +1970,81 @@
          ========================================================================== -->
     <script>
         /* --------------------------------------------------------------------------
+           0. BỘ XỬ LÝ TẢI ẢNH VỀ THIẾT BỊ CHO TẤT CẢ ẢNH TRÊN WEB
+           -------------------------------------------------------------------------- */
+        async function downloadImageAsset(imgElementOrUrl, suggestedFilename = 'THK17_Image.webp') {
+            if (!imgElementOrUrl) return;
+            const srcUrl = typeof imgElementOrUrl === 'string' ? imgElementOrUrl : (imgElementOrUrl.currentSrc || imgElementOrUrl.src);
+            if (!srcUrl) return;
+
+            // Trường hợp 1: Ảnh dạng Data URL (Base64 WebP tự đăng lên)
+            if (srcUrl.startsWith('data:')) {
+                const a = document.createElement('a');
+                a.href = srcUrl;
+                a.download = suggestedFilename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                return;
+            }
+
+            // Trường hợp 2: Tải qua Fetch Blob để ép trình duyệt tải file xuống trực tiếp
+            try {
+                const res = await fetch(srcUrl);
+                if (res.ok) {
+                    const blob = await res.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = suggestedFilename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+                    return;
+                }
+            } catch (_) {}
+
+            // Trường hợp 3: Dự phòng xuất qua Canvas nếu chạy ở chế độ file cục bộ
+            try {
+                if (typeof imgElementOrUrl === 'object' && imgElementOrUrl.naturalWidth > 0) {
+                    const cvs = document.createElement('canvas');
+                    cvs.width = imgElementOrUrl.naturalWidth;
+                    cvs.height = imgElementOrUrl.naturalHeight;
+                    const c = cvs.getContext('2d');
+                    c.drawImage(imgElementOrUrl, 0, 0);
+                    const dataUrl = cvs.toDataURL('image/webp', 0.95);
+                    const a = document.createElement('a');
+                    a.href = dataUrl;
+                    a.download = suggestedFilename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    return;
+                }
+            } catch (_) {}
+
+            // Trường hợp 4: Mở thẻ tải trực tiếp
+            const fallbackLink = document.createElement('a');
+            fallbackLink.href = srcUrl;
+            fallbackLink.download = suggestedFilename;
+            document.body.appendChild(fallbackLink);
+            fallbackLink.click();
+            fallbackLink.remove();
+        }
+
+        function downloadAllMemoryImages() {
+            const imgs = Array.from(document.querySelectorAll('#memory-grid img'));
+            if (!imgs.length) return;
+            imgs.forEach((imgEl, index) => {
+                setTimeout(() => {
+                    const name = imgEl.getAttribute('data-download-name') || `THK17_KiNiem_${String(index + 1).padStart(2, '0')}.webp`;
+                    downloadImageAsset(imgEl, name);
+                }, index * 280);
+            });
+        }
+
+        /* --------------------------------------------------------------------------
            0A. DINO PIXEL XANH VƯƠNG MIỆN VÀNG (GIỐNG 100% HÌNH MẪU & ANIMATION)
            -------------------------------------------------------------------------- */
         const DINO_PIXEL_SVG_TEMPLATE = `
@@ -2050,8 +2168,7 @@
         }
 
         /* --------------------------------------------------------------------------
-           0B. HỆ THỐNG CƠ SỞ DỮ LIỆU VĨNH VIỄN (INDEXED_DB + LOCALSTORAGE + CLOUD)
-               Lưu trữ Tài khoản (Accounts) & Ảnh Kỉ niệm tự đăng (Uploaded Photos)
+           0B. HỆ THỐNG CƠ SỞ DỮ LIỆU VĨNH VIỄN (INDEXED_DB + LOCALSTORAGE)
            -------------------------------------------------------------------------- */
         const DB_NAME = 'THK17_Permanent_System_DB';
         const DB_VERSION = 2;
@@ -2086,7 +2203,6 @@
             });
         }
 
-        // Quản lý danh sách Tài khoản lưu vĩnh viễn
         function getSavedAccountsMap() {
             let map = {};
             try {
@@ -2094,7 +2210,6 @@
                 if (raw) map = JSON.parse(raw) || {};
             } catch (_) {}
 
-            // Luôn đảm bảo có sẵn tài khoản Quản trị viên mặc định cho Mai Thiên Phú
             if (!map['admin']) {
                 map['admin'] = { username: 'admin', passwordHash: btoa('thk17@2528'), role: 'admin', createdAt: '2025-09-05' };
             }
@@ -2206,7 +2321,6 @@
             }
         }
 
-        // Điều khiển Modal Đăng nhập / Đăng ký
         function showAuthAlert(msg, isSuccess = false) {
             const box = document.getElementById('auth-alert-box');
             if (!box) return;
@@ -2301,7 +2415,6 @@
                 return;
             }
 
-            // Kiểm tra mã Quản trị viên (THK17ADMIN hoặc thk17@2528)
             const isAdminRole = (adminKeyRaw === 'THK17ADMIN' || adminKeyRaw === 'thk17@2528');
             const newUser = {
                 username: usernameRaw,
@@ -3005,7 +3118,7 @@
 
         /* --------------------------------------------------------------------------
            8. KỈ NIỆM: QUÉT TỰ ĐỘNG 1.webp -> 50.webp TRONG FOLDER +
-              CHỨC NĂNG TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN & CHỈ ADMIN MỚI XÓA ĐƯỢC
+              TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN + NÚT TẢI ẢNH CHO TẤT CẢ ẢNH
            -------------------------------------------------------------------------- */
         const MAX_MEMORY_WEBP = 50;
         const UPLOADED_PHOTOS_LS_BACKUP = 'thk17_uploaded_photos_backup_v1';
@@ -3015,7 +3128,6 @@
             await openPermanentDB();
             const mapById = new Map();
 
-            // 1. Nạp từ localStorage backup
             try {
                 const raw = localStorage.getItem(UPLOADED_PHOTOS_LS_BACKUP);
                 if (raw) {
@@ -3026,7 +3138,6 @@
                 }
             } catch (_) {}
 
-            // 2. Nạp từ IndexedDB (Dung lượng lớn vĩnh viễn)
             if (thk17Db) {
                 await new Promise((resolve) => {
                     try {
@@ -3089,7 +3200,6 @@
             const grid = document.getElementById('memory-grid');
             if (!grid) return;
 
-            // Xóa các node ảnh tự đăng cũ trên DOM để render lại theo quyền Admin hiện tại
             grid.querySelectorAll('.uploaded-memory-card').forEach(el => el.remove());
 
             const adminMode = isCurrentUserAdmin();
@@ -3103,13 +3213,26 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
 
+                const downloadName = `THK17_KiNiem_Upload_${String(idx + 1).padStart(2, '0')}.webp`;
                 const img = document.createElement('img');
                 img.src = item.dataUrl;
                 img.alt = '';
+                img.setAttribute('data-download-name', downloadName);
                 img.className = 'w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
                 wrapper.appendChild(img);
 
-                // Chỉ hiển thị nút Xóa nếu đã đăng nhập là Quản trị viên (Admin)
+                // Nút Tải ảnh cho mọi người dùng (ở góc dưới phải)
+                const dlBtn = document.createElement('button');
+                dlBtn.type = 'button';
+                dlBtn.className = 'img-download-btn absolute bottom-3 right-3 z-30';
+                dlBtn.textContent = '[⬇ TẢI ẢNH]';
+                dlBtn.onclick = function (ev) {
+                    ev.stopPropagation();
+                    downloadImageAsset(img, downloadName);
+                };
+                wrapper.appendChild(dlBtn);
+
+                // Chỉ hiển thị nút Xóa (ở góc trên phải) nếu đã đăng nhập là Quản trị viên (Admin)
                 if (adminMode) {
                     const delBtn = document.createElement('button');
                     delBtn.type = 'button';
@@ -3129,7 +3252,6 @@
             collectScrollElements();
         }
 
-        // Nén ảnh tải lên sang chuẩn WebP sắc nét để lưu trữ vĩnh viễn không giới hạn
         function compressImageFileToWebpDataUrl(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -3190,17 +3312,30 @@
                     const slot = document.createElement('div');
                     slot.id = `memory-slot-${i}`;
                     slot.style.order = String(i);
-                    slot.className = 'scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45';
+                    slot.className = 'scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45 relative group';
 
                     const wrapper = document.createElement('div');
                     wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
 
+                    const downloadName = `THK17_KiNiem_${i}.webp`;
                     const img = document.createElement('img');
                     img.src = `${i}.webp`;
                     img.alt = '';
-                    img.className = 'w-full h-full object-cover object-center transition-transform duration-700 hover:scale-[1.03]';
+                    img.setAttribute('data-download-name', downloadName);
+                    img.className = 'w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
+
+                    // Nút Tải ảnh trên từng ảnh 1.webp -> 50.webp
+                    const dlBtn = document.createElement('button');
+                    dlBtn.type = 'button';
+                    dlBtn.className = 'img-download-btn absolute bottom-3 right-3 z-30';
+                    dlBtn.textContent = '[⬇ TẢI ẢNH]';
+                    dlBtn.onclick = function (ev) {
+                        ev.stopPropagation();
+                        downloadImageAsset(img, downloadName);
+                    };
 
                     wrapper.appendChild(img);
+                    wrapper.appendChild(dlBtn);
                     slot.appendChild(wrapper);
                     grid.appendChild(slot);
                     collectScrollElements();
