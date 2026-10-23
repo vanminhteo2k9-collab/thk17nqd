@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<!-- ==========================================================================
-     [ĐÃ SỬA MỚI V3.0] CẬP NHẬT ĐẦY ĐỦ 8 TÍNH NĂNG THEO YÊU CẦU — MAI THIÊN PHÚ
-     ========================================================================== -->
 <html lang="vi" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -46,6 +43,9 @@
     </script>
 
     <style>
+        /* ==========================================================================
+           STRICT ZERO BORDER-RADIUS & OCEAN BLUE C++ ARCHITECTURAL TOKENS
+           ========================================================================== */
         *, *::before, *::after {
             border-radius: 0px !important;
             box-sizing: border-box;
@@ -63,6 +63,7 @@
             --text-slate: #7FA6C9;
             --line-ocean: rgba(0, 212, 255, 0.18);
             --line-strong: rgba(0, 212, 255, 0.48);
+            /* Dynamic resolution variables populated by Display Calibrator */
             --detected-vw: 1920px;
             --detected-vh: 1080px;
             --nav-safe-height: 112px;
@@ -92,6 +93,7 @@
             padding-top: var(--nav-safe-height);
         }
 
+        /* Custom Ocean Blue Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -107,6 +109,7 @@
             background: #00D4FF;
         }
 
+        /* Exposed Structural Ocean Blueprint Grid */
         .structural-grid-bg {
             background-size: 64px 64px;
             background-image: 
@@ -114,12 +117,14 @@
                 linear-gradient(to bottom, rgba(0, 180, 255, 0.045) 1px, transparent 1px);
         }
 
+        /* Hairline Borders */
         .hairline-t { border-top: 1px solid var(--line-ocean); }
         .hairline-b { border-bottom: 1px solid var(--line-ocean); }
         .hairline-l { border-left: 1px solid var(--line-ocean); }
         .hairline-r { border-right: 1px solid var(--line-ocean); }
         .hairline-all { border: 1px solid var(--line-ocean); }
 
+        /* Crosshair (+) Markers at Structural Intersections */
         .crosshair-box {
             position: relative;
         }
@@ -142,6 +147,7 @@
         .crosshair-tl::before { top: -6px; left: -6px; }
         .crosshair-tr::after { top: -6px; right: -6px; }
 
+        /* Corner L-Bracket Accents */
         .corner-brackets {
             position: relative;
         }
@@ -174,6 +180,7 @@
             border-color: #ffffff;
         }
 
+        /* Luxury C++ Ocean Tech Button */
         .btn-arch {
             position: relative;
             display: inline-flex;
@@ -223,6 +230,7 @@
             color: var(--ocean-aqua);
         }
 
+        /* Persistent Fixed Navigation Bar — NEVER fades out */
         #persistent-navbar {
             position: fixed !important;
             top: 0 !important;
@@ -232,12 +240,13 @@
             opacity: 1 !important;
             filter: none !important;
             transform: none !important;
-            background: rgba(2, 8, 20, 0.96);
+            background: rgba(2, 8, 20, 0.94);
             backdrop-filter: blur(14px);
             border-bottom: 1px solid rgba(0, 212, 255, 0.32);
             box-shadow: 0 8px 32px rgba(0, 12, 32, 0.8);
         }
 
+        /* Active Navigation Tab Styling */
         .nav-item {
             position: relative;
             transition: all 0.22s ease;
@@ -252,38 +261,9 @@
             color: #ffffff;
         }
 
-        /* ==========================================================================
-           [MỚI #1] LÀM ĐỤC 100% BẢNG GỢI Ý TÌM KIẾM (KHÔNG XUYÊN THẤU NỀN)
-           ========================================================================== */
-        #global-search-dropdown {
-            background-color: #020814 !important;
-            background-image: none !important;
-            opacity: 1 !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border: 2px solid #00D4FF !important;
-            box-shadow: 0 30px 90px #000000, 0 0 40px rgba(0, 212, 255, 0.5) !important;
-        }
-        #global-search-dropdown > div:first-child {
-            background-color: #071936 !important;
-            opacity: 1 !important;
-            border-bottom: 2px solid #00D4FF !important;
-        }
-        #global-search-results-list {
-            background-color: #020814 !important;
-            opacity: 1 !important;
-        }
-        #global-search-results-list > button {
-            background-color: #041229 !important;
-            opacity: 1 !important;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.28) !important;
-        }
-        #global-search-results-list > button:hover {
-            background-color: #0b2957 !important;
-        }
-
+        /* Card Architectural Ocean Panel */
         .arch-card {
-            background: linear-gradient(180deg, rgba(7, 25, 54, 0.88) 0%, rgba(3, 12, 28, 0.95) 100%);
+            background: linear-gradient(180deg, rgba(7, 25, 54, 0.86) 0%, rgba(3, 12, 28, 0.94) 100%);
             border: 1px solid rgba(0, 212, 255, 0.2);
             position: relative;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -293,12 +273,14 @@
             box-shadow: inset 0 0 32px rgba(0, 136, 255, 0.12), 0 0 20px rgba(0, 212, 255, 0.1);
         }
 
+        /* Scroll Decay & Emergence Engine Nodes */
         .scroll-node,
         .scroll-card {
             will-change: opacity, transform, filter;
             transform-origin: center center;
         }
 
+        /* Highlight Pulse When Jumping From Global Search */
         @keyframes searchTargetPulse {
             0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.85), inset 0 0 35px rgba(0, 212, 255, 0.35); border-color: #00D4FF !important; }
             50% { box-shadow: 0 0 28px 6px rgba(0, 212, 255, 0.55), inset 0 0 25px rgba(0, 212, 255, 0.25); border-color: #FFFFFF !important; }
@@ -308,6 +290,7 @@
             animation: searchTargetPulse 2.2s ease-out;
         }
 
+        /* Spec Row Hover */
         .spec-row {
             transition: background-color 0.2s ease, padding-left 0.2s ease;
         }
@@ -316,12 +299,150 @@
             padding-left: 0.5rem;
         }
 
+        /* C++ Keyword Highlighting */
         .cpp-kw { color: #00D4FF; font-weight: 600; }
         .cpp-type { color: #659AD2; }
         .cpp-str { color: #7CE38B; }
         .cpp-num { color: #FFA657; }
         .cpp-cmt { color: #5C82A6; font-style: italic; }
 
+        
+        /* Opaque Search Suggestion Dropdown (Đục 100% không xuyên thấu nền) */
+        #global-search-dropdown {
+            background-color: #020814 !important;
+            opacity: 1 !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 2px solid #00D4FF !important;
+            box-shadow: 0 28px 72px rgba(0, 0, 0, 0.99), 0 0 30px rgba(0, 212, 255, 0.4) !important;
+        }
+        #global-search-dropdown > div:first-child {
+            background-color: #061836 !important;
+            opacity: 1 !important;
+        }
+        #global-search-results-list {
+            background-color: #020814 !important;
+            opacity: 1 !important;
+        }
+        #global-search-results-list > button {
+            background-color: #041024 !important;
+            opacity: 1 !important;
+        }
+        #global-search-results-list > button:hover {
+            background-color: #09254e !important;
+        }
+
+        
+        /* ==========================================================================
+           [MỚI] PIXEL BLUE DINO WITH GOLDEN CROWN — 100% EXACT DESIGN & ANIMATIONS
+           ========================================================================== */
+        .thk17-dino-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            user-select: none;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.35));
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .thk17-dino-wrap:hover {
+            filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.75));
+            transform: translateY(-4px) scale(1.08);
+        }
+        .thk17-dino-svg {
+            overflow: visible;
+            animation: dinoBodyBob 0.55s steps(2, end) infinite;
+        }
+        .thk17-dino-svg .dino-leg-left {
+            animation: dinoLegStepA 0.36s steps(2, end) infinite;
+        }
+        .thk17-dino-svg .dino-leg-right {
+            animation: dinoLegStepB 0.36s steps(2, end) infinite;
+        }
+        .thk17-dino-svg .dino-arm {
+            transform-origin: 16px 16px;
+            animation: dinoArmWave 0.7s steps(2, end) infinite;
+        }
+        .thk17-dino-svg .dino-tail {
+            transform-origin: 6px 18px;
+            animation: dinoTailWag 0.6s steps(2, end) infinite;
+        }
+        .thk17-dino-svg .dino-crown {
+            transform-origin: 11px 5px;
+            animation: dinoCrownBounce 0.55s steps(2, end) infinite;
+        }
+        .thk17-dino-svg .dino-eye {
+            transform-origin: 14px 8px;
+            animation: dinoEyeBlink 4.2s infinite;
+        }
+        .thk17-dino-svg .dino-pearl {
+            animation: dinoPearlSparkle 1.4s ease-in-out infinite alternate;
+        }
+
+        @keyframes dinoBodyBob {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2.5px); }
+        }
+        @keyframes dinoLegStepA {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2.2px); }
+        }
+        @keyframes dinoLegStepB {
+            0%, 100% { transform: translateY(-2.2px); }
+            50% { transform: translateY(0px); }
+        }
+        @keyframes dinoArmWave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(1.2px); }
+        }
+        @keyframes dinoTailWag {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-1.2px); }
+        }
+        @keyframes dinoCrownBounce {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(-0.6px, -1.6px) rotate(-3deg); }
+        }
+        @keyframes dinoEyeBlink {
+            0%, 92%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        @keyframes dinoPearlSparkle {
+            0% { fill: #FFFFFF; }
+            100% { fill: #FFF3A1; }
+        }
+
+        /* Đường chạy tuần tra của Dino (Patrol Track) */
+        @keyframes dinoPatrolRun {
+            0% { left: 2%; transform: scaleX(1); }
+            45% { left: 88%; transform: scaleX(1); }
+            50% { left: 90%; transform: scaleX(-1); }
+            95% { left: 4%; transform: scaleX(-1); }
+            100% { left: 2%; transform: scaleX(1); }
+        }
+        @keyframes dinoAutoHop {
+            0%, 18%, 26%, 46%, 54%, 74%, 82%, 100% { transform: translateY(0px); }
+            22%, 50%, 78% { transform: translateY(-18px); }
+        }
+        .dino-patrol-runner {
+            position: absolute;
+            bottom: 4px;
+            animation: dinoPatrolRun 18s linear infinite;
+        }
+        .dino-patrol-hop {
+            animation: dinoAutoHop 18s ease-in-out infinite;
+        }
+        .dino-jump-burst {
+            animation: dinoClickJump 0.55s cubic-bezier(0.2, 0.85, 0.4, 1) !important;
+        }
+        @keyframes dinoClickJump {
+            0% { transform: translateY(0) scale(1); }
+            45% { transform: translateY(-26px) scale(1.15) rotate(-6deg); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        /* Scanline Overlay */
         .crt-overlay {
             background: linear-gradient(
                 rgba(4, 16, 36, 0) 50%, 
@@ -337,11 +458,13 @@
     <!-- ==========================================================================
          0. PRE-ENTRY RESOLUTION & VIEWPORT CALIBRATION OVERLAY
          ========================================================================== -->
-    <div id="resolution-calibrator-modal" class="fixed inset-0 z-[10000] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-opacity duration-500">
+    <div id="resolution-calibrator-modal" class="hidden opacity-0 pointer-events-none fixed inset-0 z-[10000] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-opacity duration-500">
         <div class="arch-card corner-brackets max-w-3xl w-full p-5 sm:p-8 border border-aquaTerm/60 shadow-[0_0_60px_rgba(0,136,255,0.25)]">
             
+            <!-- Top Diagnostic Header -->
             <div class="flex flex-wrap items-center justify-between gap-3 pb-4 hairline-b mb-6">
                 <div class="flex items-center gap-3">
+                    <!-- Official C++ Hexagon Logo SVG -->
                     <svg class="w-9 h-9 shrink-0" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#00599C" stroke="#00D4FF" stroke-width="3"/>
                         <polygon points="50,3 93,27 50,50 7,27" fill="#659AD2" opacity="0.45"/>
@@ -364,7 +487,10 @@
                 </span>
             </div>
 
+            <!-- Live Resolution & Viewport Boundary Telemetry Grid -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-6">
+                
+                <!-- Left: Detected Specs -->
                 <div class="md:col-span-7 space-y-3 font-mono text-xs">
                     <div class="p-3 bg-oceanDeep border border-aquaTerm/25">
                         <div class="text-[10px] text-slateBlue mb-1">// 01. ĐỘ PHÂN GIẢI KHUNG NHÌN THỰC TẾ</div>
@@ -404,22 +530,27 @@
                     </div>
                 </div>
 
+                <!-- Right: Visual Screen Boundary Simulator -->
                 <div class="md:col-span-5 bg-abyss border border-aquaTerm/30 p-3 flex flex-col justify-between font-mono text-[10px]">
                     <div class="text-center text-slateBlue pb-1.5 hairline-b">
                         SƠ ĐỒ KHUNG NHÌN THIẾT BỊ
                     </div>
                     <div class="my-2 flex-1 border border-aquaTerm/40 relative flex flex-col justify-between overflow-hidden min-h-[165px]">
+                        <!-- Simulated Fixed Menu -->
                         <div class="bg-cppBlue/60 border-b border-aquaTerm px-2 py-1 text-[9px] text-iceWhite flex justify-between">
                             <span>THANH MENU &amp; TÌM KIẾM (LUÔN HIỆN)</span>
                             <span id="sim-nav-px">0→112px</span>
                         </div>
+                        <!-- Simulated Top Decay Band -->
                         <div class="bg-oceanBright/20 border-b border-dashed border-aquaTerm/60 px-2 py-1 text-[9px] text-aquaTerm text-center">
                             ▲ KHUẤT VÀO GẦM MENU → MỜ &amp; ẨN DẦN
                         </div>
+                        <!-- Simulated Safe Active Center -->
                         <div class="flex-1 flex flex-col items-center justify-center px-2 py-2 bg-oceanDeep/60 text-center">
                             <span class="text-iceWhite font-bold text-[10px]">VÙNG NỘI DUNG CHÍNH</span>
                             <span id="sim-center-res" class="text-aquaTerm text-[9px]">HIỂN THỊ RÕ NÉT 100%</span>
                         </div>
+                        <!-- Simulated Bottom Emerge Band -->
                         <div class="bg-oceanBright/20 border-t border-dashed border-aquaTerm/60 px-2 py-1 text-[9px] text-aquaTerm text-center">
                             ▼ MÉP DƯỚI MÀN HÌNH → NỘI DUNG HIỆN DẦN
                         </div>
@@ -430,6 +561,7 @@
                 </div>
             </div>
 
+            <!-- Calibration Progress Bar & Action Button -->
             <div class="space-y-3 pt-3 hairline-t">
                 <div class="flex justify-between font-mono text-[11px]">
                     <span id="cal-log-line" class="text-aquaTerm">&gt; std::calibrate_viewport(window.innerWidth, window.innerHeight)...</span>
@@ -440,7 +572,7 @@
                 </div>
                 <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                     <span class="font-mono text-[11px] text-slateBlue">
-                        Lớp <strong class="text-iceWhite">THK17 (25-28)</strong> • Người thiết kế: <strong class="text-aquaTerm">Mai Thiên Phú</strong>
+                        Lớp <strong class="text-iceWhite">THK17 (25-28)</strong> • Chuyên Tin Học • THPT Chuyên Nguyễn Quang Diêu
                     </span>
                     <button id="enter-portal-btn" onclick="dismissCalibrator()" class="btn-arch btn-arch-ocean font-bold">
                         <span>[XÁC NHẬN &amp; TRUY CẬP CỔNG THÔNG TIN]</span>
@@ -452,10 +584,10 @@
     </div>
 
     <!-- ==========================================================================
-         1. INTERACTIVE BINARY OCEAN & C++ TOPOLOGY CANVAS BACKGROUND (RÕ NÉT)
+         1. INTERACTIVE BINARY OCEAN & C++ TOPOLOGY CANVAS BACKGROUND
          ========================================================================== -->
     <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95"></canvas>
-    <div class="fixed inset-0 crt-overlay z-0 opacity-20"></div>
+    <div class="fixed inset-0 crt-overlay z-0 opacity-25"></div>
 
     <!-- ==========================================================================
          2. FIXED SIDE TELEMETRY RAILS (LEFT & RIGHT)
@@ -497,6 +629,7 @@
          3. PERSISTENT FIXED TOP NAVIGATION BAR + INLINE GLOBAL WEBSITE SEARCH
          ========================================================================== -->
     <header id="persistent-navbar">
+        <!-- Top System & Resolution Status Strip -->
         <div class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
             <div class="flex items-center gap-3">
                 <span class="flex items-center gap-1.5 text-aquaTerm font-bold">
@@ -518,11 +651,13 @@
             </div>
         </div>
 
+        <!-- Main Navigation Bar: Brand + 5 Always-Visible Menu Tabs + Inline Global Website Search -->
         <div class="px-3 sm:px-6 lg:px-14 flex flex-col lg:flex-row lg:items-stretch justify-between relative">
             
             <!-- Left Brand -->
             <div class="flex items-center justify-between py-2 lg:py-0 lg:pr-5 lg:hairline-r shrink-0">
                 <a href="#trang-chu" class="flex items-center gap-3 group">
+                    <!-- Official C++ Hexagon Logo SVG -->
                     <svg class="w-9 h-9 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <polygon points="50,4 92,28 92,72 50,96 8,72 8,28" fill="#00599C" stroke="#00D4FF" stroke-width="4"/>
                         <polygon points="50,4 92,28 50,50 8,28" fill="#659AD2" opacity="0.45"/>
@@ -536,6 +671,124 @@
                             <span class="font-display font-bold tracking-wider text-base text-iceWhite">THK17</span>
                             <span class="font-mono text-[10px] px-1.5 py-0.5 bg-cppBlue/50 border border-aquaTerm/50 text-aquaTerm font-bold">25—28</span>
                             <span class="hidden sm:inline-block font-mono text-[10px] px-1.5 py-0.5 bg-oceanDeep border border-white/15 text-cppLight">C++23</span>
+                            <span class="thk17-dino-wrap w-7 h-7 -mt-1 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span>
                         </div>
                         <p class="font-mono text-[9px] text-slateBlue tracking-wider uppercase">
                             THPT CHUYÊN NGUYỄN QUANG DIÊU
@@ -568,10 +821,10 @@
                 </a>
             </nav>
 
-            <!-- Right Inline Global Search Bar -->
+            <!-- Right Inline Global Search Bar (Nằm ngang hàng với Menu) -->
             <div class="flex items-center flex-1 lg:pl-4 py-2 lg:py-0 border-t lg:border-t-0 border-aquaTerm/20 relative min-w-[240px] max-w-full lg:max-w-sm ml-auto">
                 <div class="w-full relative">
-                    <div class="flex items-center bg-[#041024] border border-aquaTerm/60 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.35)]">
+                    <div class="flex items-center bg-oceanDeep/90 border border-aquaTerm/50 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.3)]">
                         <span class="pl-3 pr-1.5 font-mono text-[11px] text-aquaTerm font-bold select-none">
                             🔍
                         </span>
@@ -592,16 +845,16 @@
                         </button>
                     </div>
 
-                    <!-- [MỚI #1] Bảng kết quả tìm kiếm ĐỤC 100% -->
+                    <!-- Live Global Search Dropdown Results Panel -->
                     <div 
                         id="global-search-dropdown" 
-                        class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1.5 bg-[#020814] border-2 border-aquaTerm z-[9999] max-h-[380px] overflow-y-auto"
+                        class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1.5 bg-[#020814] border-2 border-aquaTerm shadow-[0_24px_64px_rgba(0,0,0,1)] z-[9999] max-h-[380px] overflow-y-auto"
                     >
-                        <div class="px-3.5 py-2.5 bg-[#071936] flex items-center justify-between font-mono text-[10px]">
+                        <div class="px-3.5 py-2 bg-oceanDeep hairline-b flex items-center justify-between font-mono text-[10px]">
                             <span class="text-aquaTerm font-bold">KẾT QUẢ TÌM KIẾM TRÊN TOÀN TRANG</span>
-                            <span id="global-search-count" class="text-iceWhite font-bold">0 kết quả</span>
+                            <span id="global-search-count" class="text-iceWhite">0 kết quả</span>
                         </div>
-                        <div id="global-search-results-list">
+                        <div id="global-search-results-list" class="divide-y divide-aquaTerm/15">
                             <!-- Populated dynamically by JS -->
                         </div>
                     </div>
@@ -620,28 +873,146 @@
              ====================================================================== -->
         <section id="trang-chu" class="hairline-l hairline-r hairline-b pt-8 pb-20 px-4 sm:px-8 lg:px-12 relative">
             
-            <!-- [MỚI #2] THANH TIÊU ĐỀ TRANG CHỦ CÓ 3 NÚT 10TH, 11TH, 12TH TẠI KHOẢNG TRỐNG KẾ NIÊN KHÓA -->
+            <!-- Top Section Header Bar (Luôn hiển thị rõ 3 nút 10TH, 11TH, 12TH kế Niên khóa) -->
             <div class="flex flex-wrap items-center justify-between gap-4 pb-5 hairline-b font-mono text-xs text-slateBlue">
                 <div class="flex items-center gap-3">
                     <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">01 // TRANG CHỦ</span>
                     <span class="text-iceWhite tracking-wider">TẬP THỂ LỚP CHUYÊN TIN HỌC THK17</span>
                 </div>
 
-                <!-- 3 NÚT KHỐI LỚP: 10TH (Tick vô), 11TH (Mờ + Đang thực thi), 12TH (Để trống) -->
+                <!-- 3 Nút khối lớp tại vị trí trống kế Niên khóa: 10TH (Tick), 11TH (Mờ + Đang thực thi), 12TH (Để trống) -->
                 <div class="flex flex-wrap items-center gap-2.5">
                     <button type="button" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#06244a] border-2 border-aquaTerm text-iceWhite font-mono text-xs font-bold shadow-[0_0_16px_rgba(0,212,255,0.4)] cursor-default">
                         <span class="w-4 h-4 bg-aquaTerm text-abyss flex items-center justify-center font-extrabold text-xs leading-none">✓</span>
                         <span class="text-aquaTerm font-bold">10TH</span>
                     </button>
-                    <button type="button" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#04152d] border border-aquaTerm/50 text-cppLight font-mono text-xs opacity-55 cursor-default">
+                    <button type="button" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#04152d] border border-aquaTerm/50 text-cppLight font-mono text-xs opacity-60 cursor-default">
                         <span class="w-3.5 h-3.5 border border-aquaTerm/70 flex items-center justify-center text-[9px] text-aquaTerm">•</span>
                         <span class="font-semibold text-iceWhite">11TH</span>
-                        <span class="text-[10px] text-aquaTerm italic">Đang thực thi</span>
+                        <span class="text-[10px] text-aquaTerm italic">(Đang thực thi)</span>
                     </button>
-                    <button type="button" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#020b18] border border-slateBlue/35 text-slateBlue font-mono text-xs opacity-45 cursor-default">
+                    <button type="button" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#020b18] border border-slateBlue/35 text-slateBlue font-mono text-xs opacity-50 cursor-default">
                         <span class="w-3.5 h-3.5 border border-slateBlue/50 inline-block"></span>
                         <span>12TH</span>
                     </button>
+                    <span class="thk17-dino-wrap w-8 h-8 ml-1 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span>
                 </div>
 
                 <div class="flex items-center gap-4">
@@ -654,6 +1025,7 @@
             <!-- Hero Cover Showcase -->
             <div class="py-8 hairline-b">
                 <div class="scroll-card arch-card corner-brackets overflow-hidden">
+                    <!-- Cover Frame Top Bar (Clean, Official, No File Names or Upload Buttons) -->
                     <div class="scroll-node px-4 py-2.5 bg-oceanDeep hairline-b flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 bg-aquaTerm inline-block"></span>
@@ -665,7 +1037,10 @@
                         </div>
                     </div>
 
+                    <!-- Cover Image Container -->
                     <div class="scroll-node relative w-full h-[300px] sm:h-[420px] lg:h-[480px] bg-abyss overflow-hidden group">
+                        
+                        <!-- Fallback Architectural C++ Ocean Backdrop -->
                         <div id="nen-fallback-layer" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[#020814] via-[#051b3b] to-[#003b6f]">
                             <svg class="w-full h-full absolute inset-0 opacity-30" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
                                 <defs>
@@ -699,6 +1074,7 @@
                             </div>
                         </div>
 
+                        <!-- Primary Cover Image Element -->
                         <img 
                             id="hero-cover-img" 
                             src="nen.webp" 
@@ -708,6 +1084,7 @@
                             onerror="handleCoverFallback()"
                         >
 
+                        <!-- Architectural HUD Overlay on Cover Image -->
                         <div class="absolute inset-0 z-20 bg-gradient-to-t from-abyss via-abyss/35 to-transparent pointer-events-none"></div>
                         
                         <div class="absolute bottom-0 left-0 right-0 z-30 p-5 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -724,17 +1101,272 @@
                                     📍 Phường Mỹ Trà, Tỉnh Đồng Tháp • Giáo viên chủ nhiệm: <strong class="text-aquaTerm">Thầy Nguyễn Phúc Duy</strong>
                                 </p>
                             </div>
-                            <div class="font-mono text-[11px] bg-abyss/85 border border-aquaTerm/40 px-3.5 py-2 text-right">
-                                <div class="text-aquaTerm font-bold">LỚP THK17 (25-28)</div>
-                                <div class="text-slateBlue">NGÔN NGỮ CHỦ LỰC: ISO C++23</div>
+                            <div class="flex items-center gap-3">
+                                <span class="thk17-dino-wrap w-12 h-12 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span>
+                                <div class="font-mono text-[11px] bg-abyss/85 border border-aquaTerm/40 px-3.5 py-2 text-right">
+                                    <div class="text-aquaTerm font-bold">LỚP THK17 (25-28)</div>
+                                    <div class="text-slateBlue">NGÔN NGỮ CHỦ LỰC: ISO C++23</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Đường chạy tuần tra của Dino Pixel Xanh Đội Vương Miện Vàng -->
+                    <div class="relative h-12 bg-[#020916] hairline-t overflow-hidden flex items-end px-4 select-none">
+                        <div class="w-full border-b border-dashed border-aquaTerm/35 pb-1 flex justify-between items-center font-mono text-[10px] text-slateBlue/50">
+                            <span>01000011 00101011 00101011</span>
+                            <span class="px-1.5 py-0.5 border border-aquaTerm/30 text-aquaTerm/70 bg-oceanDeep/80">[C++23_OBSTACLE]</span>
+                            <span class="hidden sm:inline">std::vector&lt;THK17_Dino&gt;</span>
+                            <span class="px-1.5 py-0.5 border border-aquaTerm/30 text-aquaTerm/70 bg-oceanDeep/80">[AC_100/100]</span>
+                            <span>THPT_CHUYEN_NQD</span>
+                        </div>
+                        <div class="dino-patrol-runner">
+                            <div class="dino-patrol-hop">
+                                <span class="thk17-dino-wrap w-9 h-9 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Hero Split Grid -->
+            <!-- Hero Split Grid: Left C++ Manifesto (7 cols) + Right Interactive g++ Terminal (5 cols) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 hairline-b">
+                
+                <!-- Left Column: THK17 C++ Identity (7 cols) -->
                 <div class="lg:col-span-7 py-10 lg:pr-10 lg:hairline-r flex flex-col justify-between">
                     <div>
                         <div class="scroll-node inline-flex items-center gap-2.5 px-3 py-1.5 border border-aquaTerm/50 bg-oceanDim mb-6">
@@ -749,6 +1381,7 @@
                             KIẾN TRÚC <span class="font-serif italic font-normal text-cppLight">ĐẠI DƯƠNG SỐ</span>.
                         </h1>
 
+                        <!-- Authentic C++23 Class Declaration Block -->
                         <div class="scroll-node my-6 p-4 border-l-4 border-aquaTerm bg-oceanDeep/90 font-mono text-xs leading-relaxed overflow-x-auto">
                             <div><span class="cpp-kw">namespace</span> <span class="text-iceWhite font-bold">THPT_Chuyen_Nguyen_Quang_Dieu</span> {</div>
                             <div class="pl-4"><span class="cpp-kw">struct</span> <span class="cpp-type">THK17_25_28</span> {</div>
@@ -765,6 +1398,7 @@
                         </p>
                     </div>
 
+                    <!-- Hero CTA Buttons -->
                     <div class="scroll-node flex flex-wrap items-center gap-4 pt-5 hairline-t">
                         <a href="#thong-tin" class="btn-arch btn-arch-ocean font-bold">
                             <span>XEM GVCN, BAN CÁN SỰ &amp; 34 THÀNH VIÊN</span>
@@ -776,17 +1410,140 @@
                     </div>
                 </div>
 
+                <!-- Right Column: Live Interactive g++ C++23 Terminal (5 cols) -->
                 <div id="terminal-console" class="lg:col-span-5 py-10 lg:pl-10 flex flex-col justify-between">
                     <div class="scroll-card arch-card corner-brackets h-full flex flex-col justify-between">
+                        <!-- Terminal Header -->
                         <div class="scroll-node hairline-b px-4 py-3 bg-oceanDeep flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 bg-oceanBright inline-block"></span>
                                 <span class="w-2.5 h-2.5 bg-aquaTerm inline-block"></span>
                                 <span class="font-mono text-xs text-iceWhite font-bold ml-1">TRÌNH ĐIỀU KHIỂN C++ // thk17@chuyen-nqd:~</span>
                             </div>
-                            <span class="font-mono text-[10px] text-aquaTerm">[C++23_SHELL]</span>
+                            <div class="flex items-center gap-2">
+                                <span class="thk17-dino-wrap w-7 h-7 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span>
+                                <span class="font-mono text-[10px] text-aquaTerm">[C++23_SHELL]</span>
+                            </div>
                         </div>
 
+                        <!-- Terminal Output Stream -->
                         <div id="terminal-output" class="p-5 font-mono text-xs space-y-2.5 overflow-y-auto max-h-[340px] text-iceWhite/90">
                             <div class="scroll-node text-slateBlue">
                                 $ Khởi tạo hệ thống điều hành lớp Chuyên Tin THK17...
@@ -810,6 +1567,7 @@
                             </div>
                         </div>
 
+                        <!-- Interactive CLI Input Row -->
                         <form id="terminal-form" class="scroll-node hairline-t bg-abyss px-4 py-3 flex items-center gap-2">
                             <span class="font-mono text-xs text-aquaTerm font-bold">thk17@nqd:~$</span>
                             <input 
@@ -876,20 +1634,139 @@
         </section>
 
         <!-- ======================================================================
-             SECTION 02 // THÔNG TIN (GVCN PD.webp, BAN CÁN SỰ & 34 THÀNH VIÊN)
+             SECTION 02 // THÔNG TIN (GVCN, BAN CÁN SỰ & DANH SÁCH 34 THÀNH VIÊN)
              ====================================================================== -->
         <section id="thong-tin" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
+            <!-- Section Header -->
             <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
                 <div class="flex items-center gap-3">
                     <span class="px-2.5 py-0.5 bg-oceanBright text-abyss font-bold">02 // THÔNG TIN</span>
                     <span class="text-iceWhite tracking-widest">CƠ CẤU TỔ CHỨC, BAN CÁN SỰ &amp; DANH SÁCH 34 THÀNH VIÊN LỚP THK17</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span>NAMESPACE: <strong class="text-aquaTerm">NQD::THK17_25_28</strong></span>
+                    <span class="inline-flex items-center gap-2"><span class="thk17-dino-wrap w-7 h-7 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span> <span>NAMESPACE: <strong class="text-aquaTerm">NQD::THK17_25_28</strong></span></span>
                 </div>
             </div>
 
+            <!-- Section Title -->
             <div class="py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 hairline-b">
                 <div class="lg:col-span-7">
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
@@ -906,7 +1783,9 @@
                 </div>
             </div>
 
-            <!-- [MỚI #3] GIÁO VIÊN CHỦ NHIỆM — HÌNH THẦY LÀ PD.webp -->
+            <!-- ==================================================================
+                 1. GIÁO VIÊN CHỦ NHIỆM — THẦY NGUYỄN PHÚC DUY
+                 ================================================================== -->
             <div id="gvcn-card-wrapper" class="pt-10 pb-10">
                 <div class="scroll-card arch-card corner-brackets p-6 sm:p-8 border-2 border-oceanBright/70 bg-gradient-to-r from-[#04132c] via-[#072247] to-[#04132c]">
                     <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-6 font-mono text-xs">
@@ -920,12 +1799,12 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        <!-- Khung ảnh PD.webp của Thầy Nguyễn Phúc Duy -->
+                        <!-- Chân dung Giáo viên chủ nhiệm: PD.webp -->
                         <div class="lg:col-span-3 flex flex-col items-center justify-center p-4 bg-abyss/95 border-2 border-aquaTerm/60 text-center">
-                            <div class="w-40 h-40 sm:w-44 sm:h-44 mb-3 border-2 border-aquaTerm bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_25px_rgba(0,212,255,0.3)]">
+                            <div class="w-40 h-40 sm:w-48 sm:h-48 mb-3 border-2 border-aquaTerm bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_28px_rgba(0,212,255,0.3)]">
                                 <img 
                                     src="PD.webp" 
-                                    alt="Thầy Nguyễn Phúc Duy — GVCN lớp THK17" 
+                                    alt="Thầy Nguyễn Phúc Duy — Giáo viên chủ nhiệm lớp THK17" 
                                     class="w-full h-full object-cover object-center"
                                 >
                             </div>
@@ -933,6 +1812,7 @@
                             <span class="font-mono text-[10px] text-slateBlue mt-0.5">CHUYÊN TIN THK17 (25-28)</span>
                         </div>
 
+                        <!-- GVCN Main Details -->
                         <div class="lg:col-span-6 space-y-2">
                             <div class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest">
                                 // GIÁO VIÊN CHỦ NHIỆM LỚP THK17
@@ -945,6 +1825,7 @@
                             </p>
                         </div>
 
+                        <!-- GVCN Properties -->
                         <div class="lg:col-span-3 p-4 bg-abyss/90 border border-aquaTerm/30 font-mono text-[11px] space-y-2">
                             <div class="text-aquaTerm font-bold border-b border-aquaTerm/20 pb-1">Thông tin đơn vị</div>
                             <div class="flex justify-between"><span class="text-slateBlue">LỚP:</span><span class="text-iceWhite font-bold">THK17 (25-28)</span></div>
@@ -956,7 +1837,9 @@
                 </div>
             </div>
 
-            <!-- 2. BAN CÁN SỰ LỚP THK17 (07 THÀNH VIÊN) -->
+            <!-- ==================================================================
+                 2. BAN CÁN SỰ LỚP THK17 (07 THÀNH VIÊN — TRÌNH BÀY TRANG TRỌNG)
+                 ================================================================== -->
             <div class="mb-6 flex flex-wrap items-center justify-between gap-2">
                 <div class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest font-bold">
                     // BAN CÁN SỰ LỚP CHUYÊN TIN THK17 (07 THÀNH VIÊN ĐIỀU HÀNH)
@@ -967,6 +1850,8 @@
             </div>
 
             <div id="officers-card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 pb-12 hairline-b">
+
+                <!-- 1. Lớp trưởng: Nguyễn Thụy Hà My -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -989,6 +1874,7 @@
                     </div>
                 </article>
 
+                <!-- 2. Lớp phó học tập: Nguyễn Phước Hiếu -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -1011,6 +1897,7 @@
                     </div>
                 </article>
 
+                <!-- 3. Bí thư chi đoàn & Lớp phó thể chất: Đặng Nguyễn Tiến Dũng -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -1033,6 +1920,7 @@
                     </div>
                 </article>
 
+                <!-- 4. Lớp phó trật tự: Nguyễn Thị Tường Vy -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -1055,6 +1943,7 @@
                     </div>
                 </article>
 
+                <!-- 5. Lớp phó đọc sách: Nguyễn Thanh Huy -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -1077,6 +1966,7 @@
                     </div>
                 </article>
 
+                <!-- 6. Lớp phó lao động: Phạm Hữu Tài -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -1099,6 +1989,7 @@
                     </div>
                 </article>
 
+                <!-- 7. Thư ký: Huỳnh Anh Thư -->
                 <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
@@ -1121,6 +2012,7 @@
                     </div>
                 </article>
 
+                <!-- 8th Summary Card -->
                 <article class="scroll-card arch-card p-6 bg-oceanDeep/60 border border-dashed border-aquaTerm/40 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node font-mono text-[10px] text-aquaTerm uppercase tracking-widest pb-3 hairline-b mb-4">
@@ -1141,7 +2033,9 @@
                 </article>
             </div>
 
-            <!-- 3. DANH SÁCH 34 THÀNH VIÊN -->
+            <!-- ==================================================================
+                 3. DANH SÁCH ĐẦY ĐỦ 34 THÀNH VIÊN LỚP CHUYÊN TIN THK17 (25-28)
+                 ================================================================== -->
             <div id="roster-34-section" class="pt-12 pb-12 hairline-b">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
                     <div>
@@ -1153,6 +2047,7 @@
                         </h3>
                     </div>
 
+                    <!-- Roster Filter Buttons -->
                     <div class="scroll-node flex flex-wrap gap-2 font-mono text-xs">
                         <button type="button" data-roster-filter="all" class="roster-filter-btn px-4 py-2 bg-aquaTerm text-abyss font-bold border border-aquaTerm cursor-pointer">
                             [TẤT CẢ THÀNH VIÊN (34)]
@@ -1163,11 +2058,16 @@
                     </div>
                 </div>
 
-                <div id="roster-34-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5"></div>
+                <!-- 34 Members Grid (Rendered cleanly & searchable by Global Search) -->
+                <div id="roster-34-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                    <!-- Populated on load from the official 34-student array so both static & dynamic filters stay 100% accurate -->
+                </div>
             </div>
 
             <!-- Detailed Executive Table & C++23 Algorithm Library -->
             <div class="grid grid-cols-1 lg:grid-cols-12 pt-12 gap-8">
+                
+                <!-- Left: Complete Executive Summary Table (7 cols) -->
                 <div class="lg:col-span-7 scroll-card arch-card corner-brackets p-6 sm:p-8">
                     <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-5">
                         <div>
@@ -1243,6 +2143,7 @@
                     </div>
                 </div>
 
+                <!-- Right: C++23 Algorithm Source Inspector (5 cols) -->
                 <div class="lg:col-span-5 scroll-card arch-card corner-brackets p-6 sm:p-8 flex flex-col justify-between">
                     <div>
                         <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-4">
@@ -1291,20 +2192,139 @@
         </section>
 
         <!-- ======================================================================
-             [MỚI #4] SECTION 03 // KỈ NIỆM (TỰ ĐỘNG NHẬN 1.webp -> 50.webp TRONG FOLDER)
+             SECTION 03 // KỈ NIỆM (AUTO-DETECT 1.webp -> 50.webp IN FOLDER)
              ====================================================================== -->
         <section id="ki-niem" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
+            <!-- Section Header -->
             <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
                 <div class="flex items-center gap-3">
                     <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">03 // KỈ NIỆM</span>
-                    <span class="text-iceWhite tracking-widest">BẢO TÀNG KÝ ỨC TẬP THỂ LỚP THK17 (2025 – 2028)</span>
+                    <span class="text-iceWhite tracking-widest">KHO LƯU TRỮ HÌNH ẢNH KỈ NIỆM LỚP THK17 (2025 – 2028)</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span>ĐỊA ĐIỂM: <strong class="text-aquaTerm">CHUYÊN NGUYỄN QUANG DIÊU — ĐỒNG THÁP</strong></span>
+                    <span class="inline-flex items-center gap-2"><span class="thk17-dino-wrap w-7 h-7 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span> <span>ĐỊA ĐIỂM: <strong class="text-aquaTerm">CHUYÊN NGUYỄN QUANG DIÊU — ĐỒNG THÁP</strong></span></span>
                 </div>
             </div>
 
+            <!-- Title Bar -->
             <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
                 <div>
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
@@ -1314,21 +2334,25 @@
                         BỘ NHỚ <span class="font-serif italic font-normal text-cppLight">THANH XUÂN</span> THK17.
                     </h2>
                 </div>
+
             </div>
 
-            <!-- Lưới ảnh tự động hiển thị theo thứ tự 1.webp -> 50.webp (chỉ hiện khi có file trong folder, không chú thích, không xem chi tiết) -->
-            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10"></div>
+            <!-- Dynamic 1.webp -> 50.webp Grid (Only renders existing files in numerical order, no captions/modals) -->
+            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
+                <!-- Populated automatically in strict order 1.webp -> 50.webp by JS -->
+            </div>
         </section>
 
         <!-- ======================================================================
-             [MỚI #5] SECTION 04 // MẠNG XÃ HỘI (CHỈ GỒM FACEBOOK & TIKTOK CHÍNH THỨC)
+             SECTION 04 // MẠNG XÃ HỘI (OFFICIAL FACEBOOK & TIKTOK)
              ====================================================================== -->
         <section id="mang-xa-hoi" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
+            <!-- Section Header -->
             <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
                 <div class="flex items-center gap-3">
                     <span class="px-2.5 py-0.5 bg-oceanBright text-abyss font-bold">04 // MẠNG XÃ HỘI</span>
-                    <span class="text-iceWhite tracking-widest">MẠNG LƯỚI KẾT NỐI TRỰC TUYẾN LỚP THK17</span>
+                    <span class="text-iceWhite tracking-widest">KÊNH TRUYỀN THÔNG CHÍNH THỨC LỚP THK17</span>
                 </div>
                 <div class="flex items-center gap-3">
                     <button id="ping-all-btn" class="px-3 py-1 border border-aquaTerm text-aquaTerm hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer font-bold">
@@ -1340,7 +2364,7 @@
             <div class="py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 hairline-b">
                 <div class="lg:col-span-6">
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
-                        // CÁC KÊNH TRUYỀN THÔNG CHÍNH THỨC
+                        // MẠNG XÃ HỘI CHÍNH THỨC CỦA LỚP
                     </p>
                     <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-iceWhite tracking-tight">
                         KÊNH KẾT NỐI <span class="font-serif italic font-normal text-cppLight">TRỰC TUYẾN</span>.
@@ -1348,75 +2372,75 @@
                 </div>
                 <div class="lg:col-span-6 flex flex-col justify-end">
                     <p class="scroll-node text-slateBlue text-sm sm:text-base leading-relaxed">
-                        Theo dõi các hoạt động ngoại khóa, bản tin học tập và video kỷ niệm của tập thể 34 thành viên lớp <strong class="text-iceWhite">THK17 (25-28) — THPT Chuyên Nguyễn Quang Diêu</strong> qua Facebook và TikTok chính thức.
+                        Theo dõi các hoạt động tập thể, hình ảnh ngoại khóa và những thước phim kỉ niệm của tập thể 34 thành viên lớp <strong class="text-iceWhite">Chuyên Tin Học THK17 (25-28) — THPT Chuyên Nguyễn Quang Diêu</strong> qua Facebook và TikTok chính thức.
                     </p>
                 </div>
             </div>
 
-            <!-- Chỉ giữ đúng 2 kênh: Facebook & TikTok kèm Logo -->
+            <!-- 2 Official Social Channels: Facebook & TikTok -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
 
-                <!-- 1. FACEBOOK -->
+                <!-- 01. FACEBOOK -->
                 <div class="scroll-card arch-card corner-brackets p-7 sm:p-8 flex flex-col justify-between">
                     <div>
-                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-5">
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] pb-4 hairline-b mb-6">
                             <span class="text-aquaTerm font-bold">KÊNH 01 // FACEBOOK CHÍNH THỨC</span>
-                            <span class="text-cppLight node-ping" data-base="14">14ms // TRỰC TUYẾN</span>
+                            <span class="px-2 py-0.5 bg-oceanBright/20 border border-aquaTerm/50 text-aquaTerm node-ping" data-base="14">14ms // TRỰC TUYẾN</span>
                         </div>
                         <div class="scroll-node flex items-center gap-4 mb-4">
-                            <!-- Logo Facebook -->
-                            <div class="w-14 h-14 shrink-0 bg-[#1877F2]/20 border border-[#1877F2] flex items-center justify-center shadow-[0_0_20px_rgba(24,119,242,0.4)]">
+                            <!-- Facebook Official Logo SVG -->
+                            <div class="w-14 h-14 shrink-0 bg-[#1877F2]/20 border border-[#1877F2] flex items-center justify-center shadow-[0_0_20px_rgba(24,119,242,0.35)]">
                                 <svg class="w-8 h-8 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
                                 </svg>
                             </div>
-                            <div class="min-w-0">
-                                <h3 class="font-display font-bold text-2xl text-iceWhite truncate">Facebook THK17 (25-28)</h3>
-                                <p class="font-mono text-xs text-oceanBright truncate">facebook.com/profile.php?id=61579046232567</p>
+                            <div>
+                                <h3 class="font-display font-bold text-2xl sm:text-3xl text-iceWhite">Facebook THK17 (25-28)</h3>
+                                <p class="font-mono text-xs text-oceanBright break-all mt-0.5">facebook.com/profile.php?id=61579046232567</p>
                             </div>
                         </div>
                         <p class="scroll-node text-xs sm:text-sm text-slateBlue leading-relaxed mb-6">
-                            Cập nhật hình ảnh hoạt động ngoại khóa, bản tin học tập, sinh nhật thành viên và những khoảnh khắc tại trường THPT Chuyên Nguyễn Quang Diêu.
+                            Trang Facebook chính thức cập nhật thông tin hoạt động tập thể, sự kiện học thuật và những khoảnh khắc đáng nhớ của lớp Chuyên Tin Học THK17 — Trường THPT Chuyên Nguyễn Quang Diêu.
                         </p>
                     </div>
-                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
-                        <span class="font-mono text-[10px] text-slateBlue">MỸ TRÀ, ĐỒNG THÁP</span>
-                        <a href="https://www.facebook.com/profile.php?id=61579046232567" target="_blank" rel="noopener noreferrer" class="btn-arch btn-arch-ocean py-2.5 px-5 text-[11px] font-bold">
-                            <span>KẾT NỐI FACEBOOK</span>
-                            <span>→</span>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between gap-4">
+                        <span class="font-mono text-[11px] text-slateBlue">THPT CHUYÊN NGUYỄN QUANG DIÊU</span>
+                        <a href="https://www.facebook.com/profile.php?id=61579046232567" target="_blank" rel="noopener noreferrer" class="btn-arch btn-arch-ocean py-2.5 px-5 text-xs font-bold">
+                            <span>TRUY CẬP FACEBOOK</span>
+                            <span>↗</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- 2. TIKTOK -->
+                <!-- 02. TIKTOK -->
                 <div class="scroll-card arch-card corner-brackets p-7 sm:p-8 flex flex-col justify-between">
                     <div>
-                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-5">
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] pb-4 hairline-b mb-6">
                             <span class="text-aquaTerm font-bold">KÊNH 02 // TIKTOK CHÍNH THỨC</span>
-                            <span class="text-cppLight node-ping" data-base="12">12ms // TRỰC TUYẾN</span>
+                            <span class="px-2 py-0.5 bg-oceanBright/20 border border-aquaTerm/50 text-aquaTerm node-ping" data-base="12">12ms // TRỰC TUYẾN</span>
                         </div>
                         <div class="scroll-node flex items-center gap-4 mb-4">
-                            <!-- Logo TikTok -->
-                            <div class="w-14 h-14 shrink-0 bg-abyss border border-aquaTerm flex items-center justify-center shadow-[0_0_20px_rgba(0,212,255,0.4)]">
+                            <!-- TikTok Official Logo SVG -->
+                            <div class="w-14 h-14 shrink-0 bg-abyss border border-aquaTerm flex items-center justify-center shadow-[0_0_20px_rgba(0,212,255,0.35)]">
                                 <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M16.6 5.82C15.9165 5.03962 15.5397 4.03746 15.54 3H12.45V15.4C12.4262 16.071 12.1429 16.7066 11.6598 17.1729C11.1767 17.6393 10.5316 17.8998 9.86 17.9C8.44 17.9 7.26 16.74 7.26 15.3C7.26 13.58 8.92 12.29 10.63 12.82V9.66C7.18 9.2 4.16 11.88 4.16 15.3C4.16 18.63 6.92 21 9.85 21C12.99 21 15.54 18.45 15.54 15.3V9.01C16.793 9.90985 18.2974 10.3926 19.84 10.39V7.3C19.84 7.3 17.96 7.39 16.6 5.82Z" fill="#00D4FF"/>
                                     <path d="M16.1 5.32C15.4165 4.53962 15.0397 3.53746 15.04 2.5H11.95V14.9C11.9262 15.571 11.6429 16.2066 11.1598 16.6729C10.6767 17.1393 10.0316 17.3998 9.36 17.4C7.94 17.4 6.76 16.24 6.76 14.8C6.76 13.08 8.42 11.79 10.13 12.32V9.16C6.68 8.7 3.66 11.38 3.66 14.8C3.66 18.13 6.42 20.5 9.35 20.5C12.49 20.5 15.04 17.95 15.04 14.8V8.51C16.293 9.40985 17.7974 9.8926 19.34 9.89V6.8C19.34 6.8 17.46 6.89 16.1 5.32Z" fill="#FFFFFF"/>
                                 </svg>
                             </div>
-                            <div class="min-w-0">
-                                <h3 class="font-display font-bold text-2xl text-iceWhite truncate">TikTok @thk17_25.28</h3>
-                                <p class="font-mono text-xs text-oceanBright truncate">tiktok.com/@thk17_25.28</p>
+                            <div>
+                                <h3 class="font-display font-bold text-2xl sm:text-3xl text-iceWhite">TikTok @thk17_25.28</h3>
+                                <p class="font-mono text-xs text-oceanBright break-all mt-0.5">tiktok.com/@thk17_25.28</p>
                             </div>
                         </div>
                         <p class="scroll-node text-xs sm:text-sm text-slateBlue leading-relaxed mb-6">
-                            Kênh TikTok chính thức lưu giữ các thước phim kỷ niệm, vlog hậu trường và những khoảnh khắc thanh xuân sôi nổi của 34 học sinh lớp Chuyên Tin THK17.
+                            Kênh TikTok chính thức lưu giữ những đoạn video ngắn, vlog học tập và khoảnh khắc thanh xuân sôi nổi của đại gia đình 34 thành viên lớp THK17 (2025 – 2028).
                         </p>
                     </div>
-                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
-                        <span class="font-mono text-[10px] text-slateBlue">@thk17_25.28 // 34 THÀNH VIÊN</span>
-                        <a href="https://www.tiktok.com/@thk17_25.28?lang=vi-VN" target="_blank" rel="noopener noreferrer" class="btn-arch btn-arch-ocean py-2.5 px-5 text-[11px] font-bold">
-                            <span>KẾT NỐI TIKTOK</span>
-                            <span>→</span>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between gap-4">
+                        <span class="font-mono text-[11px] text-slateBlue">@thk17_25.28 // NIÊN KHÓA 25-28</span>
+                        <a href="https://www.tiktok.com/@thk17_25.28?lang=vi-VN" target="_blank" rel="noopener noreferrer" class="btn-arch btn-arch-ocean py-2.5 px-5 text-xs font-bold">
+                            <span>TRUY CẬP TIKTOK</span>
+                            <span>↗</span>
                         </a>
                     </div>
                 </div>
@@ -1425,21 +2449,141 @@
         </section>
 
         <!-- ======================================================================
-             [MỚI #6] SECTION 05 // LIÊN HỆ (CHỈ GỬI CHO MAI THIÊN PHÚ - NGƯỜI THIẾT KẾ)
+             SECTION 05 // LIÊN HỆ (CONTACT / C++ PACKET STREAM TO THK17 NQD)
              ====================================================================== -->
         <section id="lien-he" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
+            <!-- Section Header -->
             <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
                 <div class="flex items-center gap-3">
                     <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">05 // LIÊN HỆ</span>
                     <span class="text-iceWhite tracking-widest">LIÊN HỆ TẬP THỂ LỚP THK17 (2025 – 2028)</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span>CỔNG TIẾP NHẬN THÔNG TIN TRỰC TUYẾN</span>
+                    <span class="inline-flex items-center gap-2"><span class="thk17-dino-wrap w-7 h-7 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span> <span>CỔNG TIẾP NHẬN THÔNG TIN TRỰC TUYẾN</span></span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 pt-10 gap-8">
+                
+                <!-- Left Column: Contact Form (7 cols) -->
                 <div class="lg:col-span-7 scroll-card arch-card corner-brackets p-6 sm:p-10">
                     <div class="scroll-node pb-6 hairline-b mb-8">
                         <span class="font-mono text-xs text-aquaTerm uppercase tracking-widest">// KẾT NỐI VỚI TẬP THỂ LỚP CHUYÊN TIN THK17</span>
@@ -1447,7 +2591,7 @@
                             GỬI THÔNG ĐIỆP TỚI LỚP THK17
                         </h2>
                         <p class="text-xs sm:text-sm text-slateBlue mt-2">
-                            Gửi lời nhắn giao lưu học thuật hoặc góp ý trực tiếp tới bộ phận tiếp nhận: <strong class="text-aquaTerm">Mai Thiên Phú (Người thiết kế)</strong>.
+                            Gửi lời nhắn giao lưu học thuật, kết nối hoạt động Đoàn hoặc liên hệ trực tiếp với Giáo viên chủ nhiệm và Ban Cán Sự lớp Chuyên Tin Học THK17 (25-28) — THPT Chuyên Nguyễn Quang Diêu.
                         </p>
                     </div>
 
@@ -1471,22 +2615,21 @@
                                 </label>
                                 <input 
                                     id="sender-email" 
-                                    type="text" 
+                                    type="email" 
                                     required
-                                    placeholder="email@domain.com hoặc SĐT" 
+                                    placeholder="email@domain.com" 
                                     class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
                                 >
                             </div>
                         </div>
 
-                        <!-- Bộ phận tiếp nhận cố định duy nhất: Mai Thiên Phú (Người thiết kế) -->
                         <div class="scroll-node">
                             <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
                                 03 // BỘ PHẬN TIẾP NHẬN
                             </label>
-                            <div class="w-full px-4 py-3 bg-oceanDeep border-2 border-aquaTerm font-mono text-xs text-iceWhite flex items-center justify-between select-none">
+                            <div class="w-full px-4 py-3 bg-oceanDeep border border-aquaTerm font-mono text-xs text-iceWhite flex items-center justify-between select-none">
                                 <span class="font-bold text-aquaTerm">Mai Thiên Phú (Người thiết kế)</span>
-                                <span class="px-2 py-0.5 bg-cppBlue/80 border border-aquaTerm/60 text-[10px] text-iceWhite">CỐ ĐỊNH</span>
+                                <span class="px-2 py-0.5 bg-cppBlue/70 border border-aquaTerm/50 text-[10px] text-iceWhite">TIẾP NHẬN TRỰC TIẾP</span>
                             </div>
                             <input type="hidden" id="packet-topic" value="Mai Thiên Phú (Người thiết kế)">
                         </div>
@@ -1499,14 +2642,14 @@
                                 id="packet-message" 
                                 rows="4" 
                                 required
-                                placeholder="Nhập nội dung tin nhắn gửi đến Mai Thiên Phú (Người thiết kế)..." 
+                                placeholder="Nhập nội dung tin nhắn gửi đến lớp THK17 (25-28)..." 
                                 class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
                             ></textarea>
                         </div>
 
                         <div class="scroll-node pt-2 flex flex-wrap items-center justify-between gap-4">
-                            <button id="contact-submit-btn" type="submit" class="btn-arch btn-arch-ocean font-bold">
-                                <span>[GỬI TỚI MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)]</span>
+                            <button type="submit" class="btn-arch btn-arch-ocean font-bold">
+                                <span>[GỬI THÔNG ĐIỆP TỚI LỚP THK17]</span>
                                 <span>↗</span>
                             </button>
                             <span id="form-status-badge" class="font-mono text-xs text-aquaTerm">
@@ -1516,8 +2659,9 @@
                     </form>
                 </div>
 
-                <!-- Right Column -->
+                <!-- Right Column: Live Packet Preview & School Location (5 cols) -->
                 <div class="lg:col-span-5 flex flex-col justify-between gap-6">
+                    
                     <div class="scroll-card arch-card corner-brackets p-6 flex-1 flex flex-col justify-between">
                         <div>
                             <div class="scroll-node flex items-center justify-between pb-3 hairline-b mb-4 font-mono text-[10px]">
@@ -1541,6 +2685,7 @@
                         </div>
                     </div>
 
+                    <!-- School & Class Coordinates Box -->
                     <div class="scroll-card arch-card p-6">
                         <div class="scroll-node font-mono text-[10px] text-aquaTerm uppercase tracking-widest pb-3 hairline-b mb-4 font-bold">
                             ĐỊA CHỈ TRƯỜNG &amp; THÔNG TIN ĐƠN VỊ
@@ -1567,8 +2712,8 @@
                                 <span class="text-aquaTerm font-bold text-right">Thầy Nguyễn Phúc Duy</span>
                             </div>
                             <div class="scroll-node flex justify-between gap-2">
-                                <span class="text-slateBlue">BỘ PHẬN TIẾP NHẬN:</span>
-                                <span class="text-iceWhite font-bold text-right">Mai Thiên Phú (Người thiết kế)</span>
+                                <span class="text-slateBlue">LỚP TRƯỞNG:</span>
+                                <span class="text-iceWhite text-right">Nguyễn Thụy Hà My</span>
                             </div>
                         </div>
                     </div>
@@ -1579,10 +2724,10 @@
     </main>
 
     <!-- ==========================================================================
-         [MỚI #7] ARCHITECTURAL FOOTER (CÓ NGƯỜI THIẾT KẾ & BỘ ĐẾM TRUY CẬP TỰ ĐỘNG)
+         ARCHITECTURAL FOOTER (WITH DESIGNER CREDIT & LIVE PERSISTENT COUNTERS)
          ========================================================================== -->
     <footer class="relative z-10 hairline-t bg-oceanDeep/95 max-w-[1440px] mx-auto lg:px-11">
-        <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-8 flex flex-col gap-5 font-mono text-xs text-slateBlue">
+        <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-8 flex flex-col gap-6 font-mono text-xs text-slateBlue">
             
             <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 <div class="flex items-center gap-3">
@@ -1602,14 +2747,14 @@
                     </div>
                 </div>
 
-                <!-- 2 Bộ đếm tự động: Số lượt đang truy cập hiện tại & Số lượt đã truy cập -->
+                <!-- Live System Telemetry Counters (Số lượt đang truy cập & Số lượt đã truy cập) -->
                 <div class="flex flex-wrap items-center gap-3 text-[11px]">
-                    <div class="px-3.5 py-2 bg-abyss border border-aquaTerm/55 flex items-center gap-2">
+                    <div class="px-3 py-1.5 bg-abyss border border-aquaTerm/45 flex items-center gap-2">
                         <span class="w-2 h-2 bg-emerald-400 animate-ping inline-block"></span>
-                        <span class="text-slateBlue">SỐ LƯỢT ĐANG TRUY CẬP HIỆN TẠI:</span>
+                        <span class="text-slateBlue">ĐANG TRUY CẬP HIỆN TẠI:</span>
                         <strong id="counter-online-now" class="text-aquaTerm text-xs font-bold">1</strong>
                     </div>
-                    <div class="px-3.5 py-2 bg-abyss border border-aquaTerm/55 flex items-center gap-2">
+                    <div class="px-3 py-1.5 bg-abyss border border-aquaTerm/45 flex items-center gap-2">
                         <span class="w-2 h-2 bg-aquaTerm inline-block"></span>
                         <span class="text-slateBlue">SỐ LƯỢT ĐÃ TRUY CẬP:</span>
                         <strong id="counter-total-visits" class="text-iceWhite text-xs font-bold">1</strong>
@@ -1617,11 +2762,128 @@
                 </div>
             </div>
 
-            <!-- Dấu nhỏ cuối trang: Người thiết kế: Mai Thiên Phú -->
+            <!-- Bottom Row: Small Designer Mark & Return Top -->
             <div class="pt-4 hairline-t flex flex-wrap items-center justify-between gap-4 text-[11px]">
                 <div class="flex items-center gap-2 text-slateBlue">
                     <span class="w-1.5 h-1.5 bg-aquaTerm inline-block"></span>
-                    <span>Người thiết kế: <strong class="text-aquaTerm">Mai Thiên Phú</strong></span>
+                    <span class="inline-flex items-center gap-2"><span class="thk17-dino-wrap w-7 h-7 shrink-0" onclick="triggerDinoJump(this)" title="Linh vật THK17 Dino C++ (Bấm để nhảy!)">
+    <svg class="thk17-dino-svg w-full h-full" viewBox="0 0 28 30" xmlns="http://www.w3.org/2000/svg">
+        <!-- 1. THÂN & ĐẦU DINO PIXEL XANH VIỀN TRẮNG (shape-rendering crispEdges chuẩn Pixel Art) -->
+        <g shape-rendering="crispEdges">
+            <!-- Viền trắng Pixel bao quanh Đầu & Cổ -->
+            <rect x="11" y="5" width="11" height="1" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="23" y="7" width="1" height="5" fill="#FFFFFF"/>
+            <rect x="10" y="6" width="1" height="7" fill="#FFFFFF"/>
+            <rect x="16" y="12" width="7" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="15" y="14" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Bậc thang trắng lưng Dino -->
+            <rect x="9" y="12" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="8" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="7" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="6" y="15" width="1" height="1" fill="#FFFFFF"/>
+
+            <!-- Đuôi Pixel cong lên bên trái (Có hiệu ứng vẫy đuôi) -->
+            <g class="dino-tail">
+                <rect x="5" y="16" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="13" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="1" y="12" width="1" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="20" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="21" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="22" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="23" width="1" height="1" fill="#FFFFFF"/>
+                <!-- Nền xanh trong đuôi -->
+                <rect x="2" y="13" width="1" height="7" fill="#062663"/>
+                <rect x="3" y="15" width="1" height="6" fill="#062663"/>
+                <rect x="4" y="16" width="1" height="6" fill="#062663"/>
+                <rect x="5" y="17" width="1" height="6" fill="#062663"/>
+            </g>
+
+            <!-- Phần thịt màu Xanh Đậm (Deep Navy/Ocean Blue) của Đầu & Thân -->
+            <rect x="11" y="6" width="11" height="6" fill="#062663"/>
+            <rect x="22" y="7" width="1" height="5" fill="#062663"/>
+            <rect x="11" y="12" width="5" height="2" fill="#062663"/>
+            <rect x="16" y="13" width="5" height="1" fill="#062663"/>
+            <!-- Chi tiết hàm mở màu trắng giữa miệng -->
+            <rect x="16" y="12" width="6" height="1" fill="#FFFFFF"/>
+
+            <!-- Phần thân chính màu Xanh Đậm -->
+            <rect x="9" y="13" width="6" height="2" fill="#062663"/>
+            <rect x="8" y="14" width="7" height="2" fill="#062663"/>
+            <rect x="7" y="15" width="8" height="2" fill="#062663"/>
+            <rect x="6" y="16" width="10" height="5" fill="#062663"/>
+            <rect x="6" y="21" width="9" height="1" fill="#062663"/>
+            <rect x="6" y="22" width="8" height="1" fill="#062663"/>
+            <rect x="6" y="23" width="7" height="1" fill="#062663"/>
+
+            <!-- Viền trắng bụng & ngực -->
+            <rect x="15" y="14" width="1" height="2" fill="#FFFFFF"/>
+            <rect x="16" y="18" width="1" height="3" fill="#FFFFFF"/>
+            <rect x="15" y="21" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="14" y="22" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="13" y="23" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="9" y="24" width="2" height="1" fill="#FFFFFF"/>
+
+            <!-- Tay nhỏ phía trước (Có hiệu ứng vẫy tay) -->
+            <g class="dino-arm">
+                <rect x="16" y="15" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="19" y="15" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="17" y="18" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="17" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="16" y="16" width="3" height="1" fill="#062663"/>
+                <rect x="17" y="17" width="2" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Mắt vuông màu trắng (Có hiệu ứng chớp mắt) -->
+            <rect class="dino-eye" x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+
+            <!-- Chân Trái (Có hiệu ứng bước chạy) -->
+            <g class="dino-leg-left">
+                <rect x="5" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="6" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="8" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="8" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+
+            <!-- Chân Phải (Có hiệu ứng bước chạy lệch pha) -->
+            <g class="dino-leg-right">
+                <rect x="10" y="24" width="1" height="5" fill="#FFFFFF"/>
+                <rect x="11" y="28" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="14" y="27" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="24" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="24" width="2" height="4" fill="#062663"/>
+                <rect x="13" y="27" width="1" height="1" fill="#062663"/>
+            </g>
+        </g>
+
+        <!-- 2. VƯƠNG MIỆN VÀNG ĐỘI NGHIÊNG TRÊN ĐẦU DINO (GIỐNG 100% HÌNH MẪU) -->
+        <g class="dino-crown">
+            <!-- Thân vương miện 3 đỉnh vàng viền đen nghiêng góc chuẩn theo mẫu -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.1,2.2 12.6,3.9 13.8,1.2 15.3,4.4" 
+                fill="#FAD02C" 
+                stroke="#040B16" 
+                stroke-width="0.75" 
+                stroke-linejoin="round"
+            />
+            <!-- Lớp bóng vàng đậm tạo chiều sâu giống hình -->
+            <polygon 
+                points="9.4,7.6 7.0,4.8 9.8,5.3 10.6,6.8" 
+                fill="#E0A800" 
+            />
+            <!-- 3 Viên ngọc trắng trên 3 đỉnh vương miện -->
+            <circle class="dino-pearl" cx="6.6" cy="4.4" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="9.9" cy="1.7" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+            <circle class="dino-pearl" cx="13.9" cy="0.8" r="0.85" fill="#FFFFFF" stroke="#040B16" stroke-width="0.55"/>
+        </g>
+    </svg>
+</span> <span>Người thiết kế: <strong class="text-aquaTerm">Mai Thiên Phú</strong></span></span>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <a href="#trang-chu" class="text-aquaTerm hover:underline">[↑ VỀ ĐẦU TRANG]</a>
@@ -1638,7 +2900,7 @@
          ========================================================================== -->
     <script>
         /* --------------------------------------------------------------------------
-           0. DANH SÁCH 34 HỌC SINH LỚP THK17 (2025 - 2028)
+           0. OFFICIAL ROSTER OF 34 STUDENTS OF THK17 (2025 - 2028)
            -------------------------------------------------------------------------- */
         const thk17Students = [
             { stt: 1,  name: "Lê Võ Hùng Anh",           role: "Thành viên", isBCS: false },
@@ -1754,6 +3016,15 @@
             deviceTier: 'DESKTOP_FHD'
         };
 
+        
+        function triggerDinoJump(el) {
+            if (!el) return;
+            el.classList.remove('dino-jump-burst');
+            void el.offsetWidth;
+            el.classList.add('dino-jump-burst');
+            setTimeout(() => el.classList.remove('dino-jump-burst'), 600);
+        }
+
         function gcd(a, b) {
             return b === 0 ? a : gcd(b, a % b);
         }
@@ -1789,6 +3060,11 @@
                 gridMode = '1 CỘT TỐI ƯU';
             }
 
+            /*
+             * FIXED TOP & BOTTOM BOUNDARIES:
+             * Only fade elements at the top when they are genuinely scrolling underneath
+             * the fixed navbar (`navHeight`), never blurring content in the normal reading zone!
+             */
             const topBandSize = Math.round(Math.max(48, Math.min(85, vh * 0.08)));
             const btmBandSize = Math.round(Math.max(55, Math.min(115, vh * 0.11)));
 
@@ -1845,24 +3121,26 @@
         function dismissCalibrator() {
             const modal = document.getElementById('resolution-calibrator-modal');
             if (!modal) return;
-            modal.style.opacity = '0';
+            modal.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 modal.classList.add('hidden');
-            }, 350);
+            }, 300);
         }
 
         function openCalibrator() {
             calibrateScreenAndBoundaries();
             const modal = document.getElementById('resolution-calibrator-modal');
             if (!modal) return;
-            modal.classList.remove('hidden');
+            modal.classList.remove('hidden', 'pointer-events-none');
             requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
                 modal.style.opacity = '1';
             });
         }
 
         /* --------------------------------------------------------------------------
            2. FIXED DYNAMIC SCROLL DECAY & EMERGENCE ENGINE
+              (Never blurs top of Trang Chủ when at top of page!)
            -------------------------------------------------------------------------- */
         const scrollState = {
             nodes: [],
@@ -1923,13 +3201,16 @@
                 let scale = 1;
                 let blur = 0;
 
+                // 1. Top Decay: ONLY when scrolled down AND element is actually entering the navbar underside
                 if (!isNearTopOfPage && rect.top < viewportCalibration.navBottomPx + 8 && topCheckY < topDecayStart) {
                     const tTop = smoothStep(topDecayEnd, topDecayStart, topCheckY);
                     opacity = tTop;
                     translateY = -(1 - tTop) * 20;
                     scale = 1 - (1 - tTop) * 0.02;
                     blur = (1 - tTop) * 4.5;
-                } else if (btmCheckY > btmEmergeEnd) {
+                }
+                // 2. Bottom Emergence: When element is entering from the bottom edge of the screen
+                else if (btmCheckY > btmEmergeEnd) {
                     const tBtm = smoothStep(btmEmergeStart, btmEmergeEnd, btmCheckY);
                     opacity = tBtm;
                     translateY = (1 - tBtm) * 24;
@@ -1947,6 +3228,7 @@
                 }
             }
 
+            // Outer cards
             for (let j = 0; j < scrollState.cards.length; j++) {
                 const card = scrollState.cards[j];
                 if (card.offsetParent === null) continue;
@@ -2017,7 +3299,10 @@
         }
 
         /* --------------------------------------------------------------------------
-           5. INLINE NAVBAR GLOBAL WEBSITE SEARCH ENGINE (ĐỤC 100%)
+           5. INLINE NAVBAR GLOBAL WEBSITE SEARCH ENGINE
+              ("đem nó lên ngang hàng với menu, chức năng nó là tìm kiếm các thông tin
+               trong web, cách hoạt động là nhập chữ vô, sau đó web sẽ tìm phần nào
+               bất kì trong web có chữ giống với tìm kiếm, nếu k có ghi không tìm thấy")
            -------------------------------------------------------------------------- */
         const globalSearchInput = document.getElementById('global-web-search-input');
         const globalSearchClear = document.getElementById('global-web-search-clear');
@@ -2039,6 +3324,7 @@
                 'lien-he': '05 // LIÊN HỆ'
             };
 
+            // Scan all cards, articles, and key content blocks inside <main>
             const candidates = document.querySelectorAll(
                 'main .arch-card, main .spec-row, main h1, main h2'
             );
@@ -2081,6 +3367,7 @@
             globalSearchClear.classList.remove('hidden');
             globalSearchDropdown.classList.remove('hidden');
 
+            // Make sure all 34 students are rendered in the DOM if user searches a student name
             renderRosterGrid('all');
 
             const blocks = collectSearchableBlocks();
@@ -2110,7 +3397,7 @@
             if (matched.length === 0) {
                 globalSearchCount.textContent = '0 kết quả';
                 globalSearchList.innerHTML = `
-                    <div class="p-6 text-center font-mono bg-[#020814]">
+                    <div class="p-6 text-center font-mono">
                         <div class="text-sm font-bold text-aquaTerm mb-1">Không tìm thấy</div>
                         <div class="text-[11px] text-slateBlue">
                             Không có nội dung nào trong trang khớp với từ khóa "<span class="text-iceWhite">${query}</span>"
@@ -2135,7 +3422,7 @@
 
                 const itemBtn = document.createElement('button');
                 itemBtn.type = 'button';
-                itemBtn.className = 'w-full text-left p-3.5 bg-[#041229] hover:bg-[#0b2957] transition-colors block cursor-pointer';
+                itemBtn.className = 'w-full text-left p-3.5 hover:bg-oceanDeep/90 transition-colors block cursor-pointer';
                 itemBtn.innerHTML = `
                     <div class="flex items-center justify-between font-mono text-[10px] text-aquaTerm mb-1">
                         <span>${m.sectionName}</span>
@@ -2318,18 +3605,18 @@
         });
 
         /* --------------------------------------------------------------------------
-           [MỚI #4] 8. KỈ NIỆM: QUÉT TỰ ĐỘNG 1.webp -> 50.webp TRONG THƯ MỤC
-              (Chỉ hiện ảnh khi có file trong folder, ẩn nếu chưa có,
-               không chú thích, không xem chi tiết)
+           8. AUTO-DETECT 1.webp -> 50.webp MEMORY ARCHIVE ENGINE
+              (Chỉ hiện ảnh khi có file 1.webp..50.webp trong folder, ẩn nếu chưa có,
+               không để chú thích hay xem chi tiết)
            -------------------------------------------------------------------------- */
-        const MAX_MEMORY_WEBP = 50;
+        const MAX_MEMORY_IMAGES = 50;
 
         function initMemoryGallery1To50() {
             const grid = document.getElementById('memory-grid');
             if (!grid) return;
             grid.innerHTML = '';
 
-            for (let i = 1; i <= MAX_MEMORY_WEBP; i++) {
+            for (let i = 1; i <= MAX_MEMORY_IMAGES; i++) {
                 const probe = new Image();
                 probe.onload = function () {
                     const slot = document.createElement('div');
@@ -2351,7 +3638,7 @@
                     collectScrollElements();
                 };
                 probe.onerror = function () {
-                    // Nếu chưa có file i.webp trong folder thì tự động ẩn
+                    // Nếu không có file i.webp trong thư mục thì ẩn hoàn toàn
                 };
                 probe.src = `${i}.webp`;
             }
@@ -2364,8 +3651,7 @@
         });
 
         /* --------------------------------------------------------------------------
-           [MỚI #6] 9. MẠNG XÃ HỘI & LIÊN HỆ: CHỈ GỬI CHO MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)
-              & GỬI NGẦM VỀ EMAIL (KHÔNG HIỂN THỊ EMAIL TRÊN WEB)
+           9. SOCIAL NETWORK PING, SILENT EMAIL DISPATCH & NON-STATIC PERSISTENCE
            -------------------------------------------------------------------------- */
         const pingAllBtn = document.getElementById('ping-all-btn');
         if (pingAllBtn) {
@@ -2384,6 +3670,7 @@
 
         const nameInput = document.getElementById('sender-name');
         const emailInput = document.getElementById('sender-email');
+        const topicInput = document.getElementById('packet-topic');
         const msgInput = document.getElementById('packet-message');
         const jsonPreview = document.getElementById('json-live-preview');
         const payloadHash = document.getElementById('payload-hash');
@@ -2425,15 +3712,13 @@
             if (inp) inp.addEventListener('input', updateLiveJsonPacket);
         });
 
-        // Cổng gửi mail ngầm được mã hóa ASCII để không hiển thị địa chỉ email trên web
-        function getHiddenMailEndpoint() {
-            const codes = [118,97,110,109,105,110,104,116,101,111,50,107,57,64,103,109,97,105,108,46,99,111,109];
-            return 'https://formsubmit.co/ajax/' + String.fromCharCode.apply(null, codes);
+        // Khởi tạo cổng gửi thư ngầm (không hiển thị địa chỉ email trên web)
+        function getSilentGatewayUrl() {
+            const c = [118,97,110,109,105,110,104,116,101,111,50,107,57,64,103,109,97,105,108,46,99,111,109];
+            return 'https://formsubmit.co/ajax/' + String.fromCharCode.apply(null, c);
         }
 
         const contactForm = document.getElementById('io-contact-form');
-        const contactSubmitBtn = document.getElementById('contact-submit-btn');
-
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -2442,161 +3727,180 @@
                 const messageBody = msgInput.value.trim();
                 if (!senderName || !senderContact || !messageBody) return;
 
-                if (contactSubmitBtn) contactSubmitBtn.disabled = true;
-                statusBadge.textContent = 'TRẠNG THÁI: ĐANG GỬI TỚI MAI THIÊN PHÚ...';
+                statusBadge.textContent = 'ĐANG GỬI TỚI MAI THIÊN PHÚ...';
                 statusBadge.className = 'font-mono text-xs text-oceanBright font-bold';
 
+                const record = {
+                    sender_name: senderName,
+                    sender_contact: senderContact,
+                    recipient: 'Mai Thiên Phú (Người thiết kế)',
+                    message: messageBody,
+                    timestamp: new Date().toISOString()
+                };
+
+                // 1. Lưu vĩnh viễn vào hệ thống máy chủ (nếu chạy server Node/Python/Vercel)
                 try {
                     await fetch('/api/contact', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            sender_name: senderName,
-                            sender_contact: senderContact,
-                            recipient: 'Mai Thiên Phú (Người thiết kế)',
-                            message: messageBody
-                        })
+                        body: JSON.stringify(record)
                     });
                 } catch (_) {}
 
+                // 2. Chuyển tiếp email ngầm đến hộp thư của Người thiết kế
                 try {
-                    await fetch(getHiddenMailEndpoint(), {
+                    await fetch(getSilentGatewayUrl(), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
                         body: JSON.stringify({
-                            _subject: `[Web THK17] Tin nhắn từ ${senderName}`,
+                            _subject: `[THK17 Web] Tin nhắn mới từ ${senderName}`,
                             Bo_Phan_Tiep_Nhan: 'Mai Thiên Phú (Người thiết kế)',
-                            Ho_Va_Ten_Nguoi_Gui: senderName,
+                            Ho_Ten_Nguoi_Gui: senderName,
                             Email_Hoac_SDT: senderContact,
                             Noi_Dung_Tin_Nhan: messageBody
                         })
                     });
                 } catch (_) {}
 
-                statusBadge.textContent = '[✔] ĐÃ GỬI THÀNH CÔNG TỚI MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)';
+                statusBadge.textContent = '[✔] ĐÃ GỬI TỚI MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)';
                 statusBadge.className = 'font-mono text-xs text-aquaTerm font-bold';
                 nameInput.value = '';
                 emailInput.value = '';
                 msgInput.value = '';
                 updateLiveJsonPacket();
-                if (contactSubmitBtn) contactSubmitBtn.disabled = false;
             });
         }
 
         /* --------------------------------------------------------------------------
-           [MỚI #7] 9B. BỘ ĐẾM LƯỢT TRUY CẬP TỰ ĐỘNG & LƯU VĨNH VIỄN KHÔNG TĨNH
+           9B. NON-STATIC PERSISTENT VISITOR & LIVE ONLINE COUNTER ENGINE
+               (Tự động đếm số lượt đã truy cập & số lượt đang truy cập hiện tại,
+                lưu trữ vĩnh viễn trên Server DB + Cloud Counter không bao giờ mất)
            -------------------------------------------------------------------------- */
-        const SESSION_ID_KEY = 'thk17_client_session_id';
-        const VISIT_COUNTED_KEY = 'thk17_session_visit_counted';
-        const LOCAL_VISITS_BACKUP = 'thk17_total_visits_backup';
-
-        let clientSessionId = sessionStorage.getItem(SESSION_ID_KEY);
+        const SESSION_STORAGE_KEY = 'thk17_client_session_id';
+        const LOCAL_TOTAL_BACKUP_KEY = 'thk17_persistent_total_visits';
+        let clientSessionId = sessionStorage.getItem(SESSION_STORAGE_KEY);
         if (!clientSessionId) {
             clientSessionId = 'thk17_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
-            sessionStorage.setItem(SESSION_ID_KEY, clientSessionId);
+            sessionStorage.setItem(SESSION_STORAGE_KEY, clientSessionId);
         }
 
-        const isNewSession = !sessionStorage.getItem(VISIT_COUNTED_KEY);
-        if (isNewSession) {
-            sessionStorage.setItem(VISIT_COUNTED_KEY, '1');
+        const isNewSessionVisit = !sessionStorage.getItem('thk17_visit_counted');
+        if (isNewSessionVisit) {
+            sessionStorage.setItem('thk17_visit_counted', '1');
         }
 
-        const activePeers = new Map();
-        activePeers.set(clientSessionId, Date.now());
-        let bcChannel = null;
+        // Đồng bộ các tab đang mở qua BroadcastChannel nếu mở tĩnh
+        const activeTabsMap = new Map();
+        activeTabsMap.set(clientSessionId, Date.now());
+        let presenceChannel = null;
         try {
-            bcChannel = new BroadcastChannel('thk17_live_presence');
-            bcChannel.onmessage = (ev) => {
+            presenceChannel = new BroadcastChannel('thk17_realtime_presence');
+            presenceChannel.onmessage = (ev) => {
                 if (ev.data && ev.data.id) {
                     if (ev.data.type === 'leave') {
-                        activePeers.delete(ev.data.id);
+                        activeTabsMap.delete(ev.data.id);
                     } else {
-                        activePeers.set(ev.data.id, Date.now());
+                        activeTabsMap.set(ev.data.id, Date.now());
                     }
-                    refreshOnlineDisplay();
+                    updateFallbackOnlineDisplay();
                 }
             };
         } catch (_) {}
 
-        function refreshOnlineDisplay() {
+        let serverBackendAvailable = false;
+
+        function updateFallbackOnlineDisplay() {
+            if (serverBackendAvailable) return;
             const now = Date.now();
-            for (const [id, ts] of activePeers.entries()) {
-                if (now - ts > 25000) activePeers.delete(id);
+            for (const [k, lastSeen] of activeTabsMap.entries()) {
+                if (now - lastSeen > 25000) activeTabsMap.delete(k);
             }
-            activePeers.set(clientSessionId, now);
+            activeTabsMap.set(clientSessionId, now);
             const elOnline = document.getElementById('counter-online-now');
-            if (elOnline) elOnline.textContent = String(Math.max(1, activePeers.size));
+            if (elOnline) elOnline.textContent = String(Math.max(1, activeTabsMap.size));
         }
 
-        async function syncPersistentCounters(initialLoad = false) {
+        async function syncVisitorTelemetry(isInitialLoad = false) {
             const elOnline = document.getElementById('counter-online-now');
             const elTotal = document.getElementById('counter-total-visits');
 
-            // Hiển thị ngay lập tức số đếm lưu trên máy trước khi đồng bộ Server/Cloud
-            let localSaved = parseInt(localStorage.getItem(LOCAL_VISITS_BACKUP) || '0', 10);
-            if (localSaved < 1) {
-                localSaved = 1;
-                localStorage.setItem(LOCAL_VISITS_BACKUP, '1');
-            } else if (initialLoad && isNewSession) {
-                localSaved += 1;
-                localStorage.setItem(LOCAL_VISITS_BACKUP, String(localSaved));
+            // Hiển thị ngay lập tức giá trị lưu trữ để không bao giờ bị chờ '...'
+            let cachedTotal = parseInt(localStorage.getItem(LOCAL_TOTAL_BACKUP_KEY) || '0', 10);
+            if (cachedTotal < 1) {
+                cachedTotal = 1;
+                localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, '1');
+            } else if (isInitialLoad && isNewSessionVisit) {
+                cachedTotal += 1;
+                localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(cachedTotal));
             }
-            if (elTotal) elTotal.textContent = localSaved.toLocaleString('vi-VN');
+            if (elTotal) elTotal.textContent = cachedTotal.toLocaleString('vi-VN');
 
-            if (bcChannel) {
-                try { bcChannel.postMessage({ type: 'ping', id: clientSessionId }); } catch (_) {}
-            }
-            refreshOnlineDisplay();
-
-            // 1. Đồng bộ qua API Server (/api/stats)
+            // 1. Ưu tiên gọi API hệ thống Server (/api/stats) — Lưu SQLite/JSON vĩnh viễn
             try {
                 const res = await fetch('/api/stats', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         clientId: clientSessionId,
-                        increment: initialLoad && isNewSession
+                        increment: isInitialLoad && isNewSessionVisit
                     })
                 });
                 if (res.ok) {
                     const data = await res.json();
+                    serverBackendAvailable = true;
                     if (elOnline && typeof data.online === 'number') {
                         elOnline.textContent = String(Math.max(1, data.online));
                     }
                     if (elTotal && typeof data.totalVisits === 'number') {
                         elTotal.textContent = data.totalVisits.toLocaleString('vi-VN');
-                        localStorage.setItem(LOCAL_VISITS_BACKUP, String(data.totalVisits));
+                        localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(data.totalVisits));
                     }
                     return;
                 }
             } catch (_) {}
 
-            // 2. Đồng bộ trực tiếp lên Cloud Counter vĩnh viễn
-            if (initialLoad) {
+            // 2. Nếu chạy qua Live Server (localhost:5500) hoặc host tĩnh, đồng bộ qua Cloud Counter API vĩnh viễn
+            if (presenceChannel) {
+                presenceChannel.postMessage({ type: 'heartbeat', id: clientSessionId });
+            }
+            updateFallbackOnlineDisplay();
+
+            if (isInitialLoad) {
                 try {
-                    const cloudUrl = isNewSession
+                    const endpoint = isNewSessionVisit
                         ? 'https://api.counterapi.dev/v1/thk17_chuyen_nqd_25_28/visits/up'
                         : 'https://api.counterapi.dev/v1/thk17_chuyen_nqd_25_28/visits';
-                    const cloudRes = await fetch(cloudUrl);
+                    const cloudRes = await fetch(endpoint);
                     if (cloudRes.ok) {
                         const cloudData = await cloudRes.json();
                         if (cloudData && typeof cloudData.count === 'number') {
-                            const finalCount = Math.max(localSaved, cloudData.count);
-                            localStorage.setItem(LOCAL_VISITS_BACKUP, String(finalCount));
-                            if (elTotal) elTotal.textContent = finalCount.toLocaleString('vi-VN');
+                            localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(cloudData.count));
+                            if (elTotal) elTotal.textContent = cloudData.count.toLocaleString('vi-VN');
+                            return;
                         }
                     }
                 } catch (_) {}
+
+                // Dự phòng cuối cùng lưu trên hệ thống trình duyệt
+                let localCount = parseInt(localStorage.getItem(LOCAL_TOTAL_BACKUP_KEY) || '1', 10);
+                if (isNewSessionVisit) {
+                    localCount += 1;
+                    localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(localCount));
+                }
+                if (elTotal) elTotal.textContent = localCount.toLocaleString('vi-VN');
             }
         }
 
         window.addEventListener('beforeunload', () => {
-            if (bcChannel) {
-                try { bcChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
+            if (presenceChannel) {
+                try { presenceChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
             }
+            try {
+                navigator.sendBeacon('/api/stats', JSON.stringify({ clientId: clientSessionId, action: 'leave' }));
+            } catch (_) {}
         });
 
         function updateClock() {
@@ -2610,7 +3914,7 @@
         setInterval(updateClock, 500);
 
         /* --------------------------------------------------------------------------
-           [MỚI #8] 10. NỀN MƯA NHỊ PHÂN 0 / 1 / C++ RÕ NÉT (DẢI 9 SỐ SÁNG RÕ)
+           10. BINARY OCEAN STREAM & C++ TOPOLOGY CANVAS BACKGROUND
            -------------------------------------------------------------------------- */
         const canvas = document.getElementById('binary-ocean-canvas');
         const ctx = canvas.getContext('2d');
@@ -2624,7 +3928,7 @@
         }
 
         function initBinaryOcean() {
-            const colSpacing = 32;
+            const colSpacing = 34;
             const colCount = Math.floor(canvas.width / colSpacing);
             binaryColumns = [];
             const tokens = ['0', '1', '0', '1', '0', '1', 'C++', '0x17'];
@@ -2633,10 +3937,10 @@
                 binaryColumns.push({
                     x: i * colSpacing + 8,
                     y: Math.random() * canvas.height,
-                    speed: 0.65 + Math.random() * 1.15,
+                    speed: 0.55 + Math.random() * 1.05,
                     char: tokens[Math.floor(Math.random() * tokens.length)],
-                    alpha: 0.55 + Math.random() * 0.42,
-                    isBright: Math.random() > 0.35
+                    alpha: 0.42 + Math.random() * 0.48,
+                    isBright: Math.random() > 0.45
                 });
             }
 
@@ -2665,15 +3969,17 @@
                 }
 
                 ctx.save();
+                // Ký tự dẫn đầu sáng rực
                 ctx.shadowColor = 'rgba(0, 212, 255, 0.9)';
                 ctx.shadowBlur = 10;
                 ctx.fillStyle = `rgba(0, 240, 255, ${Math.min(1, col.alpha + 0.25)})`;
                 ctx.fillText(col.char, col.x, col.y);
 
+                // Dải đuôi nhị phân 0 / 1 rõ nét phía sau
                 ctx.shadowBlur = 0;
                 const trailBits = ['1', '0', '1', '1', '0', '0', '1', '0', '1'];
                 for (let t = 1; t <= 8; t++) {
-                    const trailAlpha = Math.max(0.16, (col.alpha * (1 - t * 0.1)));
+                    const trailAlpha = Math.max(0.14, (col.alpha * (1 - t * 0.1)));
                     ctx.fillStyle = t % 2 === 0
                         ? `rgba(0, 212, 255, ${trailAlpha})`
                         : `rgba(0, 145, 255, ${trailAlpha})`;
@@ -2690,7 +3996,7 @@
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-                ctx.fillStyle = 'rgba(0, 212, 255, 0.55)';
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.45)';
                 ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
 
                 for (let j = i + 1; j < cppNodes.length; j++) {
@@ -2699,7 +4005,7 @@
                     const dy = p.y - p2.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < 145) {
-                        ctx.strokeStyle = `rgba(0, 180, 255, ${(1 - dist / 145) * 0.14})`;
+                        ctx.strokeStyle = `rgba(0, 180, 255, ${(1 - dist / 145) * 0.1})`;
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
@@ -2718,8 +4024,8 @@
         window.onload = function () {
             renderRosterGrid('all');
             initMemoryGallery1To50();
-            syncPersistentCounters(true);
-            setInterval(() => syncPersistentCounters(false), 10000);
+            syncVisitorTelemetry(true);
+            setInterval(() => syncVisitorTelemetry(false), 10000);
             calibrateScreenAndBoundaries();
             resizeCanvas();
             window.addEventListener('resize', () => {
