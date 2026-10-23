@@ -1,0 +1,36 @@
+================================================================================
+HƯỚNG DẪN VẬN HÀNH HỆ THỐNG WEB KHÔNG TĨNH LỚP CHUYÊN TIN THK17 (2025 - 2028)
+Trường THPT Chuyên Nguyễn Quang Diêu — Phường Mỹ Trà, Tỉnh Đồng Tháp
+Người thiết kế: Mai Thiên Phú
+================================================================================
+
+1. CẤU TRÚC THƯ MỤC TRONG FILE ZIP:
+   ├── index.html                  : Giao diện chính C++23 Ocean Blue (đã nâng cấp từ code gốc)
+   ├── server.js                   : Máy chủ Node.js lưu trữ dữ liệu vĩnh viễn & đếm truy cập thực
+   ├── server.py                   : Máy chủ Python 3 + SQLite lưu trữ dữ liệu vĩnh viễn
+   ├── package.json                : Cấu hình khởi chạy Node.js
+   ├── vercel.json & api/          : Serverless API hỗ trợ khi đẩy lên GitHub / Vercel
+   ├── data/
+   │   ├── thk17_database.sqlite   : Cơ sở dữ liệu SQLite lưu số lượt truy cập & tin nhắn
+   │   └── thk17_state.json        : File dữ liệu JSON đồng bộ vĩnh viễn
+   ├── nen.webp                    : Ảnh bìa trang chủ
+   ├── PD.webp                     : Ảnh chân dung GVCN Thầy Nguyễn Phúc Duy tại mục Thông tin
+   └── 1.webp, 2.webp, 3.webp      : Ảnh mẫu mục Kỉ niệm (tự động nhận từ 1.webp -> 50.webp)
+
+2. CÁCH THÊM / ẨN ẢNH Ở MỤC KỈ NIỆM (1.webp -> 50.webp):
+   - Đặt ảnh định dạng .webp theo tên số thứ tự: 1.webp, 2.webp, 3.webp, ..., 50.webp vào cùng thư mục với index.html.
+   - Hệ thống tự động kiểm tra từ 1.webp đến 50.webp:
+     + Có file nào trong thư mục -> Tự động hiện đúng thứ tự đó.
+     + Không có file -> Tự động ẩn hoàn toàn (không báo lỗi, không hiện khung trống).
+     + Khung ảnh hiển thị nguyên bản, không có chú thích hay nút xem chi tiết.
+
+3. CÁCH CHẠY TRANG WEB KHÔNG TĨNH:
+   - Cách 1 (Chạy bằng Node.js):
+       node server.js
+     Sau đó mở trình duyệt tại: http://localhost:5500
+   - Cách 2 (Chạy bằng Python):
+       python server.py
+     Sau đó mở trình duyệt tại: http://localhost:5500
+   - Cách 3 (Triển khai lên Vercel / GitHub hoặc mở bằng VS Code Live Server):
+     Hệ thống tự động kết nối API /api/stats và Cloud Counter vĩnh viễn để không bao giờ mất số lượt truy cập.
+================================================================================
