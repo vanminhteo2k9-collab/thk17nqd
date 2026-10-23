@@ -92,6 +92,13 @@
             padding-top: var(--nav-safe-height);
         }
 
+        /* KHÓA TẢI / KÉO THẢ TẤT CẢ ẢNH NGOÀI MỤC KỈ NIỆM */
+        img:not(.memory-downloadable-img) {
+            -webkit-user-drag: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -223,7 +230,7 @@
             color: var(--ocean-aqua);
         }
 
-        /* Nút tải ảnh nhanh trên từng khung ảnh */
+        /* Nút tải ảnh dành riêng cho mục Kỉ niệm */
         .img-download-btn {
             background: rgba(2, 8, 20, 0.92);
             border: 1px solid #00D4FF;
@@ -461,7 +468,7 @@
 <body class="structural-grid-bg">
 
     <!-- ==========================================================================
-         0A. MODAL ĐĂNG NHẬP / ĐĂNG KÝ TÀI KHOẢN (LƯU TRỮ VĨNH VIỄN & PHÂN QUYỀN ADMIN)
+         0A. MODAL ĐĂNG NHẬP / ĐĂNG KÝ TÀI KHOẢN (ĐỒNG BỘ CLOUD MỌI THIẾT BỊ)
          ========================================================================== -->
     <div id="auth-modal" class="hidden fixed inset-0 z-[10005] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-4">
         <div class="arch-card corner-brackets max-w-md w-full bg-[#020814] border-2 border-aquaTerm p-6 sm:p-8 shadow-[0_0_70px_rgba(0,212,255,0.35)]">
@@ -472,10 +479,10 @@
                     <span class="thk17-dino-slot w-8 h-8" data-dino-size="w-8 h-8"></span>
                     <div>
                         <div class="font-mono text-xs text-aquaTerm font-bold tracking-widest">
-                            THK17 AUTHENTICATION // C++23
+                            THK17 CLOUD AUTH // C++23
                         </div>
                         <div class="font-mono text-[10px] text-slateBlue">
-                            Hệ thống tài khoản &amp; Phân quyền Quản trị viên
+                            Tài khoản đồng bộ Đám mây trên mọi thiết bị
                         </div>
                     </div>
                 </div>
@@ -526,7 +533,7 @@
                     >
                 </div>
                 <div class="pt-2">
-                    <button type="submit" class="w-full btn-arch btn-arch-ocean font-bold py-3">
+                    <button id="login-submit-btn" type="submit" class="w-full btn-arch btn-arch-ocean font-bold py-3">
                         <span>[XÁC NHẬN ĐĂNG NHẬP]</span>
                         <span>→</span>
                     </button>
@@ -563,7 +570,7 @@
                 </div>
                 <div>
                     <label class="block font-mono text-[11px] text-cppLight uppercase mb-1.5">
-                        MÃ QUẢN TRỊ VIÊN (NẾU CÓ - ĐỂ TRỐNG NẾU LÀ THÀNH VIÊN)
+                        MÃ QUẢN TRỊ VIÊN (ĐỂ TRỐNG NẾU LÀ THÀNH VIÊN)
                     </label>
                     <input 
                         id="signup-admin-key" 
@@ -573,8 +580,8 @@
                     >
                 </div>
                 <div class="pt-2">
-                    <button type="submit" class="w-full btn-arch btn-arch-ocean font-bold py-3">
-                        <span>[TẠO TÀI KHOẢN &amp; LƯU VĨNH VIỄN]</span>
+                    <button id="signup-submit-btn" type="submit" class="w-full btn-arch btn-arch-ocean font-bold py-3">
+                        <span>[TẠO TÀI KHOẢN &amp; ĐỒNG BỘ CLOUD]</span>
                         <span>→</span>
                     </button>
                 </div>
@@ -734,7 +741,7 @@
     </aside>
 
     <!-- ==========================================================================
-         3. PERSISTENT FIXED TOP NAVIGATION BAR (CÓ LOGIN / SIGN UP Ở TRÊN CÙNG)
+         3. PERSISTENT FIXED TOP NAVIGATION BAR (CÓ LOGIN / SIGN UP ĐỒNG BỘ CLOUD)
          ========================================================================== -->
     <header id="persistent-navbar">
         <div class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
@@ -747,8 +754,12 @@
                 <span class="hidden sm:inline">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU (PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP)</strong></span>
             </div>
 
-            <!-- Khu vực Login / Sign Up + Độ phân giải + Đồng hồ ở trên cùng -->
+            <!-- Khu vực Login / Sign Up + Trạng thái Cloud + Độ phân giải + Đồng hồ -->
             <div class="flex flex-wrap items-center gap-2.5 ml-auto">
+                <span id="cloud-sync-indicator" class="px-2 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]">
+                    ☁ CLOUD: ĐANG ĐỒNG BỘ...
+                </span>
+
                 <!-- Khi chưa đăng nhập -->
                 <div id="top-auth-guest" class="flex items-center gap-1.5">
                     <button type="button" onclick="openAuthModal('login')" class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold border border-aquaTerm hover:bg-iceWhite transition-colors cursor-pointer">
@@ -915,7 +926,7 @@
                 </div>
             </div>
 
-            <!-- Hero Cover Showcase -->
+            <!-- Hero Cover Showcase (KHÔNG CHO PHÉP TẢI ẢNH BÌA) -->
             <div class="py-8 hairline-b">
                 <div class="scroll-card arch-card corner-brackets overflow-hidden">
                     <div class="scroll-node px-4 py-2.5 bg-oceanDeep hairline-b flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
@@ -925,15 +936,7 @@
                             <span class="text-slateBlue hidden sm:inline">— TRƯỜNG THPT CHUYÊN NGUYỄN QUANG DIÊU</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="text-iceWhite text-[10px] hidden sm:inline">PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP</span>
-                            <button 
-                                type="button" 
-                                onclick="downloadImageAsset(document.getElementById('hero-cover-img'), 'THK17_AnhBia_nen.webp')" 
-                                class="img-download-btn"
-                                title="Tải ảnh bìa về máy"
-                            >
-                                [⬇ TẢI ẢNH]
-                            </button>
+                            <span class="text-iceWhite text-[10px]">PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP</span>
                         </div>
                     </div>
 
@@ -1202,7 +1205,7 @@
                 </div>
             </div>
 
-            <!-- 1. GIÁO VIÊN CHỦ NHIỆM — HÌNH THẦY LÀ PD.webp (CÓ NÚT TẢI ẢNH) -->
+            <!-- 1. GIÁO VIÊN CHỦ NHIỆM — HÌNH THẦY LÀ PD.webp (KHÔNG CHO PHÉP TẢI ẢNH) -->
             <div id="gvcn-card-wrapper" class="pt-10 pb-10">
                 <div class="scroll-card arch-card corner-brackets p-6 sm:p-8 border-2 border-oceanBright/70 bg-gradient-to-r from-[#04132c] via-[#072247] to-[#04132c]">
                     <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-6 font-mono text-xs">
@@ -1217,21 +1220,13 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                         <div class="lg:col-span-3 flex flex-col items-center justify-center p-4 bg-abyss/95 border-2 border-aquaTerm/60 text-center">
-                            <div class="w-40 h-40 sm:w-44 sm:h-44 mb-3 border-2 border-aquaTerm bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_25px_rgba(0,212,255,0.3)] group">
+                            <div class="w-40 h-40 sm:w-44 sm:h-44 mb-3 border-2 border-aquaTerm bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_25px_rgba(0,212,255,0.3)]">
                                 <img 
                                     id="gvcn-pd-img"
                                     src="PD.webp" 
                                     alt="Thầy Nguyễn Phúc Duy — GVCN lớp THK17" 
                                     class="w-full h-full object-cover object-center"
                                 >
-                                <button 
-                                    type="button" 
-                                    onclick="downloadImageAsset(document.getElementById('gvcn-pd-img'), 'GVCN_Thay_Nguyen_Phuc_Duy_PD.webp')" 
-                                    class="img-download-btn absolute bottom-2 right-2 z-20"
-                                    title="Tải ảnh GVCN về máy"
-                                >
-                                    [⬇ TẢI ẢNH]
-                                </button>
                             </div>
                             <span class="font-mono text-[11px] text-aquaTerm font-bold">GIÁO VIÊN CHỦ NHIỆM</span>
                             <span class="font-mono text-[10px] text-slateBlue mt-0.5">CHUYÊN TIN THK17 (25-28)</span>
@@ -1595,8 +1590,7 @@
         </section>
 
         <!-- ======================================================================
-             SECTION 03 // KỈ NIỆM (1.webp -> 50.webp + TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN,
-             TẢI ẢNH CHO TẤT CẢ ẢNH & CHỈ QUẢN TRỊ VIÊN MỚI XÓA ĐƯỢC)
+             SECTION 03 // KỈ NIỆM (ĐỒNG BỘ CLOUD MỌI THIẾT BỊ & CHỈ CHO PHÉP TẢI ẢNH TẠI ĐÂY)
              ====================================================================== -->
         <section id="ki-niem" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
             
@@ -1611,18 +1605,18 @@
                 </div>
             </div>
 
-            <!-- Thanh công cụ Đăng ảnh kỉ niệm, Tải tất cả ảnh & Trạng thái quyền Admin -->
+            <!-- Thanh công cụ Đăng ảnh kỉ niệm lên Cloud, Tải ảnh Kỉ niệm & Trạng thái Admin -->
             <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
                 <div>
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
-                        // LƯU TRỮ KHOẢNH KHẮC ĐÁNG NHỚ
+                        // LƯU TRỮ ĐÁM MÂY TOÀN CẦU MỌI THIẾT BỊ
                     </p>
                     <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-iceWhite tracking-tight">
                         BỘ NHỚ <span class="font-serif italic font-normal text-cppLight">THANH XUÂN</span> THK17.
                     </h2>
                 </div>
 
-                <!-- Cụm nút Tự đăng ảnh + Tải tất cả ảnh + Thông báo quyền xóa -->
+                <!-- Cụm nút Tự đăng ảnh lên Cloud + Tải tất cả ảnh Kỉ niệm + Quyền Admin -->
                 <div class="scroll-node flex flex-wrap items-center gap-3">
                     <input 
                         type="file" 
@@ -1632,6 +1626,7 @@
                         class="hidden"
                     >
                     <button 
+                        id="upload-memory-btn"
                         type="button" 
                         onclick="document.getElementById('memory-upload-input').click()" 
                         class="btn-arch btn-arch-ocean font-bold py-3 px-5"
@@ -1642,9 +1637,9 @@
                         type="button" 
                         onclick="downloadAllMemoryImages()" 
                         class="btn-arch font-bold py-3 px-5"
-                        title="Tải xuống tất cả ảnh kỉ niệm đang hiển thị"
+                        title="Tải xuống tất cả ảnh trong mục Kỉ niệm"
                     >
-                        <span>[⬇ TẢI TẤT CẢ ẢNH]</span>
+                        <span>[⬇ TẢI TẤT CẢ ẢNH KỈ NIỆM]</span>
                     </button>
                     <div id="memory-permission-status" class="px-3 py-2 bg-[#041024] border border-aquaTerm/35 font-mono text-[11px] text-slateBlue">
                         QUYỀN XÓA ẢNH: <strong class="text-aquaTerm">CHỈ QUẢN TRỊ VIÊN</strong>
@@ -1652,7 +1647,7 @@
                 </div>
             </div>
 
-            <!-- Lưới ảnh: Gồm ảnh 1.webp -> 50.webp trong folder + ảnh tự đăng lưu vĩnh viễn (Tất cả đều có nút Tải ảnh) -->
+            <!-- Lưới ảnh: Gồm ảnh 1.webp -> 50.webp trong folder + ảnh tự đăng đồng bộ Cloud -->
             <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10"></div>
         </section>
 
@@ -1970,14 +1965,27 @@
          ========================================================================== -->
     <script>
         /* --------------------------------------------------------------------------
-           0. BỘ XỬ LÝ TẢI ẢNH VỀ THIẾT BỊ CHO TẤT CẢ ẢNH TRÊN WEB
+           0. CHỈ CHO PHÉP TẢI ẢNH TRONG MỤC KỈ NIỆM (#ki-niem), CẤM TẢI CÁC ẢNH KHÁC
            -------------------------------------------------------------------------- */
-        async function downloadImageAsset(imgElementOrUrl, suggestedFilename = 'THK17_Image.webp') {
-            if (!imgElementOrUrl) return;
-            const srcUrl = typeof imgElementOrUrl === 'string' ? imgElementOrUrl : (imgElementOrUrl.currentSrc || imgElementOrUrl.src);
+        document.addEventListener('contextmenu', (e) => {
+            const target = e.target;
+            if (target && target.tagName === 'IMG' && !target.closest('#ki-niem')) {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            const target = e.target;
+            if (target && target.tagName === 'IMG' && !target.closest('#ki-niem')) {
+                e.preventDefault();
+            }
+        });
+
+        async function downloadMemoryImageAsset(imgElement, suggestedFilename = 'THK17_KiNiem.webp') {
+            if (!imgElement || !imgElement.closest('#ki-niem')) return;
+            const srcUrl = imgElement.currentSrc || imgElement.src;
             if (!srcUrl) return;
 
-            // Trường hợp 1: Ảnh dạng Data URL (Base64 WebP tự đăng lên)
             if (srcUrl.startsWith('data:')) {
                 const a = document.createElement('a');
                 a.href = srcUrl;
@@ -1988,7 +1996,6 @@
                 return;
             }
 
-            // Trường hợp 2: Tải qua Fetch Blob để ép trình duyệt tải file xuống trực tiếp
             try {
                 const res = await fetch(srcUrl);
                 if (res.ok) {
@@ -2005,14 +2012,13 @@
                 }
             } catch (_) {}
 
-            // Trường hợp 3: Dự phòng xuất qua Canvas nếu chạy ở chế độ file cục bộ
             try {
-                if (typeof imgElementOrUrl === 'object' && imgElementOrUrl.naturalWidth > 0) {
+                if (imgElement.naturalWidth > 0) {
                     const cvs = document.createElement('canvas');
-                    cvs.width = imgElementOrUrl.naturalWidth;
-                    cvs.height = imgElementOrUrl.naturalHeight;
+                    cvs.width = imgElement.naturalWidth;
+                    cvs.height = imgElement.naturalHeight;
                     const c = cvs.getContext('2d');
-                    c.drawImage(imgElementOrUrl, 0, 0);
+                    c.drawImage(imgElement, 0, 0);
                     const dataUrl = cvs.toDataURL('image/webp', 0.95);
                     const a = document.createElement('a');
                     a.href = dataUrl;
@@ -2024,7 +2030,6 @@
                 }
             } catch (_) {}
 
-            // Trường hợp 4: Mở thẻ tải trực tiếp
             const fallbackLink = document.createElement('a');
             fallbackLink.href = srcUrl;
             fallbackLink.download = suggestedFilename;
@@ -2034,12 +2039,12 @@
         }
 
         function downloadAllMemoryImages() {
-            const imgs = Array.from(document.querySelectorAll('#memory-grid img'));
+            const imgs = Array.from(document.querySelectorAll('#memory-grid img.memory-downloadable-img'));
             if (!imgs.length) return;
             imgs.forEach((imgEl, index) => {
                 setTimeout(() => {
                     const name = imgEl.getAttribute('data-download-name') || `THK17_KiNiem_${String(index + 1).padStart(2, '0')}.webp`;
-                    downloadImageAsset(imgEl, name);
+                    downloadMemoryImageAsset(imgEl, name);
                 }, index * 280);
             });
         }
@@ -2168,16 +2173,39 @@
         }
 
         /* --------------------------------------------------------------------------
-           0B. HỆ THỐNG CƠ SỞ DỮ LIỆU VĨNH VIỄN (INDEXED_DB + LOCALSTORAGE)
+           0B. HỆ THỐNG ĐỒNG BỘ ĐÁM MÂY TOÀN CẦU MỌI THIẾT BỊ (CLOUD SYNC ENGINE)
+               Đồng bộ Tài khoản (Accounts) + Ảnh Kỉ niệm tự đăng (Uploaded Photos)
+               giữa tất cả máy tính & điện thoại qua Bytebin Cloud + Ntfy Stream + KeyValue
            -------------------------------------------------------------------------- */
         const DB_NAME = 'THK17_Permanent_System_DB';
-        const DB_VERSION = 2;
+        const DB_VERSION = 3;
         const STORE_PHOTOS = 'uploaded_memories';
         const STORE_USERS = 'registered_accounts';
-        const ACCOUNTS_LS_KEY = 'thk17_permanent_accounts_v1';
-        const CURRENT_USER_LS_KEY = 'thk17_active_logged_user_v1';
+        const ACCOUNTS_LS_KEY = 'thk17_permanent_accounts_v2';
+        const CURRENT_USER_LS_KEY = 'thk17_active_logged_user_v2';
+        const UPLOADED_PHOTOS_LS_BACKUP = 'thk17_uploaded_photos_backup_v2';
+        const DELETED_PHOTO_IDS_LS_KEY = 'thk17_deleted_photo_ids_v2';
+
+        // Các kênh Đám mây (Cloud) dùng chung cho tất cả thiết bị truy cập thk17nqd.vercel.app
+        const CLOUD_SYNC_TOPIC = 'thk17nqd_2528_global_cloud_v4';
+        const NTFY_STREAM_URL = `https://ntfy.sh/${CLOUD_SYNC_TOPIC}`;
+        const KV_APP_KEY = 'thk17nqd2528v4';
+        const KV_SNAPSHOT_KEY = 'global_snapshot_id';
+        const BYTEBIN_POST_URL = 'https://bytebin.lucko.me/post';
 
         let thk17Db = null;
+        let uploadedMemoriesList = [];
+        let deletedPhotoIdsSet = new Set(JSON.parse(localStorage.getItem(DELETED_PHOTO_IDS_LS_KEY) || '[]'));
+        let lastAppliedSnapshotKey = '';
+
+        function setCloudIndicator(text, isOk = true) {
+            const el = document.getElementById('cloud-sync-indicator');
+            if (!el) return;
+            el.textContent = text;
+            el.className = isOk
+                ? 'px-2 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px]'
+                : 'px-2 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]';
+        }
 
         function openPermanentDB() {
             return new Promise((resolve) => {
@@ -2219,43 +2247,265 @@
             return map;
         }
 
-        function saveAccountPermanently(userObj) {
-            const map = getSavedAccountsMap();
-            const key = userObj.username.toLowerCase();
-            map[key] = userObj;
+        function saveAccountsMapLocally(map) {
             localStorage.setItem(ACCOUNTS_LS_KEY, JSON.stringify(map));
-
             if (thk17Db) {
                 try {
                     const tx = thk17Db.transaction(STORE_USERS, 'readwrite');
-                    tx.objectStore(STORE_USERS).put(userObj);
+                    const store = tx.objectStore(STORE_USERS);
+                    Object.values(map).forEach(u => store.put(u));
                 } catch (_) {}
             }
         }
 
-        async function syncAccountsFromIndexedDB() {
-            await openPermanentDB();
-            if (!thk17Db) return;
-            return new Promise((resolve) => {
+        function savePhotosListLocally(list) {
+            uploadedMemoriesList = list.filter(item => item && item.id && item.dataUrl && !deletedPhotoIdsSet.has(item.id));
+            uploadedMemoriesList.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+
+            try {
+                localStorage.setItem(UPLOADED_PHOTOS_LS_BACKUP, JSON.stringify(uploadedMemoriesList));
+                localStorage.setItem(DELETED_PHOTO_IDS_LS_KEY, JSON.stringify(Array.from(deletedPhotoIdsSet)));
+            } catch (_) {}
+
+            if (thk17Db) {
                 try {
-                    const tx = thk17Db.transaction(STORE_USERS, 'readonly');
-                    const req = tx.objectStore(STORE_USERS).getAll();
-                    req.onsuccess = () => {
-                        const rows = req.result || [];
-                        const map = getSavedAccountsMap();
-                        rows.forEach(u => {
-                            if (u && u.username) {
-                                map[u.username.toLowerCase()] = u;
-                            }
-                        });
-                        localStorage.setItem(ACCOUNTS_LS_KEY, JSON.stringify(map));
-                        resolve();
-                    };
-                    req.onerror = () => resolve();
-                } catch (_) {
-                    resolve();
+                    const tx = thk17Db.transaction(STORE_PHOTOS, 'readwrite');
+                    const store = tx.objectStore(STORE_PHOTOS);
+                    store.clear();
+                    uploadedMemoriesList.forEach(p => store.put(p));
+                } catch (_) {}
+            }
+        }
+
+        // Đẩy toàn bộ trạng thái (Tài khoản + Ảnh đã đăng + Danh sách ảnh đã xóa) lên Đám mây chung
+        async function pushGlobalCloudState(extraEventPayload = null) {
+            setCloudIndicator('☁ CLOUD: ĐANG LƯU LÊN ĐÁM MÂY...', false);
+            const fullState = {
+                accounts: getSavedAccountsMap(),
+                photos: uploadedMemoriesList,
+                deletedIds: Array.from(deletedPhotoIdsSet),
+                updatedAt: Date.now()
+            };
+
+            let snapshotKey = null;
+
+            // 1. Lưu gói dữ liệu lớn (Accounts + Photos WebP) lên Bytebin Cloud
+            try {
+                const res = await fetch(BYTEBIN_POST_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(fullState)
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.key) {
+                        snapshotKey = data.key;
+                        lastAppliedSnapshotKey = snapshotKey;
+                    }
                 }
-            });
+            } catch (_) {}
+
+            // 2. Lưu mã khóa Snapshot lên KeyValue Cloud & phát tín hiệu Realtime qua Ntfy Stream
+            if (snapshotKey) {
+                try {
+                    await fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${KV_APP_KEY}/${KV_SNAPSHOT_KEY}/${snapshotKey}`, {
+                        method: 'POST'
+                    });
+                } catch (_) {}
+            }
+
+            try {
+                const packet = {
+                    type: 'cloud_sync',
+                    snapshotKey: snapshotKey,
+                    event: extraEventPayload,
+                    updatedAt: Date.now()
+                };
+                await fetch(NTFY_STREAM_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(packet)
+                });
+            } catch (_) {}
+
+            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ MỌI THIẾT BỊ', true);
+        }
+
+        // Gộp dữ liệu từ Đám mây về máy hiện tại
+        function mergeIncomingCloudState(cloudState) {
+            if (!cloudState || typeof cloudState !== 'object') return;
+
+            // 1. Gộp danh sách ID ảnh đã bị Admin xóa
+            if (Array.isArray(cloudState.deletedIds)) {
+                cloudState.deletedIds.forEach(id => deletedPhotoIdsSet.add(id));
+            }
+
+            // 2. Gộp danh sách Tài khoản
+            if (cloudState.accounts && typeof cloudState.accounts === 'object') {
+                const localAcc = getSavedAccountsMap();
+                Object.keys(cloudState.accounts).forEach(k => {
+                    localAcc[k.toLowerCase()] = cloudState.accounts[k];
+                });
+                saveAccountsMapLocally(localAcc);
+            }
+
+            // 3. Gộp danh sách Ảnh Kỉ niệm đã đăng
+            if (Array.isArray(cloudState.photos)) {
+                const photoMap = new Map();
+                uploadedMemoriesList.forEach(p => {
+                    if (p && p.id && !deletedPhotoIdsSet.has(p.id)) photoMap.set(p.id, p);
+                });
+                cloudState.photos.forEach(p => {
+                    if (p && p.id && p.dataUrl && !deletedPhotoIdsSet.has(p.id)) {
+                        photoMap.set(p.id, p);
+                    }
+                });
+                savePhotosListLocally(Array.from(photoMap.values()));
+                renderAllUploadedMemories();
+            }
+        }
+
+        async function fetchAndApplySnapshotByKey(snapshotKey) {
+            if (!snapshotKey || snapshotKey === lastAppliedSnapshotKey) return false;
+            try {
+                const res = await fetch(`https://bytebin.lucko.me/${snapshotKey}`, { cache: 'no-store' });
+                if (res.ok) {
+                    const cloudData = await res.json();
+                    lastAppliedSnapshotKey = snapshotKey;
+                    mergeIncomingCloudState(cloudData);
+                    return true;
+                }
+            } catch (_) {}
+            return false;
+        }
+
+        // Tải toàn bộ Tài khoản & Ảnh Kỉ niệm từ Đám mây về khi mở trên bất kỳ thiết bị nào
+        async function pullGlobalCloudState() {
+            setCloudIndicator('☁ CLOUD: ĐANG TẢI DỮ LIỆU...', false);
+            let latestKey = null;
+
+            // 1. Kiểm tra mã Snapshot từ KeyValue Cloud
+            try {
+                const kvRes = await fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/${KV_APP_KEY}/${KV_SNAPSHOT_KEY}`, { cache: 'no-store' });
+                if (kvRes.ok) {
+                    const rawKey = (await kvRes.text()).replace(/^"+|"+$/g, '').trim();
+                    if (rawKey && rawKey !== 'null') {
+                        latestKey = rawKey;
+                    }
+                }
+            } catch (_) {}
+
+            // 2. Kiểm tra lịch sử sự kiện trên Ntfy Cloud Stream (Lấy cả các tài khoản/lệnh xóa vừa phát)
+            try {
+                const ntfyRes = await fetch(`${NTFY_STREAM_URL}/json?poll=1&since=all`, { cache: 'no-store' });
+                if (ntfyRes.ok) {
+                    const text = await ntfyRes.text();
+                    const lines = text.split('\n').filter(Boolean);
+                    for (const line of lines) {
+                        try {
+                            const msgObj = JSON.parse(line);
+                            if (msgObj && msgObj.message) {
+                                const payload = JSON.parse(msgObj.message);
+                                if (payload.snapshotKey) {
+                                    latestKey = payload.snapshotKey;
+                                }
+                                if (payload.event) {
+                                    applySingleRealtimeEvent(payload.event);
+                                }
+                            }
+                        } catch (_) {}
+                    }
+                }
+            } catch (_) {}
+
+            if (latestKey) {
+                await fetchAndApplySnapshotByKey(latestKey);
+            } else if (uploadedMemoriesList.length > 0 || Object.keys(getSavedAccountsMap()).length > 2) {
+                // Tự động phục hồi lên Đám mây nếu thiết bị này đang giữ dữ liệu
+                await pushGlobalCloudState();
+            }
+
+            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ MỌI THIẾT BỊ', true);
+        }
+
+        function applySingleRealtimeEvent(ev) {
+            if (!ev || !ev.action) return;
+            if (ev.action === 'register_user' && ev.user) {
+                const map = getSavedAccountsMap();
+                map[ev.user.username.toLowerCase()] = ev.user;
+                saveAccountsMapLocally(map);
+            } else if (ev.action === 'delete_photo' && ev.photoId) {
+                deletedPhotoIdsSet.add(ev.photoId);
+                savePhotosListLocally(uploadedMemoriesList);
+                renderAllUploadedMemories();
+            }
+        }
+
+        // Lắng nghe thời gian thực (Realtime SSE) để máy A vừa đăng/xóa ảnh là máy B cập nhật ngay lập tức
+        function startRealtimeCloudStream() {
+            try {
+                const es = new EventSource(`${NTFY_STREAM_URL}/sse`);
+                es.onmessage = async (e) => {
+                    try {
+                        const msgObj = JSON.parse(e.data);
+                        if (msgObj && msgObj.message) {
+                            const payload = JSON.parse(msgObj.message);
+                            if (payload.event) {
+                                applySingleRealtimeEvent(payload.event);
+                            }
+                            if (payload.snapshotKey && payload.snapshotKey !== lastAppliedSnapshotKey) {
+                                await fetchAndApplySnapshotByKey(payload.snapshotKey);
+                            }
+                        }
+                    } catch (_) {}
+                };
+            } catch (_) {}
+        }
+
+        async function loadLocalCacheFromIndexedDB() {
+            await openPermanentDB();
+            const accMap = getSavedAccountsMap();
+            const photoMap = new Map();
+
+            try {
+                const rawPhotos = localStorage.getItem(UPLOADED_PHOTOS_LS_BACKUP);
+                if (rawPhotos) {
+                    (JSON.parse(rawPhotos) || []).forEach(p => {
+                        if (p && p.id && p.dataUrl && !deletedPhotoIdsSet.has(p.id)) {
+                            photoMap.set(p.id, p);
+                        }
+                    });
+                }
+            } catch (_) {}
+
+            if (thk17Db) {
+                await new Promise((resolve) => {
+                    try {
+                        const tx = thk17Db.transaction([STORE_USERS, STORE_PHOTOS], 'readonly');
+                        const reqUsers = tx.objectStore(STORE_USERS).getAll();
+                        const reqPhotos = tx.objectStore(STORE_PHOTOS).getAll();
+                        reqUsers.onsuccess = () => {
+                            (reqUsers.result || []).forEach(u => {
+                                if (u && u.username) accMap[u.username.toLowerCase()] = u;
+                            });
+                        };
+                        reqPhotos.onsuccess = () => {
+                            (reqPhotos.result || []).forEach(p => {
+                                if (p && p.id && p.dataUrl && !deletedPhotoIdsSet.has(p.id)) {
+                                    photoMap.set(p.id, p);
+                                }
+                            });
+                        };
+                        tx.oncomplete = () => resolve();
+                        tx.onerror = () => resolve();
+                    } catch (_) {
+                        resolve();
+                    }
+                });
+            }
+
+            saveAccountsMapLocally(accMap);
+            savePhotosListLocally(Array.from(photoMap.values()));
+            renderAllUploadedMemories();
         }
 
         function getCurrentLoggedUser() {
@@ -2359,6 +2609,8 @@
             if (!modal) return;
             switchAuthTab(mode);
             modal.classList.remove('hidden');
+            // Tự động làm mới danh sách tài khoản từ Cloud ngay khi mở hộp thoại
+            pullGlobalCloudState();
         }
 
         function closeAuthModal() {
@@ -2371,14 +2623,28 @@
             setCurrentLoggedUser(null);
         }
 
-        document.getElementById('login-form')?.addEventListener('submit', (e) => {
+        // Xử lý Đăng nhập (Tự động kiểm tra Cloud nếu đăng nhập trên máy mới)
+        document.getElementById('login-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const usernameRaw = (document.getElementById('login-username')?.value || '').trim();
             const passwordRaw = (document.getElementById('login-password')?.value || '').trim();
+            const submitBtn = document.getElementById('login-submit-btn');
             if (!usernameRaw || !passwordRaw) return;
 
-            const accounts = getSavedAccountsMap();
-            const found = accounts[usernameRaw.toLowerCase()];
+            if (submitBtn) submitBtn.disabled = true;
+            showAuthAlert('Đang đồng bộ tài khoản từ Đám mây...', true);
+
+            let accounts = getSavedAccountsMap();
+            let found = accounts[usernameRaw.toLowerCase()];
+
+            // Nếu máy mới chưa có trong bộ nhớ đệm, tải ngay từ Cloud về
+            if (!found) {
+                await pullGlobalCloudState();
+                accounts = getSavedAccountsMap();
+                found = accounts[usernameRaw.toLowerCase()];
+            }
+
+            if (submitBtn) submitBtn.disabled = false;
 
             if (!found || found.passwordHash !== btoa(passwordRaw)) {
                 showAuthAlert('Sai tên đăng nhập hoặc mật khẩu! Vui lòng kiểm tra lại.', false);
@@ -2386,18 +2652,20 @@
             }
 
             setCurrentLoggedUser({ username: found.username, role: found.role });
-            showAuthAlert(`Đăng nhập thành công với quyền ${found.role === 'admin' ? 'QUẢN TRỊ VIÊN' : 'THÀNH VIÊN'}!`, true);
+            showAuthAlert(`Đăng nhập thành công (${found.role === 'admin' ? 'QUẢN TRỊ VIÊN' : 'THÀNH VIÊN'})!`, true);
             setTimeout(() => {
                 closeAuthModal();
                 document.getElementById('login-form').reset();
-            }, 600);
+            }, 550);
         });
 
-        document.getElementById('signup-form')?.addEventListener('submit', (e) => {
+        // Xử lý Đăng ký mới (Lưu vĩnh viễn và đẩy thẳng lên Cloud cho mọi thiết bị)
+        document.getElementById('signup-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const usernameRaw = (document.getElementById('signup-username')?.value || '').trim();
             const passwordRaw = (document.getElementById('signup-password')?.value || '').trim();
             const adminKeyRaw = (document.getElementById('signup-admin-key')?.value || '').trim();
+            const submitBtn = document.getElementById('signup-submit-btn');
 
             if (usernameRaw.length < 3) {
                 showAuthAlert('Tên tài khoản phải có ít nhất 3 ký tự!', false);
@@ -2408,10 +2676,16 @@
                 return;
             }
 
+            if (submitBtn) submitBtn.disabled = true;
+            showAuthAlert('Đang kiểm tra & đồng bộ tài khoản lên Đám mây...', true);
+
+            await pullGlobalCloudState();
             const accounts = getSavedAccountsMap();
             const key = usernameRaw.toLowerCase();
+
             if (accounts[key]) {
-                showAuthAlert('Tên tài khoản này đã tồn tại! Vui lòng chọn tên khác hoặc chuyển sang Đăng nhập.', false);
+                if (submitBtn) submitBtn.disabled = false;
+                showAuthAlert('Tên tài khoản này đã tồn tại trên hệ thống! Vui lòng chọn tên khác.', false);
                 return;
             }
 
@@ -2423,16 +2697,21 @@
                 createdAt: new Date().toISOString()
             };
 
-            saveAccountPermanently(newUser);
+            accounts[key] = newUser;
+            saveAccountsMapLocally(accounts);
             setCurrentLoggedUser({ username: newUser.username, role: newUser.role });
+
+            await pushGlobalCloudState({ action: 'register_user', user: newUser });
+
+            if (submitBtn) submitBtn.disabled = false;
             showAuthAlert(
-                `Đăng ký & lưu tài khoản "${newUser.username}" thành công (${isAdminRole ? 'QUẢN TRỊ VIÊN' : 'THÀNH VIÊN'})!`,
+                `Đã tạo & đồng bộ tài khoản "${newUser.username}" lên Đám mây (Đăng nhập được trên mọi máy)!`,
                 true
             );
             setTimeout(() => {
                 closeAuthModal();
                 document.getElementById('signup-form').reset();
-            }, 700);
+            }, 650);
         });
 
         /* --------------------------------------------------------------------------
@@ -3118,82 +3397,25 @@
 
         /* --------------------------------------------------------------------------
            8. KỈ NIỆM: QUÉT TỰ ĐỘNG 1.webp -> 50.webp TRONG FOLDER +
-              TỰ ĐĂNG ẢNH LƯU VĨNH VIỄN + NÚT TẢI ẢNH CHO TẤT CẢ ẢNH
+              TỰ ĐĂNG ẢNH ĐỒNG BỘ CLOUD MỌI THIẾT BỊ + CHỈ TẢI ẢNH TRONG MỤC KỈ NIỆM
            -------------------------------------------------------------------------- */
         const MAX_MEMORY_WEBP = 50;
-        const UPLOADED_PHOTOS_LS_BACKUP = 'thk17_uploaded_photos_backup_v1';
-        let uploadedMemoriesList = [];
 
-        async function loadPermanentUploadedPhotos() {
-            await openPermanentDB();
-            const mapById = new Map();
-
-            try {
-                const raw = localStorage.getItem(UPLOADED_PHOTOS_LS_BACKUP);
-                if (raw) {
-                    const arr = JSON.parse(raw) || [];
-                    arr.forEach(item => {
-                        if (item && item.id && item.dataUrl) mapById.set(item.id, item);
-                    });
-                }
-            } catch (_) {}
-
-            if (thk17Db) {
-                await new Promise((resolve) => {
-                    try {
-                        const tx = thk17Db.transaction(STORE_PHOTOS, 'readonly');
-                        const req = tx.objectStore(STORE_PHOTOS).getAll();
-                        req.onsuccess = () => {
-                            const rows = req.result || [];
-                            rows.forEach(item => {
-                                if (item && item.id && item.dataUrl) mapById.set(item.id, item);
-                            });
-                            resolve();
-                        };
-                        req.onerror = () => resolve();
-                    } catch (_) {
-                        resolve();
-                    }
-                });
-            }
-
-            uploadedMemoriesList = Array.from(mapById.values()).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
-            renderAllUploadedMemories();
-        }
-
-        function persistUploadedPhoto(photoObj) {
-            uploadedMemoriesList.push(photoObj);
-            if (thk17Db) {
-                try {
-                    const tx = thk17Db.transaction(STORE_PHOTOS, 'readwrite');
-                    tx.objectStore(STORE_PHOTOS).put(photoObj);
-                } catch (_) {}
-            }
-            try {
-                localStorage.setItem(UPLOADED_PHOTOS_LS_BACKUP, JSON.stringify(uploadedMemoriesList));
-            } catch (_) {}
-        }
-
-        window.deleteUploadedMemoryPhoto = function (photoId) {
+        window.deleteUploadedMemoryPhoto = async function (photoId) {
             if (!isCurrentUserAdmin()) {
                 openAuthModal('login');
                 showAuthAlert('Chỉ Quản trị viên (Admin) mới có quyền xóa ảnh kỉ niệm!', false);
                 return;
             }
-            uploadedMemoriesList = uploadedMemoriesList.filter(item => item.id !== photoId);
-            if (thk17Db) {
-                try {
-                    const tx = thk17Db.transaction(STORE_PHOTOS, 'readwrite');
-                    tx.objectStore(STORE_PHOTOS).delete(photoId);
-                } catch (_) {}
-            }
-            try {
-                localStorage.setItem(UPLOADED_PHOTOS_LS_BACKUP, JSON.stringify(uploadedMemoriesList));
-            } catch (_) {}
+
+            deletedPhotoIdsSet.add(photoId);
+            savePhotosListLocally(uploadedMemoriesList.filter(item => item.id !== photoId));
 
             const domNode = document.getElementById(`uploaded-memory-${photoId}`);
             if (domNode) domNode.remove();
             collectScrollElements();
+
+            await pushGlobalCloudState({ action: 'delete_photo', photoId });
         };
 
         function renderAllUploadedMemories() {
@@ -3205,6 +3427,8 @@
             const adminMode = isCurrentUserAdmin();
 
             uploadedMemoriesList.forEach((item, idx) => {
+                if (!item || !item.id || deletedPhotoIdsSet.has(item.id)) return;
+
                 const slot = document.createElement('div');
                 slot.id = `uploaded-memory-${item.id}`;
                 slot.style.order = String(100 + idx);
@@ -3213,26 +3437,26 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
 
-                const downloadName = `THK17_KiNiem_Upload_${String(idx + 1).padStart(2, '0')}.webp`;
+                const downloadName = `THK17_KiNiem_Cloud_${String(idx + 1).padStart(2, '0')}.webp`;
                 const img = document.createElement('img');
                 img.src = item.dataUrl;
                 img.alt = '';
                 img.setAttribute('data-download-name', downloadName);
-                img.className = 'w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
+                img.className = 'memory-downloadable-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
                 wrapper.appendChild(img);
 
-                // Nút Tải ảnh cho mọi người dùng (ở góc dưới phải)
+                // Nút Tải ảnh trong mục Kỉ niệm
                 const dlBtn = document.createElement('button');
                 dlBtn.type = 'button';
                 dlBtn.className = 'img-download-btn absolute bottom-3 right-3 z-30';
                 dlBtn.textContent = '[⬇ TẢI ẢNH]';
                 dlBtn.onclick = function (ev) {
                     ev.stopPropagation();
-                    downloadImageAsset(img, downloadName);
+                    downloadMemoryImageAsset(img, downloadName);
                 };
                 wrapper.appendChild(dlBtn);
 
-                // Chỉ hiển thị nút Xóa (ở góc trên phải) nếu đã đăng nhập là Quản trị viên (Admin)
+                // Chỉ hiển thị nút Xóa nếu đã đăng nhập là Quản trị viên (Admin)
                 if (adminMode) {
                     const delBtn = document.createElement('button');
                     delBtn.type = 'button';
@@ -3252,13 +3476,14 @@
             collectScrollElements();
         }
 
-        function compressImageFileToWebpDataUrl(file) {
+        // Nén ảnh sang chuẩn WebP tối ưu để đồng bộ nhanh lên Đám mây giữa các thiết bị
+        function compressImageFileToCloudWebp(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
-                        const maxDim = 1100;
+                        const maxDim = 820;
                         let w = img.width;
                         let h = img.height;
                         if (w > maxDim || h > maxDim) {
@@ -3275,7 +3500,7 @@
                         cvs.height = h;
                         const c = cvs.getContext('2d');
                         c.drawImage(img, 0, 0, w, h);
-                        resolve(cvs.toDataURL('image/webp', 0.84));
+                        resolve(cvs.toDataURL('image/webp', 0.74));
                     };
                     img.onerror = () => resolve(e.target.result);
                     img.src = e.target.result;
@@ -3288,18 +3513,29 @@
             const files = Array.from(e.target.files || []);
             if (!files.length) return;
 
+            const uploadBtn = document.getElementById('upload-memory-btn');
+            if (uploadBtn) uploadBtn.innerHTML = '<span>[☁ ĐANG ĐỒNG BỘ ẢNH LÊN CLOUD...]</span>';
+
+            await pullGlobalCloudState();
+            const currentList = [...uploadedMemoriesList];
+
             for (const file of files) {
                 if (!file.type.startsWith('image/')) continue;
-                const webpDataUrl = await compressImageFileToWebpDataUrl(file);
+                const webpDataUrl = await compressImageFileToCloudWebp(file);
                 const photoObj = {
                     id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
                     dataUrl: webpDataUrl,
                     createdAt: Date.now()
                 };
-                persistUploadedPhoto(photoObj);
+                currentList.push(photoObj);
             }
+
             e.target.value = '';
+            savePhotosListLocally(currentList);
             renderAllUploadedMemories();
+            await pushGlobalCloudState({ action: 'upload_photo' });
+
+            if (uploadBtn) uploadBtn.innerHTML = '<span>[+ ĐĂNG ẢNH KỈ NIỆM LÊN WEB]</span>';
         });
 
         function initMemoryGallery1To50() {
@@ -3322,16 +3558,15 @@
                     img.src = `${i}.webp`;
                     img.alt = '';
                     img.setAttribute('data-download-name', downloadName);
-                    img.className = 'w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
+                    img.className = 'memory-downloadable-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
 
-                    // Nút Tải ảnh trên từng ảnh 1.webp -> 50.webp
                     const dlBtn = document.createElement('button');
                     dlBtn.type = 'button';
                     dlBtn.className = 'img-download-btn absolute bottom-3 right-3 z-30';
                     dlBtn.textContent = '[⬇ TẢI ẢNH]';
                     dlBtn.onclick = function (ev) {
                         ev.stopPropagation();
-                        downloadImageAsset(img, downloadName);
+                        downloadMemoryImageAsset(img, downloadName);
                     };
 
                     wrapper.appendChild(img);
@@ -3461,8 +3696,7 @@
         }
 
         /* --------------------------------------------------------------------------
-           9B. BỘ ĐẾM TỔNG LƯỢT TRUY CẬP TOÀN CẦU (MỌI THIẾT BỊ CỘNG CHUNG 1 SỐ,
-               LƯU TRÊN CLOUD KV ĐỘC LẬP — UPLOAD GITHUB KHÔNG BAO GIỜ RESET)
+           9B. BỘ ĐẾM TỔNG LƯỢT TRUY CẬP TOÀN CẦU (MỌI THIẾT BỊ CỘNG CHUNG 1 SỐ)
            -------------------------------------------------------------------------- */
         const SESSION_ID_KEY = 'thk17_client_session_id';
         const GLOBAL_CACHE_KEY = 'thk17_global_cloud_cache';
@@ -3707,9 +3941,11 @@
             mountAllThk17Dinos();
             renderRosterGrid('all');
             initMemoryGallery1To50();
-            await syncAccountsFromIndexedDB();
             updateAuthHeaderUI();
-            await loadPermanentUploadedPhotos();
+            await loadLocalCacheFromIndexedDB();
+            await pullGlobalCloudState();
+            startRealtimeCloudStream();
+            setInterval(() => pullGlobalCloudState(), 15000);
             syncPersistentCounters(true);
             setInterval(() => syncPersistentCounters(false), 8000);
             calibrateScreenAndBoundaries();
