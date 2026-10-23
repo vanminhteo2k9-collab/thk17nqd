@@ -1,0 +1,2861 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THK17 (25-28) // C++ ARCHITECTURAL PORTAL — THPT Chuyên Nguyễn Quang Diêu</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Be Vietnam Pro, JetBrains Mono, Playfair Display, Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        abyss: '#020814',
+                        oceanDeep: '#041024',
+                        oceanPanel: '#071936',
+                        cppBlue: '#00599C',
+                        cppLight: '#659AD2',
+                        oceanBright: '#0088FF',
+                        aquaTerm: '#00D4FF',
+                        aquaDim: 'rgba(0, 212, 255, 0.12)',
+                        oceanDim: 'rgba(0, 136, 255, 0.15)',
+                        iceWhite: '#E8F4FF',
+                        slateBlue: '#7FA6C9'
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        display: ['"Space Grotesk"', '"Be Vietnam Pro"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           STRICT ZERO BORDER-RADIUS & OCEAN BLUE C++ ARCHITECTURAL TOKENS
+           ========================================================================== */
+        *, *::before, *::after {
+            border-radius: 0px !important;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-abyss: #020814;
+            --bg-deep: #041024;
+            --bg-panel: #071936;
+            --cpp-primary: #00599C;
+            --cpp-secondary: #659AD2;
+            --ocean-cobalt: #0088FF;
+            --ocean-aqua: #00D4FF;
+            --text-ice: #E8F4FF;
+            --text-slate: #7FA6C9;
+            --line-ocean: rgba(0, 212, 255, 0.18);
+            --line-strong: rgba(0, 212, 255, 0.48);
+            /* Dynamic resolution variables populated by Display Calibrator */
+            --detected-vw: 1920px;
+            --detected-vh: 1080px;
+            --nav-safe-height: 112px;
+            --ui-scale: 1;
+        }
+
+        html {
+            background-color: var(--bg-abyss);
+            color: var(--text-ice);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            scroll-padding-top: 120px;
+        }
+
+        ::selection {
+            background: var(--ocean-aqua);
+            color: #020814;
+        }
+
+        body {
+            background-color: var(--bg-abyss);
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 89, 156, 0.28) 0%, rgba(2, 8, 20, 0.95) 70%);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            padding-top: var(--nav-safe-height);
+        }
+
+        /* Custom Ocean Blue Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020814;
+            border-left: 1px solid rgba(0, 212, 255, 0.15);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0088FF;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00D4FF;
+        }
+
+        /* Exposed Structural Ocean Blueprint Grid */
+        .structural-grid-bg {
+            background-size: 64px 64px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 180, 255, 0.045) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 180, 255, 0.045) 1px, transparent 1px);
+        }
+
+        /* Hairline Borders */
+        .hairline-t { border-top: 1px solid var(--line-ocean); }
+        .hairline-b { border-bottom: 1px solid var(--line-ocean); }
+        .hairline-l { border-left: 1px solid var(--line-ocean); }
+        .hairline-r { border-right: 1px solid var(--line-ocean); }
+        .hairline-all { border: 1px solid var(--line-ocean); }
+
+        /* Crosshair (+) Markers at Structural Intersections */
+        .crosshair-box {
+            position: relative;
+        }
+        .crosshair-tl::before,
+        .crosshair-tr::after {
+            content: '+';
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1;
+            color: var(--ocean-aqua);
+            pointer-events: none;
+            z-index: 20;
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .crosshair-tl::before { top: -6px; left: -6px; }
+        .crosshair-tr::after { top: -6px; right: -6px; }
+
+        /* Corner L-Bracket Accents */
+        .corner-brackets {
+            position: relative;
+        }
+        .corner-brackets::before,
+        .corner-brackets::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            z-index: 15;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .corner-brackets::before {
+            top: -1px;
+            left: -1px;
+            border-top: 2px solid var(--ocean-aqua);
+            border-left: 2px solid var(--ocean-aqua);
+        }
+        .corner-brackets::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 2px solid var(--ocean-cobalt);
+            border-right: 2px solid var(--ocean-cobalt);
+        }
+        .corner-brackets:hover::before,
+        .corner-brackets:hover::after {
+            width: 22px;
+            height: 22px;
+            border-color: #ffffff;
+        }
+
+        /* Luxury C++ Ocean Tech Button */
+        .btn-arch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            padding: 0.8rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.76rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 212, 255, 0.38);
+            background: rgba(4, 16, 36, 0.92);
+            color: var(--text-ice);
+            overflow: hidden;
+            transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+        .btn-arch::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #00599C 0%, #0088FF 50%, #00D4FF 100%);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 0;
+        }
+        .btn-arch:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .btn-arch:hover {
+            color: #020814;
+            font-weight: 700;
+            border-color: var(--ocean-aqua);
+            box-shadow: 0 0 22px rgba(0, 212, 255, 0.35);
+        }
+        .btn-arch > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-arch-ocean {
+            border-color: var(--ocean-aqua);
+            background: rgba(0, 136, 255, 0.16);
+            color: var(--ocean-aqua);
+        }
+
+        /* Persistent Fixed Navigation Bar — NEVER fades out */
+        #persistent-navbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 9990 !important;
+            opacity: 1 !important;
+            filter: none !important;
+            transform: none !important;
+            background: rgba(2, 8, 20, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.32);
+            box-shadow: 0 8px 32px rgba(0, 12, 32, 0.8);
+        }
+
+        /* Active Navigation Tab Styling */
+        .nav-item {
+            position: relative;
+            transition: all 0.22s ease;
+        }
+        .nav-item.active {
+            color: #00D4FF !important;
+            background: linear-gradient(180deg, rgba(0, 89, 156, 0.35) 0%, rgba(0, 212, 255, 0.14) 100%);
+            border-bottom: 3px solid #00D4FF;
+            text-shadow: 0 0 12px rgba(0, 212, 255, 0.45);
+        }
+        .nav-item.active .nav-hex {
+            color: #ffffff;
+        }
+
+        /* Card Architectural Ocean Panel */
+        .arch-card {
+            background: linear-gradient(180deg, rgba(7, 25, 54, 0.86) 0%, rgba(3, 12, 28, 0.94) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .arch-card:hover {
+            border-color: rgba(0, 212, 255, 0.65);
+            box-shadow: inset 0 0 32px rgba(0, 136, 255, 0.12), 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        /* Scroll Decay & Emergence Engine Nodes */
+        .scroll-node,
+        .scroll-card {
+            will-change: opacity, transform, filter;
+            transform-origin: center center;
+        }
+
+        /* Highlight Pulse When Jumping From Global Search */
+        @keyframes searchTargetPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.85), inset 0 0 35px rgba(0, 212, 255, 0.35); border-color: #00D4FF !important; }
+            50% { box-shadow: 0 0 28px 6px rgba(0, 212, 255, 0.55), inset 0 0 25px rgba(0, 212, 255, 0.25); border-color: #FFFFFF !important; }
+            100% { box-shadow: none; }
+        }
+        .search-target-highlight {
+            animation: searchTargetPulse 2.2s ease-out;
+        }
+
+        /* Spec Row Hover */
+        .spec-row {
+            transition: background-color 0.2s ease, padding-left 0.2s ease;
+        }
+        .spec-row:hover {
+            background-color: rgba(0, 136, 255, 0.12);
+            padding-left: 0.5rem;
+        }
+
+        /* C++ Keyword Highlighting */
+        .cpp-kw { color: #00D4FF; font-weight: 600; }
+        .cpp-type { color: #659AD2; }
+        .cpp-str { color: #7CE38B; }
+        .cpp-num { color: #FFA657; }
+        .cpp-cmt { color: #5C82A6; font-style: italic; }
+
+        
+        /* Opaque Search Suggestion Dropdown (Đục 100% không xuyên thấu nền) */
+        #global-search-dropdown {
+            background-color: #020814 !important;
+            opacity: 1 !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 2px solid #00D4FF !important;
+            box-shadow: 0 28px 72px rgba(0, 0, 0, 0.99), 0 0 30px rgba(0, 212, 255, 0.4) !important;
+        }
+        #global-search-dropdown > div:first-child {
+            background-color: #061836 !important;
+            opacity: 1 !important;
+        }
+        #global-search-results-list {
+            background-color: #020814 !important;
+            opacity: 1 !important;
+        }
+        #global-search-results-list > button {
+            background-color: #041024 !important;
+            opacity: 1 !important;
+        }
+        #global-search-results-list > button:hover {
+            background-color: #09254e !important;
+        }
+
+        /* Scanline Overlay */
+        .crt-overlay {
+            background: linear-gradient(
+                rgba(4, 16, 36, 0) 50%, 
+                rgba(0, 8, 20, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="structural-grid-bg">
+
+    <!-- ==========================================================================
+         0. PRE-ENTRY RESOLUTION & VIEWPORT CALIBRATION OVERLAY
+         ========================================================================== -->
+    <div id="resolution-calibrator-modal" class="fixed inset-0 z-[10000] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-opacity duration-500">
+        <div class="arch-card corner-brackets max-w-3xl w-full p-5 sm:p-8 border border-aquaTerm/60 shadow-[0_0_60px_rgba(0,136,255,0.25)]">
+            
+            <!-- Top Diagnostic Header -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 hairline-b mb-6">
+                <div class="flex items-center gap-3">
+                    <!-- Official C++ Hexagon Logo SVG -->
+                    <svg class="w-9 h-9 shrink-0" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#00599C" stroke="#00D4FF" stroke-width="3"/>
+                        <polygon points="50,3 93,27 50,50 7,27" fill="#659AD2" opacity="0.45"/>
+                        <polygon points="93,27 93,73 50,97 50,50" fill="#004482" opacity="0.65"/>
+                        <text x="18" y="64" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="38">C</text>
+                        <text x="48" y="54" fill="#00D4FF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="22">+</text>
+                        <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="22">+</text>
+                    </svg>
+                    <div>
+                        <div class="font-mono text-xs text-aquaTerm font-bold tracking-widest">
+                            HỆ THỐNG CÂN CHỈNH ĐỘ PHÂN GIẢI // C++23 VIEWPORT ENGINE
+                        </div>
+                        <div class="font-mono text-[11px] text-slateBlue">
+                            THPT Chuyên Nguyễn Quang Diêu — Phường Mỹ Trà, Tỉnh Đồng Tháp
+                        </div>
+                    </div>
+                </div>
+                <span id="calibrator-status-tag" class="px-2.5 py-1 bg-oceanBright/20 border border-aquaTerm text-aquaTerm font-mono text-[10px] font-bold">
+                    [ĐANG NHẬN DIỆN...]
+                </span>
+            </div>
+
+            <!-- Live Resolution & Viewport Boundary Telemetry Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-6">
+                
+                <!-- Left: Detected Specs -->
+                <div class="md:col-span-7 space-y-3 font-mono text-xs">
+                    <div class="p-3 bg-oceanDeep border border-aquaTerm/25">
+                        <div class="text-[10px] text-slateBlue mb-1">// 01. ĐỘ PHÂN GIẢI KHUNG NHÌN THỰC TẾ</div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="cal-viewport-res" class="text-xl sm:text-2xl font-bold text-aquaTerm">0000 × 0000 px</span>
+                            <span id="cal-aspect-ratio" class="text-xs text-iceWhite">TỈ LỆ: --:--</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 bg-oceanDeep border border-aquaTerm/20">
+                            <div class="text-[10px] text-slateBlue mb-1">// 02. MÀN HÌNH THIẾT BỊ</div>
+                            <div id="cal-screen-res" class="text-sm font-bold text-iceWhite">0000 × 0000</div>
+                            <div id="cal-dpr" class="text-[10px] text-cppLight mt-0.5">DPR: 1.0x</div>
+                        </div>
+                        <div class="p-3 bg-oceanDeep border border-aquaTerm/20">
+                            <div class="text-[10px] text-slateBlue mb-1">// 03. CẤU HÌNH BỐ CỤC</div>
+                            <div id="cal-device-tier" class="text-sm font-bold text-aquaTerm">ĐANG TỐI ƯU...</div>
+                            <div id="cal-grid-mode" class="text-[10px] text-cppLight mt-0.5">GRID: AUTO</div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-oceanDeep border border-oceanBright/35 space-y-1 text-[11px]">
+                        <div class="text-aquaTerm font-bold">// 04. VÙNG HIỂN THỊ &amp; HIỆU ỨNG CUỘN THEO MÀN HÌNH</div>
+                        <div class="flex justify-between">
+                            <span class="text-slateBlue">Mép khuất trên (Dưới thanh Menu):</span>
+                            <strong id="cal-top-edge" class="text-iceWhite">Y &lt; 112px</strong>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slateBlue">Vùng hiển thị rõ 100%:</span>
+                            <strong id="cal-safe-zone" class="text-aquaTerm">112px → 920px</strong>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slateBlue">Mép khuất dưới (Đáy màn hình):</span>
+                            <strong id="cal-btm-edge" class="text-iceWhite">Y &gt; 920px</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Visual Screen Boundary Simulator -->
+                <div class="md:col-span-5 bg-abyss border border-aquaTerm/30 p-3 flex flex-col justify-between font-mono text-[10px]">
+                    <div class="text-center text-slateBlue pb-1.5 hairline-b">
+                        SƠ ĐỒ KHUNG NHÌN THIẾT BỊ
+                    </div>
+                    <div class="my-2 flex-1 border border-aquaTerm/40 relative flex flex-col justify-between overflow-hidden min-h-[165px]">
+                        <!-- Simulated Fixed Menu -->
+                        <div class="bg-cppBlue/60 border-b border-aquaTerm px-2 py-1 text-[9px] text-iceWhite flex justify-between">
+                            <span>THANH MENU &amp; TÌM KIẾM (LUÔN HIỆN)</span>
+                            <span id="sim-nav-px">0→112px</span>
+                        </div>
+                        <!-- Simulated Top Decay Band -->
+                        <div class="bg-oceanBright/20 border-b border-dashed border-aquaTerm/60 px-2 py-1 text-[9px] text-aquaTerm text-center">
+                            ▲ KHUẤT VÀO GẦM MENU → MỜ &amp; ẨN DẦN
+                        </div>
+                        <!-- Simulated Safe Active Center -->
+                        <div class="flex-1 flex flex-col items-center justify-center px-2 py-2 bg-oceanDeep/60 text-center">
+                            <span class="text-iceWhite font-bold text-[10px]">VÙNG NỘI DUNG CHÍNH</span>
+                            <span id="sim-center-res" class="text-aquaTerm text-[9px]">HIỂN THỊ RÕ NÉT 100%</span>
+                        </div>
+                        <!-- Simulated Bottom Emerge Band -->
+                        <div class="bg-oceanBright/20 border-t border-dashed border-aquaTerm/60 px-2 py-1 text-[9px] text-aquaTerm text-center">
+                            ▼ MÉP DƯỚI MÀN HÌNH → NỘI DUNG HIỆN DẦN
+                        </div>
+                    </div>
+                    <div class="text-[9px] text-slateBlue text-center">
+                        * Tự động đồng bộ khi thay đổi kích thước cửa sổ
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calibration Progress Bar & Action Button -->
+            <div class="space-y-3 pt-3 hairline-t">
+                <div class="flex justify-between font-mono text-[11px]">
+                    <span id="cal-log-line" class="text-aquaTerm">&gt; std::calibrate_viewport(window.innerWidth, window.innerHeight)...</span>
+                    <span id="cal-pct-text" class="text-iceWhite font-bold">100%</span>
+                </div>
+                <div class="w-full h-1.5 bg-oceanDeep border border-aquaTerm/30 overflow-hidden">
+                    <div id="cal-progress-fill" class="h-full bg-gradient-to-r from-cppBlue via-oceanBright to-aquaTerm transition-all duration-300" style="width: 100%"></div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                    <span class="font-mono text-[11px] text-slateBlue">
+                        Lớp <strong class="text-iceWhite">THK17 (25-28)</strong> • Chuyên Tin Học • THPT Chuyên Nguyễn Quang Diêu
+                    </span>
+                    <button id="enter-portal-btn" onclick="dismissCalibrator()" class="btn-arch btn-arch-ocean font-bold">
+                        <span>[XÁC NHẬN &amp; TRUY CẬP CỔNG THÔNG TIN]</span>
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         1. INTERACTIVE BINARY OCEAN & C++ TOPOLOGY CANVAS BACKGROUND
+         ========================================================================== -->
+    <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95"></canvas>
+    <div class="fixed inset-0 crt-overlay z-0 opacity-25"></div>
+
+    <!-- ==========================================================================
+         2. FIXED SIDE TELEMETRY RAILS (LEFT & RIGHT)
+         ========================================================================== -->
+    <aside class="hidden lg:flex fixed left-0 top-0 bottom-0 w-11 hairline-r bg-abyss/85 backdrop-blur-sm z-30 flex-col justify-between items-center py-28 select-none">
+        <div class="font-mono text-[10px] text-slateBlue tracking-widest [writing-mode:vertical-rl] rotate-180">
+            THK17 // NIÊN KHÓA 25-28 // CHUYÊN NGUYỄN QUANG DIÊU
+        </div>
+        <div class="flex flex-col items-center gap-2 font-mono text-[9px] text-aquaTerm">
+            <span>+</span>
+            <div class="w-[2px] h-16 bg-white/10 relative overflow-hidden">
+                <div id="scroll-progress-bar" class="w-full bg-aquaTerm transition-none" style="height: 0%"></div>
+            </div>
+            <span id="scroll-pct-label">00%</span>
+            <span>+</span>
+        </div>
+        <div class="font-mono text-[10px] text-oceanBright tracking-widest [writing-mode:vertical-rl] rotate-180">
+            STD::C++23 // BINARY_OCEAN
+        </div>
+    </aside>
+
+    <aside class="hidden lg:flex fixed right-0 top-0 bottom-0 w-11 hairline-l bg-abyss/85 backdrop-blur-sm z-30 flex-col justify-between items-center py-28 select-none">
+        <div class="font-mono text-[10px] text-slateBlue tracking-widest [writing-mode:vertical-rl]">
+            PHƯỜNG MỸ TRÀ // TỈNH ĐỒNG THÁP
+        </div>
+        <div class="flex flex-col items-center gap-2.5 font-mono text-[9px] text-slateBlue">
+            <span class="text-aquaTerm/70">SCR_Y</span>
+            <span id="rail-y-offset" class="text-iceWhite">0000</span>
+            <span class="text-white/20">───</span>
+            <span class="text-aquaTerm/70">FPS</span>
+            <span id="rail-fps" class="text-aquaTerm">60</span>
+        </div>
+        <div class="font-mono text-[10px] text-aquaTerm/80 tracking-widest [writing-mode:vertical-rl]">
+            [SĨ SỐ: 34 HỌC SINH]
+        </div>
+    </aside>
+
+    <!-- ==========================================================================
+         3. PERSISTENT FIXED TOP NAVIGATION BAR + INLINE GLOBAL WEBSITE SEARCH
+         ========================================================================== -->
+    <header id="persistent-navbar">
+        <!-- Top System & Resolution Status Strip -->
+        <div class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
+            <div class="flex items-center gap-3">
+                <span class="flex items-center gap-1.5 text-aquaTerm font-bold">
+                    <span class="w-2 h-2 bg-aquaTerm inline-block animate-pulse"></span>
+                    CHUYÊN TIN HỌC THK17 (2025 – 2028)
+                </span>
+                <span class="hidden sm:inline text-white/20">|</span>
+                <span class="hidden sm:inline">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU (PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP)</strong></span>
+                <span class="hidden xl:inline text-white/20">|</span>
+                <span class="hidden xl:inline">SĨ SỐ: <strong class="text-aquaTerm">34 THÀNH VIÊN</strong></span>
+            </div>
+
+            <div class="flex items-center gap-3 ml-auto">
+                <button onclick="openCalibrator()" class="px-2 py-0.5 bg-cppBlue/40 border border-aquaTerm/50 text-iceWhite hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer" title="Cân chỉnh độ phân giải màn hình">
+                    ĐỘ PHÂN GIẢI: <strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
+                </button>
+                <span class="hidden md:inline text-white/20">|</span>
+                <span id="live-system-clock" class="hidden md:inline text-iceWhite">UTC+7 // 00:00:00</span>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar: Brand + 5 Always-Visible Menu Tabs + Inline Global Website Search -->
+        <div class="px-3 sm:px-6 lg:px-14 flex flex-col lg:flex-row lg:items-stretch justify-between relative">
+            
+            <!-- Left Brand -->
+            <div class="flex items-center justify-between py-2 lg:py-0 lg:pr-5 lg:hairline-r shrink-0">
+                <a href="#trang-chu" class="flex items-center gap-3 group">
+                    <!-- Official C++ Hexagon Logo SVG -->
+                    <svg class="w-9 h-9 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,4 92,28 92,72 50,96 8,72 8,28" fill="#00599C" stroke="#00D4FF" stroke-width="4"/>
+                        <polygon points="50,4 92,28 50,50 8,28" fill="#659AD2" opacity="0.45"/>
+                        <polygon points="92,28 92,72 50,96 50,50" fill="#003865" opacity="0.7"/>
+                        <text x="17" y="64" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="39">C</text>
+                        <text x="48" y="54" fill="#00D4FF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="22">+</text>
+                        <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="22">+</text>
+                    </svg>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-display font-bold tracking-wider text-base text-iceWhite">THK17</span>
+                            <span class="font-mono text-[10px] px-1.5 py-0.5 bg-cppBlue/50 border border-aquaTerm/50 text-aquaTerm font-bold">25—28</span>
+                            <span class="hidden sm:inline-block font-mono text-[10px] px-1.5 py-0.5 bg-oceanDeep border border-white/15 text-cppLight">C++23</span>
+                        </div>
+                        <p class="font-mono text-[9px] text-slateBlue tracking-wider uppercase">
+                            THPT CHUYÊN NGUYỄN QUANG DIÊU
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Center: ALWAYS-VISIBLE 5 MENU TABS -->
+            <nav aria-label="Menu thẻ chính" class="flex items-stretch overflow-x-auto no-scrollbar border-t lg:border-t-0 border-aquaTerm/20 shrink-0">
+                <a href="#trang-chu" data-section="trang-chu" class="nav-item active shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
+                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">01//</span>
+                    <span>Trang chủ</span>
+                </a>
+                <a href="#thong-tin" data-section="thong-tin" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
+                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">02//</span>
+                    <span>Thông tin</span>
+                </a>
+                <a href="#ki-niem" data-section="ki-niem" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
+                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">03//</span>
+                    <span>Kỉ niệm</span>
+                </a>
+                <a href="#mang-xa-hoi" data-section="mang-xa-hoi" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
+                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">04//</span>
+                    <span>Mạng xã hội</span>
+                </a>
+                <a href="#lien-he" data-section="lien-he" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
+                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">05//</span>
+                    <span>Liên hệ</span>
+                </a>
+            </nav>
+
+            <!-- Right Inline Global Search Bar (Nằm ngang hàng với Menu) -->
+            <div class="flex items-center flex-1 lg:pl-4 py-2 lg:py-0 border-t lg:border-t-0 border-aquaTerm/20 relative min-w-[240px] max-w-full lg:max-w-sm ml-auto">
+                <div class="w-full relative">
+                    <div class="flex items-center bg-oceanDeep/90 border border-aquaTerm/50 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.3)]">
+                        <span class="pl-3 pr-1.5 font-mono text-[11px] text-aquaTerm font-bold select-none">
+                            🔍
+                        </span>
+                        <input 
+                            id="global-web-search-input" 
+                            type="text" 
+                            placeholder="Tìm kiếm thông tin trong web..." 
+                            autocomplete="off"
+                            class="w-full py-2 px-1.5 bg-transparent font-mono text-xs text-iceWhite focus:outline-none placeholder:text-slateBlue/60"
+                        >
+                        <button 
+                            id="global-web-search-clear" 
+                            type="button" 
+                            class="hidden px-2 py-1 mr-1 text-[10px] font-mono text-slateBlue hover:text-aquaTerm cursor-pointer"
+                            title="Xóa từ khóa"
+                        >
+                            ✕
+                        </button>
+                    </div>
+
+                    <!-- Live Global Search Dropdown Results Panel -->
+                    <div 
+                        id="global-search-dropdown" 
+                        class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1.5 bg-[#020814] border-2 border-aquaTerm shadow-[0_24px_64px_rgba(0,0,0,1)] z-[9999] max-h-[380px] overflow-y-auto"
+                    >
+                        <div class="px-3.5 py-2 bg-oceanDeep hairline-b flex items-center justify-between font-mono text-[10px]">
+                            <span class="text-aquaTerm font-bold">KẾT QUẢ TÌM KIẾM TRÊN TOÀN TRANG</span>
+                            <span id="global-search-count" class="text-iceWhite">0 kết quả</span>
+                        </div>
+                        <div id="global-search-results-list" class="divide-y divide-aquaTerm/15">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+         MAIN ARCHITECTURAL CONTAINER
+         ========================================================================== -->
+    <main class="relative z-10 max-w-[1440px] mx-auto lg:px-11">
+
+        <!-- ======================================================================
+             SECTION 01 // TRANG CHỦ
+             ====================================================================== -->
+        <section id="trang-chu" class="hairline-l hairline-r hairline-b pt-8 pb-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Top Section Header Bar -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-5 hairline-b font-mono text-xs text-slateBlue">
+                <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">01 // TRANG CHỦ</span>
+                    <span class="text-iceWhite tracking-wider">TẬP THỂ LỚP CHUYÊN TIN HỌC THK17</span>
+                </div>
+
+                <!-- 3 Nút lộ trình khối lớp: 10TH (Đã tick), 11TH (Mờ + Đang thực thi), 12TH (Trống) -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" class="inline-flex items-center gap-2 px-3 py-1 bg-aquaTerm/20 border-2 border-aquaTerm text-iceWhite font-mono text-xs font-bold shadow-[0_0_14px_rgba(0,212,255,0.32)] cursor-default">
+                        <span class="w-4 h-4 bg-aquaTerm text-abyss flex items-center justify-center font-extrabold text-[11px] leading-none">✓</span>
+                        <span class="text-aquaTerm">10TH</span>
+                    </button>
+                    <button type="button" class="inline-flex items-center gap-2 px-3 py-1 bg-oceanDeep/75 border border-oceanBright/45 text-cppLight font-mono text-xs opacity-60 cursor-default">
+                        <span class="w-2 h-2 bg-aquaTerm animate-pulse inline-block"></span>
+                        <span>11TH</span>
+                        <span class="text-[10px] text-aquaTerm/90 italic font-normal">• Đang thực thi</span>
+                    </button>
+                    <button type="button" class="inline-flex items-center gap-2 px-3 py-1 bg-abyss/80 border border-white/20 text-slateBlue/55 font-mono text-xs opacity-50 cursor-default">
+                        <span class="w-3.5 h-3.5 border border-slateBlue/40 inline-block"></span>
+                        <span>12TH</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <span>NIÊN KHÓA: <strong class="text-aquaTerm">2025 — 2028 (25-28)</strong></span>
+                    <span class="text-white/20">//</span>
+                    <span>ĐỊA CHỈ: <strong class="text-iceWhite">PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP</strong></span>
+                </div>
+            </div>
+
+            <!-- Hero Cover Showcase -->
+            <div class="py-8 hairline-b">
+                <div class="scroll-card arch-card corner-brackets overflow-hidden">
+                    <!-- Cover Frame Top Bar (Clean, Official, No File Names or Upload Buttons) -->
+                    <div class="scroll-node px-4 py-2.5 bg-oceanDeep hairline-b flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-aquaTerm inline-block"></span>
+                            <span class="text-aquaTerm font-bold">LỚP CHUYÊN TIN HỌC THK17 (NIÊN KHÓA 2025 – 2028)</span>
+                            <span class="text-slateBlue hidden sm:inline">— TRƯỜNG THPT CHUYÊN NGUYỄN QUANG DIÊU</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-iceWhite text-[10px]">PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP</span>
+                        </div>
+                    </div>
+
+                    <!-- Cover Image Container -->
+                    <div class="scroll-node relative w-full h-[300px] sm:h-[420px] lg:h-[480px] bg-abyss overflow-hidden group">
+                        
+                        <!-- Fallback Architectural C++ Ocean Backdrop -->
+                        <div id="nen-fallback-layer" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[#020814] via-[#051b3b] to-[#003b6f]">
+                            <svg class="w-full h-full absolute inset-0 opacity-30" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <pattern id="cppGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+                                        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00D4FF" stroke-width="0.6" stroke-opacity="0.35"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="1200" height="500" fill="url(#cppGrid)"/>
+                                <path d="M0,360 Q300,260 600,340 T1200,280" fill="none" stroke="#0088FF" stroke-width="2"/>
+                                <path d="M0,400 Q350,300 700,380 T1200,330" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="8 4"/>
+                                <circle cx="600" cy="220" r="140" fill="none" stroke="#00D4FF" stroke-width="1" stroke-opacity="0.35"/>
+                                <circle cx="600" cy="220" r="190" fill="none" stroke="#0088FF" stroke-width="1" stroke-dasharray="6 6" stroke-opacity="0.3"/>
+                            </svg>
+                            <div class="relative z-10 flex flex-col items-center max-w-2xl">
+                                <svg class="w-20 h-20 mb-4 drop-shadow-[0_0_25px_rgba(0,212,255,0.5)]" viewBox="0 0 100 100">
+                                    <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#00599C" stroke="#00D4FF" stroke-width="3"/>
+                                    <polygon points="50,3 93,27 50,50 7,27" fill="#659AD2" opacity="0.45"/>
+                                    <text x="17" y="64" fill="#FFFFFF" font-family="JetBrains Mono" font-weight="700" font-size="39">C</text>
+                                    <text x="48" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                                    <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                                </svg>
+                                <div class="font-mono text-xs text-aquaTerm tracking-widest uppercase mb-1">
+                                    CỔNG THÔNG TIN CHÍNH THỨC
+                                </div>
+                                <h2 class="font-display font-bold text-2xl sm:text-4xl text-iceWhite tracking-tight">
+                                    CHUYÊN TIN HỌC THK17 (2025 — 2028)
+                                </h2>
+                                <p class="font-mono text-xs text-cppLight mt-1">
+                                    TRƯỜNG THPT CHUYÊN NGUYỄN QUANG DIÊU • PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Primary Cover Image Element -->
+                        <img 
+                            id="hero-cover-img" 
+                            src="nen.webp" 
+                            alt="Ảnh bìa lớp Chuyên Tin THK17 (25-28) - THPT Chuyên Nguyễn Quang Diêu" 
+                            class="relative z-10 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
+                            onload="handleCoverLoaded()"
+                            onerror="handleCoverFallback()"
+                        >
+
+                        <!-- Architectural HUD Overlay on Cover Image -->
+                        <div class="absolute inset-0 z-20 bg-gradient-to-t from-abyss via-abyss/35 to-transparent pointer-events-none"></div>
+                        
+                        <div class="absolute bottom-0 left-0 right-0 z-30 p-5 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                            <div>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 bg-abyss/85 border border-aquaTerm/60 font-mono text-[11px] text-aquaTerm mb-2">
+                                    <span>CHUYÊN TIN HỌC KHÓA 17</span>
+                                    <span>//</span>
+                                    <span>NIÊN KHÓA 2025 – 2028</span>
+                                </div>
+                                <h2 class="font-display font-bold text-2xl sm:text-4xl lg:text-5xl text-iceWhite tracking-tight drop-shadow-lg">
+                                    THPT CHUYÊN NGUYỄN QUANG DIÊU
+                                </h2>
+                                <p class="font-mono text-xs sm:text-sm text-cppLight mt-1">
+                                    📍 Phường Mỹ Trà, Tỉnh Đồng Tháp • Giáo viên chủ nhiệm: <strong class="text-aquaTerm">Thầy Nguyễn Phúc Duy</strong>
+                                </p>
+                            </div>
+                            <div class="font-mono text-[11px] bg-abyss/85 border border-aquaTerm/40 px-3.5 py-2 text-right">
+                                <div class="text-aquaTerm font-bold">LỚP THK17 (25-28)</div>
+                                <div class="text-slateBlue">NGÔN NGỮ CHỦ LỰC: ISO C++23</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Split Grid: Left C++ Manifesto (7 cols) + Right Interactive g++ Terminal (5 cols) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 hairline-b">
+                
+                <!-- Left Column: THK17 C++ Identity (7 cols) -->
+                <div class="lg:col-span-7 py-10 lg:pr-10 lg:hairline-r flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node inline-flex items-center gap-2.5 px-3 py-1.5 border border-aquaTerm/50 bg-oceanDim mb-6">
+                            <span class="w-2 h-2 bg-aquaTerm"></span>
+                            <span class="font-mono text-[11px] uppercase tracking-widest text-aquaTerm font-bold">
+                                LỚP CHUYÊN TIN HỌC THK17 • NIÊN KHÓA 2025 - 2028
+                            </span>
+                        </div>
+
+                        <h1 class="scroll-node font-display font-bold text-4xl sm:text-6xl xl:text-7xl tracking-tight leading-[1.05] text-iceWhite mb-5">
+                            BẢN LĨNH <span class="text-aquaTerm font-mono">C++</span>.<br>
+                            KIẾN TRÚC <span class="font-serif italic font-normal text-cppLight">ĐẠI DƯƠNG SỐ</span>.
+                        </h1>
+
+                        <!-- Authentic C++23 Class Declaration Block -->
+                        <div class="scroll-node my-6 p-4 border-l-4 border-aquaTerm bg-oceanDeep/90 font-mono text-xs leading-relaxed overflow-x-auto">
+                            <div><span class="cpp-kw">namespace</span> <span class="text-iceWhite font-bold">THPT_Chuyen_Nguyen_Quang_Dieu</span> {</div>
+                            <div class="pl-4"><span class="cpp-kw">struct</span> <span class="cpp-type">THK17_25_28</span> {</div>
+                            <div class="pl-8"><span class="cpp-kw">static constexpr const char*</span> dia_chi   = <span class="cpp-str">"Phường Mỹ Trà, Tỉnh Đồng Tháp"</span>;</div>
+                            <div class="pl-8"><span class="cpp-kw">static constexpr const char*</span> gvcn      = <span class="cpp-str">"Thầy Nguyễn Phúc Duy"</span>;</div>
+                            <div class="pl-8"><span class="cpp-kw">static constexpr int</span>         si_so     = <span class="cpp-num">34</span>;</div>
+                            <div class="pl-8"><span class="cpp-kw">static constexpr const char*</span> ngon_ngu  = <span class="cpp-str">"ISO/IEC 14882:2023 (C++23)"</span>;</div>
+                            <div class="pl-4">};</div>
+                            <div>}</div>
+                        </div>
+
+                        <p class="scroll-node text-base sm:text-lg text-iceWhite/85 font-light leading-relaxed mb-8">
+                            Chào mừng đến với không gian kỹ thuật của tập thể <strong class="text-aquaTerm font-semibold">34 thành viên lớp THK17 (Niên khóa 25-28)</strong> — Trường THPT Chuyên Nguyễn Quang Diêu, Phường Mỹ Trà, Tỉnh Đồng Tháp. Nơi từng dòng lệnh <code class="font-mono text-aquaTerm px-1.5 py-0.5 bg-oceanDeep border border-aquaTerm/30">std::vector</code>, từng cấu trúc dữ liệu cây phân đoạn và thuật toán đồ thị C++ kết tinh thành thanh xuân rực rỡ dưới sự dẫn dắt của thầy chủ nhiệm <strong class="text-iceWhite font-medium">Nguyễn Phúc Duy</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Hero CTA Buttons -->
+                    <div class="scroll-node flex flex-wrap items-center gap-4 pt-5 hairline-t">
+                        <a href="#thong-tin" class="btn-arch btn-arch-ocean font-bold">
+                            <span>XEM GVCN, BAN CÁN SỰ &amp; 34 THÀNH VIÊN</span>
+                            <span>→</span>
+                        </a>
+                        <a href="#ki-niem" class="btn-arch">
+                            <span>[0x03] KHO LƯU TRỮ KỈ NIỆM</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Interactive g++ C++23 Terminal (5 cols) -->
+                <div id="terminal-console" class="lg:col-span-5 py-10 lg:pl-10 flex flex-col justify-between">
+                    <div class="scroll-card arch-card corner-brackets h-full flex flex-col justify-between">
+                        <!-- Terminal Header -->
+                        <div class="scroll-node hairline-b px-4 py-3 bg-oceanDeep flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 bg-oceanBright inline-block"></span>
+                                <span class="w-2.5 h-2.5 bg-aquaTerm inline-block"></span>
+                                <span class="font-mono text-xs text-iceWhite font-bold ml-1">TRÌNH ĐIỀU KHIỂN C++ // thk17@chuyen-nqd:~</span>
+                            </div>
+                            <span class="font-mono text-[10px] text-aquaTerm">[C++23_SHELL]</span>
+                        </div>
+
+                        <!-- Terminal Output Stream -->
+                        <div id="terminal-output" class="p-5 font-mono text-xs space-y-2.5 overflow-y-auto max-h-[340px] text-iceWhite/90">
+                            <div class="scroll-node text-slateBlue">
+                                $ Khởi tạo hệ thống điều hành lớp Chuyên Tin THK17...
+                            </div>
+                            <div class="scroll-node text-aquaTerm">
+                                [✔] Kết nối thành công — Sĩ số: 34 học sinh (0 lỗi, 0 cảnh báo)
+                            </div>
+                            <div class="scroll-node text-slateBlue">
+                                $ query --class-info
+                            </div>
+                            <div class="scroll-node pl-3 border-l-2 border-aquaTerm space-y-1 text-[11px]">
+                                <div><span class="text-aquaTerm">LỚP:</span> THK17 (Niên khóa 2025 - 2028)</div>
+                                <div><span class="text-aquaTerm">TRƯỜNG:</span> THPT Chuyên Nguyễn Quang Diêu</div>
+                                <div><span class="text-aquaTerm">ĐỊA CHỈ:</span> Phường Mỹ Trà, Tỉnh Đồng Tháp</div>
+                                <div><span class="text-aquaTerm">GVCN:</span> Thầy Nguyễn Phúc Duy</div>
+                                <div><span class="text-aquaTerm">LỚP TRƯỞNG:</span> Nguyễn Thụy Hà My</div>
+                                <div><span class="text-aquaTerm">SĨ SỐ:</span> 34 Thành viên</div>
+                            </div>
+                            <div class="scroll-node text-slateBlue pt-1">
+                                Gõ lệnh: <span class="text-aquaTerm">help</span>, <span class="text-aquaTerm">bcs</span>, <span class="text-aquaTerm">gvcn</span>, <span class="text-aquaTerm">danhsach</span>, <span class="text-aquaTerm">school</span>, <span class="text-aquaTerm">clear</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive CLI Input Row -->
+                        <form id="terminal-form" class="scroll-node hairline-t bg-abyss px-4 py-3 flex items-center gap-2">
+                            <span class="font-mono text-xs text-aquaTerm font-bold">thk17@nqd:~$</span>
+                            <input 
+                                id="terminal-input" 
+                                type="text" 
+                                placeholder="Gõ lệnh (vd: bcs, gvcn, danhsach, school)..." 
+                                autocomplete="off"
+                                class="w-full bg-transparent font-mono text-xs text-iceWhite focus:outline-none placeholder:text-slateBlue/50"
+                            >
+                            <button type="submit" class="px-3 py-1 border border-aquaTerm/50 font-mono text-[10px] text-aquaTerm hover:bg-aquaTerm hover:text-abyss transition-colors font-bold">
+                                CHẠY
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Class Telemetry Metrics Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-aquaTerm/20 hairline-b">
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-slateBlue mb-2">
+                        <span>0x01 // NIÊN KHÓA</span>
+                        <span class="text-aquaTerm">[2025 - 2028]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-iceWhite tracking-tight mb-1">
+                        THK<span class="text-aquaTerm font-mono">17</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-slateBlue">Chuyên Tin Học Khóa 17 • Niên khóa 25-28</p>
+                </div>
+
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-slateBlue mb-2">
+                        <span>0x02 // SĨ SỐ LỚP</span>
+                        <span class="text-oceanBright">[ĐẦY ĐỦ]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-iceWhite tracking-tight mb-1">
+                        34<span class="text-aquaTerm font-mono text-2xl"> HS</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-slateBlue">34 thành viên đoàn kết &amp; đam mê công nghệ</p>
+                </div>
+
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-slateBlue mb-2">
+                        <span>0x03 // ĐIỀU HÀNH LỚP</span>
+                        <span class="text-aquaTerm">[CHÍNH THỨC]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-4xl lg:text-5xl text-iceWhite tracking-tight mb-1">
+                        01<span class="text-oceanBright font-mono text-2xl">+07</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-slateBlue">01 GVCN Nguyễn Phúc Duy &amp; 07 Ban Cán Sự</p>
+                </div>
+
+                <div class="scroll-card p-6 lg:p-8 crosshair-box crosshair-tl">
+                    <div class="scroll-node flex justify-between items-center font-mono text-[10px] text-slateBlue mb-2">
+                        <span>0x04 // ĐƠN VỊ ĐÀO TẠO</span>
+                        <span class="text-oceanBright">[ĐỒNG THÁP]</span>
+                    </div>
+                    <div class="scroll-node font-display font-bold text-3xl lg:text-4xl text-iceWhite tracking-tight mb-1">
+                        CHUYÊN <span class="text-aquaTerm font-mono">NQD</span>
+                    </div>
+                    <p class="scroll-node font-mono text-xs text-slateBlue">Phường Mỹ Trà, Tỉnh Đồng Tháp</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 02 // THÔNG TIN (GVCN, BAN CÁN SỰ & DANH SÁCH 34 THÀNH VIÊN)
+             ====================================================================== -->
+        <section id="thong-tin" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
+                <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-0.5 bg-oceanBright text-abyss font-bold">02 // THÔNG TIN</span>
+                    <span class="text-iceWhite tracking-widest">CƠ CẤU TỔ CHỨC, BAN CÁN SỰ &amp; DANH SÁCH 34 THÀNH VIÊN LỚP THK17</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>NAMESPACE: <strong class="text-aquaTerm">NQD::THK17_25_28</strong></span>
+                </div>
+            </div>
+
+            <!-- Section Title -->
+            <div class="py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 hairline-b">
+                <div class="lg:col-span-7">
+                    <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
+                        // HỆ THỐNG TỔ CHỨC &amp; DANH BẠ THÀNH VIÊN
+                    </p>
+                    <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-iceWhite tracking-tight leading-tight">
+                        GIÁO VIÊN CHỦ NHIỆM, BAN CÁN SỰ &amp; <span class="text-aquaTerm font-mono">34</span> THÀNH VIÊN <span class="font-serif italic font-normal text-cppLight">THK17</span>.
+                    </h2>
+                </div>
+                <div class="lg:col-span-5 flex flex-col justify-end">
+                    <p class="scroll-node text-slateBlue text-sm leading-relaxed">
+                        Tập thể lớp Chuyên Tin Học <strong class="text-iceWhite">THK17 (Niên khóa 2025 - 2028)</strong> — Trường THPT Chuyên Nguyễn Quang Diêu, Phường Mỹ Trà, Tỉnh Đồng Tháp gồm 34 học sinh dưới sự dìu dắt của thầy chủ nhiệm Nguyễn Phúc Duy cùng đội ngũ 07 thành viên Ban Cán Sự.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==================================================================
+                 1. GIÁO VIÊN CHỦ NHIỆM — THẦY NGUYỄN PHÚC DUY
+                 ================================================================== -->
+            <div id="gvcn-card-wrapper" class="pt-10 pb-10">
+                <div class="scroll-card arch-card corner-brackets p-6 sm:p-8 border-2 border-oceanBright/70 bg-gradient-to-r from-[#04132c] via-[#072247] to-[#04132c]">
+                    <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-6 font-mono text-xs">
+                        <div class="flex items-center gap-2.5">
+                            <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">0x00 // GIÁO VIÊN CHỦ NHIỆM</span>
+                            <span class="text-aquaTerm font-bold">std::shared_ptr&lt;Advisor&gt; — CỐ VẤN HỌC THUẬT &amp; ĐỊNH HƯỚNG LỚP THK17</span>
+                        </div>
+                        <span class="text-iceWhite bg-cppBlue/60 border border-aquaTerm/50 px-2.5 py-0.5 text-[11px]">
+                            THPT CHUYÊN NGUYỄN QUANG DIÊU
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        <!-- Chân dung Giáo viên chủ nhiệm: PD.webp -->
+                        <div class="lg:col-span-3 flex flex-col items-center justify-center p-4 bg-abyss/90 border border-aquaTerm/40 text-center">
+                            <div class="w-36 h-36 sm:w-44 sm:h-44 mb-3 border-2 border-aquaTerm/70 bg-oceanDeep overflow-hidden relative flex items-center justify-center shadow-[0_0_24px_rgba(0,212,255,0.22)]">
+                                <img 
+                                    src="PD.webp" 
+                                    alt="Thầy Nguyễn Phúc Duy — Giáo viên chủ nhiệm lớp THK17" 
+                                    class="w-full h-full object-cover object-center"
+                                    onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                                >
+                                <svg class="hidden w-16 h-16" viewBox="0 0 100 100">
+                                    <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#00599C" stroke="#00D4FF" stroke-width="3.5"/>
+                                    <polygon points="50,3 93,27 50,50 7,27" fill="#659AD2" opacity="0.45"/>
+                                    <text x="17" y="64" fill="#FFFFFF" font-family="JetBrains Mono" font-weight="700" font-size="38">C</text>
+                                    <text x="48" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                                    <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                                </svg>
+                            </div>
+                            <span class="font-mono text-[11px] text-aquaTerm font-bold">GIÁO VIÊN CHỦ NHIỆM</span>
+                            <span class="font-mono text-[10px] text-slateBlue mt-0.5">CHUYÊN TIN THK17 (25-28)</span>
+                        </div>
+
+                        <!-- GVCN Main Details -->
+                        <div class="lg:col-span-6 space-y-2">
+                            <div class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest">
+                                // GIÁO VIÊN CHỦ NHIỆM LỚP THK17
+                            </div>
+                            <h3 class="scroll-node font-display font-bold text-3xl sm:text-4xl text-iceWhite tracking-tight">
+                                Thầy NGUYỄN PHÚC DUY
+                            </h3>
+                            <p class="scroll-node text-sm text-iceWhite/85 leading-relaxed pt-1">
+                                Người kiến trúc sư trưởng định hướng học tập, rèn luyện tư duy lập trình C++ và đồng hành cùng 34 học sinh tập thể lớp Chuyên Tin Học <strong class="text-aquaTerm">THK17 (Niên khóa 2025 - 2028)</strong> tại Trường THPT Chuyên Nguyễn Quang Diêu, Phường Mỹ Trà, Tỉnh Đồng Tháp.
+                            </p>
+                        </div>
+
+                        <!-- GVCN Properties -->
+                        <div class="lg:col-span-3 p-4 bg-abyss/90 border border-aquaTerm/30 font-mono text-[11px] space-y-2">
+                            <div class="text-aquaTerm font-bold border-b border-aquaTerm/20 pb-1">Thông tin đơn vị</div>
+                            <div class="flex justify-between"><span class="text-slateBlue">LỚP:</span><span class="text-iceWhite font-bold">THK17 (25-28)</span></div>
+                            <div class="flex justify-between"><span class="text-slateBlue">SĨ SỐ:</span><span class="text-iceWhite">34 Học sinh</span></div>
+                            <div class="flex justify-between"><span class="text-slateBlue">TRƯỜNG:</span><span class="text-iceWhite">Chuyên NQD</span></div>
+                            <div class="flex justify-between"><span class="text-slateBlue">ĐỊA CHỈ:</span><span class="text-aquaTerm">P. Mỹ Trà, Đồng Tháp</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================================================================
+                 2. BAN CÁN SỰ LỚP THK17 (07 THÀNH VIÊN — TRÌNH BÀY TRANG TRỌNG)
+                 ================================================================== -->
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-2">
+                <div class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest font-bold">
+                    // BAN CÁN SỰ LỚP CHUYÊN TIN THK17 (07 THÀNH VIÊN ĐIỀU HÀNH)
+                </div>
+                <div class="scroll-node font-mono text-xs text-slateBlue">
+                    NIÊN KHÓA 2025 – 2028 • THPT CHUYÊN NGUYỄN QUANG DIÊU
+                </div>
+            </div>
+
+            <div id="officers-card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 pb-12 hairline-b">
+
+                <!-- 1. Lớp trưởng: Nguyễn Thụy Hà My -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-aquaTerm text-abyss font-bold">01 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #18</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            LỚP TRƯỞNG
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Nguyễn Thụy Hà My
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Điều phối tổng thể các hoạt động học tập và phong trào của tập thể THK17, kết nối trực tiếp giữa Giáo viên chủ nhiệm và 34 thành viên trong lớp.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">LỚP TRƯỞNG</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 2. Lớp phó học tập: Nguyễn Phước Hiếu -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-oceanBright text-abyss font-bold">02 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #08</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            LỚP PHÓ HỌC TẬP
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Nguyễn Phước Hiếu
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Phụ trách chuyên môn học thuật, theo dõi tiến độ học tập các môn văn hóa và chuyên đề lập trình C++, cấu trúc dữ liệu &amp; giải thuật.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">LP HỌC TẬP</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 3. Bí thư chi đoàn & Lớp phó thể chất: Đặng Nguyễn Tiến Dũng -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-aquaTerm text-abyss font-bold">03 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #02</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            BÍ THƯ CHI ĐOÀN &amp; LỚP PHÓ THỂ CHẤT
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Đặng Nguyễn Tiến Dũng
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Đảm nhiệm công tác Đoàn thanh niên của Chi đoàn THK17 và dẫn dắt các hoạt động rèn luyện thể chất, hội thao cấp trường.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">BÍ THƯ &amp; LP THỂ CHẤT</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 4. Lớp phó trật tự: Nguyễn Thị Tường Vy -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-oceanBright text-abyss font-bold">04 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #34</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            LỚP PHÓ TRẬT TỰ
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Nguyễn Thị Tường Vy
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Giữ vững nề nếp, kỷ cương, tác phong học tập và sự tập trung trong các giờ học cũng như các buổi sinh hoạt tập thể của lớp.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">LỚP PHÓ TRẬT TỰ</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 5. Lớp phó đọc sách: Nguyễn Thanh Huy -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-oceanBright text-abyss font-bold">05 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #09</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            LỚP PHÓ ĐỌC SÁCH
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Nguyễn Thanh Huy
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Quản lý tủ sách chuyên đề, tài liệu tham khảo thuật toán và lan tỏa văn hóa đọc, nghiên cứu tri thức mới cho tập thể lớp THK17.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">LP ĐỌC SÁCH</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 6. Lớp phó lao động: Phạm Hữu Tài -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-oceanBright text-abyss font-bold">06 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #28</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            LỚP PHÓ LAO ĐỘNG
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Phạm Hữu Tài
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Điều phối công tác vệ sinh lớp học, giữ gìn cảnh quan môi trường xanh - sạch - đẹp và quản lý cơ sở vật chất chung của tập thể.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">LP LAO ĐỘNG</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 7. Thư ký: Huỳnh Anh Thư -->
+                <article class="scroll-card arch-card corner-brackets p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[10px] pb-3 hairline-b mb-4">
+                            <span class="px-2 py-0.5 bg-aquaTerm text-abyss font-bold">07 // BAN CÁN SỰ</span>
+                            <span class="text-aquaTerm font-bold">STT #31</span>
+                        </div>
+                        <div class="scroll-node font-mono text-[11px] text-cppLight uppercase tracking-wider mb-1">
+                            THƯ KÝ
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl text-iceWhite mb-3">
+                            Huỳnh Anh Thư
+                        </h3>
+                        <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
+                            Tổng hợp biên bản sinh hoạt lớp, theo dõi số liệu thi đua, lưu trữ hồ sơ hoạt động và thông báo lịch trình học tập cho tập thể THK17.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                        <span>CHỨC VỤ: <strong class="text-aquaTerm">THƯ KÝ</strong></span>
+                        <span>THK17 // 25-28</span>
+                    </div>
+                </article>
+
+                <!-- 8th Summary Card -->
+                <article class="scroll-card arch-card p-6 bg-oceanDeep/60 border border-dashed border-aquaTerm/40 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node font-mono text-[10px] text-aquaTerm uppercase tracking-widest pb-3 hairline-b mb-4">
+                            // TỔNG QUAN NHÂN SỰ LỚP
+                        </div>
+                        <div class="scroll-node font-mono text-xs text-iceWhite space-y-1.5">
+                            <div><span class="text-cppLight">struct</span> <span class="text-aquaTerm">THK17_Summary</span> {</div>
+                            <div class="pl-3 text-[11px] text-slateBlue">GVCN: Thầy Nguyễn Phúc Duy</div>
+                            <div class="pl-3 text-[11px] text-slateBlue">Ban Cán Sự: 07 thành viên</div>
+                            <div class="pl-3 text-[11px] text-slateBlue">Sĩ số lớp: 34 học sinh</div>
+                            <div class="pl-3 text-[11px] text-slateBlue">Niên khóa: 2025 - 2028</div>
+                            <div>};</div>
+                        </div>
+                    </div>
+                    <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-aquaTerm">
+                        THPT CHUYÊN NGUYỄN QUANG DIÊU
+                    </div>
+                </article>
+            </div>
+
+            <!-- ==================================================================
+                 3. DANH SÁCH ĐẦY ĐỦ 34 THÀNH VIÊN LỚP CHUYÊN TIN THK17 (25-28)
+                 ================================================================== -->
+            <div id="roster-34-section" class="pt-12 pb-12 hairline-b">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                    <div>
+                        <div class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-1">
+                            // std::array&lt;Student, 34&gt; thk17_members
+                        </div>
+                        <h3 class="scroll-node font-display font-bold text-2xl sm:text-4xl text-iceWhite tracking-tight">
+                            DANH SÁCH 34 THÀNH VIÊN LỚP THK17 (2025 – 2028)
+                        </h3>
+                    </div>
+
+                    <!-- Roster Filter Buttons -->
+                    <div class="scroll-node flex flex-wrap gap-2 font-mono text-xs">
+                        <button type="button" data-roster-filter="all" class="roster-filter-btn px-4 py-2 bg-aquaTerm text-abyss font-bold border border-aquaTerm cursor-pointer">
+                            [TẤT CẢ THÀNH VIÊN (34)]
+                        </button>
+                        <button type="button" data-roster-filter="bcs" class="roster-filter-btn px-4 py-2 bg-oceanDeep text-slateBlue hover:text-iceWhite border border-aquaTerm/30 cursor-pointer">
+                            [BAN CÁN SỰ (07)]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 34 Members Grid (Rendered cleanly & searchable by Global Search) -->
+                <div id="roster-34-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                    <!-- Populated on load from the official 34-student array so both static & dynamic filters stay 100% accurate -->
+                </div>
+            </div>
+
+            <!-- Detailed Executive Table & C++23 Algorithm Library -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 pt-12 gap-8">
+                
+                <!-- Left: Complete Executive Summary Table (7 cols) -->
+                <div class="lg:col-span-7 scroll-card arch-card corner-brackets p-6 sm:p-8">
+                    <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-5">
+                        <div>
+                            <span class="font-mono text-[10px] text-aquaTerm uppercase tracking-widest">BẢNG TỔNG HỢP ĐIỀU HÀNH LỚP THK17</span>
+                            <h3 class="font-display font-bold text-2xl text-iceWhite mt-1">GIÁO VIÊN CHỦ NHIỆM &amp; BAN CÁN SỰ</h3>
+                        </div>
+                        <span class="font-mono text-xs px-2.5 py-1 bg-cppBlue/40 border border-aquaTerm/40 text-aquaTerm">08 VỊ TRÍ CHỦ CHỐT</span>
+                    </div>
+
+                    <div class="divide-y divide-aquaTerm/15 font-mono text-xs">
+                        <div class="scroll-node grid grid-cols-12 py-2.5 text-[10px] text-slateBlue uppercase tracking-wider">
+                            <div class="col-span-2">MÃ</div>
+                            <div class="col-span-5">CHỨC VỤ</div>
+                            <div class="col-span-3">HỌ VÀ TÊN</div>
+                            <div class="col-span-2 text-right">VAI TRÒ</div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-aquaTerm font-bold">0x00</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Giáo viên chủ nhiệm</div>
+                            <div class="col-span-3 text-aquaTerm font-bold">Nguyễn Phúc Duy</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-aquaTerm text-abyss font-bold text-[10px]">GVCN</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x01</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Lớp trưởng</div>
+                            <div class="col-span-3 text-iceWhite">Nguyễn Thụy Hà My</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x02</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Lớp phó học tập</div>
+                            <div class="col-span-3 text-iceWhite">Nguyễn Phước Hiếu</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x03</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Bí thư CĐ &amp; LP Thể chất</div>
+                            <div class="col-span-3 text-iceWhite">Đặng Nguyễn Tiến Dũng</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x04</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Lớp phó trật tự</div>
+                            <div class="col-span-3 text-iceWhite">Nguyễn Thị Tường Vy</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x05</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Lớp phó đọc sách</div>
+                            <div class="col-span-3 text-iceWhite">Nguyễn Thanh Huy</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x06</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Lớp phó lao động</div>
+                            <div class="col-span-3 text-iceWhite">Phạm Hữu Tài</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+
+                        <div class="scroll-node spec-row grid grid-cols-12 py-3 items-center">
+                            <div class="col-span-2 text-oceanBright">0x07</div>
+                            <div class="col-span-5 text-iceWhite font-sans font-medium">Thư ký</div>
+                            <div class="col-span-3 text-iceWhite">Huỳnh Anh Thư</div>
+                            <div class="col-span-2 text-right"><span class="px-1.5 py-0.5 bg-cppBlue/60 text-aquaTerm text-[10px]">BCS</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: C++23 Algorithm Source Inspector (5 cols) -->
+                <div class="lg:col-span-5 scroll-card arch-card corner-brackets p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex flex-wrap items-center justify-between gap-2 pb-4 hairline-b mb-4">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-6 h-6" viewBox="0 0 100 100">
+                                    <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#00599C" stroke="#00D4FF" stroke-width="4"/>
+                                    <text x="17" y="64" fill="#FFFFFF" font-family="JetBrains Mono" font-weight="700" font-size="38">C</text>
+                                    <text x="48" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                                    <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                                </svg>
+                                <div>
+                                    <span class="font-mono text-[10px] text-aquaTerm uppercase tracking-widest">CHUYÊN ĐỀ THUẬT TOÁN C++23</span>
+                                    <h3 class="font-display font-bold text-xl text-iceWhite">THƯ VIỆN C++ CHUYÊN TIN</h3>
+                                </div>
+                            </div>
+                            <div class="flex gap-1">
+                                <button data-algo="segtree" class="algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-aquaTerm text-abyss font-bold cursor-pointer">SEG_TREE</button>
+                                <button data-algo="dijkstra" class="algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-oceanDeep text-slateBlue hover:text-iceWhite cursor-pointer">DIJKSTRA</button>
+                                <button data-algo="dp" class="algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-oceanDeep text-slateBlue hover:text-iceWhite cursor-pointer">BITMASK_DP</button>
+                            </div>
+                        </div>
+
+                        <pre id="algo-code-view" class="scroll-node bg-abyss p-4 border border-aquaTerm/25 font-mono text-[11px] leading-relaxed text-iceWhite overflow-x-auto"><code><span class="cpp-cmt">// THK17 Segment Tree Lazy Propagation — O(log N)</span>
+<span class="cpp-kw">template</span>&lt;<span class="cpp-kw">typename</span> T&gt;
+<span class="cpp-kw">void</span> update(<span class="cpp-kw">int</span> id, <span class="cpp-kw">int</span> l, <span class="cpp-kw">int</span> r, <span class="cpp-kw">int</span> u, <span class="cpp-kw">int</span> v, T val) {
+    <span class="cpp-kw">if</span> (v &lt; l || r &lt; u) <span class="cpp-kw">return</span>;
+    <span class="cpp-kw">if</span> (u &lt;= l &amp;&amp; r &lt;= v) {
+        st[id].sum += val * (r - l + <span class="cpp-num">1</span>);
+        st[id].lazy += val;
+        <span class="cpp-kw">return</span>;
+    }
+    pushDown(id, l, r);
+    <span class="cpp-kw">int</span> mid = (l + r) &gt;&gt; <span class="cpp-num">1</span>;
+    update(id &lt;&lt; <span class="cpp-num">1</span>, l, mid, u, v, val);
+    update(id &lt;&lt; <span class="cpp-num">1</span> | <span class="cpp-num">1</span>, mid + <span class="cpp-num">1</span>, r, u, v, val);
+    st[id].sum = st[id &lt;&lt; <span class="cpp-num">1</span>].sum + st[id &lt;&lt; <span class="cpp-num">1</span> | <span class="cpp-num">1</span>].sum;
+}</code></pre>
+                    </div>
+
+                    <div class="scroll-node mt-6 pt-4 hairline-t flex items-center justify-between font-mono text-[11px] text-slateBlue">
+                        <span>ĐỘ PHỨC TẠP: <strong id="algo-complexity" class="text-aquaTerm">Time O(Q log N) // Space O(4N)</strong></span>
+                        <span class="text-oceanBright">[CHUẨN C++23]</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 03 // KỈ NIỆM (AUTO-DETECT 1.webp -> 50.webp IN FOLDER)
+             ====================================================================== -->
+        <section id="ki-niem" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
+                <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">03 // KỈ NIỆM</span>
+                    <span class="text-iceWhite tracking-widest">KHO LƯU TRỮ HÌNH ẢNH KỈ NIỆM LỚP THK17 (2025 – 2028)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>ĐỊA ĐIỂM: <strong class="text-aquaTerm">CHUYÊN NGUYỄN QUANG DIÊU — ĐỒNG THÁP</strong></span>
+                </div>
+            </div>
+
+            <!-- Title Bar -->
+            <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
+                <div>
+                    <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
+                        // LƯU TRỮ KHOẢNH KHẮC ĐÁNG NHỚ
+                    </p>
+                    <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-iceWhite tracking-tight">
+                        BỘ NHỚ <span class="font-serif italic font-normal text-cppLight">THANH XUÂN</span> THK17.
+                    </h2>
+                </div>
+                <div class="scroll-node font-mono text-xs text-slateBlue">
+                    <span id="memory-loaded-counter" class="px-3 py-1.5 bg-oceanDeep border border-aquaTerm/40 text-aquaTerm font-bold">
+                        ĐANG ĐỒNG BỘ ẢNH KỈ NIỆM...
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dynamic 1.webp -> 50.webp Grid (Only renders existing files in numerical order, no captions/modals) -->
+            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
+                <!-- Populated automatically in strict order 1.webp -> 50.webp by JS -->
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 04 // MẠNG XÃ HỘI (OFFICIAL FACEBOOK & TIKTOK)
+             ====================================================================== -->
+        <section id="mang-xa-hoi" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
+                <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-0.5 bg-oceanBright text-abyss font-bold">04 // MẠNG XÃ HỘI</span>
+                    <span class="text-iceWhite tracking-widest">KÊNH TRUYỀN THÔNG CHÍNH THỨC LỚP THK17</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="ping-all-btn" class="px-3 py-1 border border-aquaTerm text-aquaTerm hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer font-bold">
+                        [KIỂM TRA KẾT NỐI]
+                    </button>
+                </div>
+            </div>
+
+            <div class="py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 hairline-b">
+                <div class="lg:col-span-6">
+                    <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
+                        // MẠNG XÃ HỘI CHÍNH THỨC CỦA LỚP
+                    </p>
+                    <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-iceWhite tracking-tight">
+                        KÊNH KẾT NỐI <span class="font-serif italic font-normal text-cppLight">TRỰC TUYẾN</span>.
+                    </h2>
+                </div>
+                <div class="lg:col-span-6 flex flex-col justify-end">
+                    <p class="scroll-node text-slateBlue text-sm sm:text-base leading-relaxed">
+                        Theo dõi các hoạt động tập thể, hình ảnh ngoại khóa và những thước phim kỉ niệm của tập thể 34 thành viên lớp <strong class="text-iceWhite">Chuyên Tin Học THK17 (25-28) — THPT Chuyên Nguyễn Quang Diêu</strong> qua Facebook và TikTok chính thức.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2 Official Social Channels: Facebook & TikTok -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
+
+                <!-- 01. FACEBOOK -->
+                <div class="scroll-card arch-card corner-brackets p-7 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] pb-4 hairline-b mb-6">
+                            <span class="text-aquaTerm font-bold">KÊNH 01 // FACEBOOK CHÍNH THỨC</span>
+                            <span class="px-2 py-0.5 bg-oceanBright/20 border border-aquaTerm/50 text-aquaTerm node-ping" data-base="14">14ms // TRỰC TUYẾN</span>
+                        </div>
+                        <div class="scroll-node flex items-center gap-4 mb-4">
+                            <!-- Facebook Official Logo SVG -->
+                            <div class="w-14 h-14 shrink-0 bg-[#1877F2]/20 border border-[#1877F2] flex items-center justify-center shadow-[0_0_20px_rgba(24,119,242,0.35)]">
+                                <svg class="w-8 h-8 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-2xl sm:text-3xl text-iceWhite">Facebook THK17 (25-28)</h3>
+                                <p class="font-mono text-xs text-oceanBright break-all mt-0.5">facebook.com/profile.php?id=61579046232567</p>
+                            </div>
+                        </div>
+                        <p class="scroll-node text-xs sm:text-sm text-slateBlue leading-relaxed mb-6">
+                            Trang Facebook chính thức cập nhật thông tin hoạt động tập thể, sự kiện học thuật và những khoảnh khắc đáng nhớ của lớp Chuyên Tin Học THK17 — Trường THPT Chuyên Nguyễn Quang Diêu.
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between gap-4">
+                        <span class="font-mono text-[11px] text-slateBlue">THPT CHUYÊN NGUYỄN QUANG DIÊU</span>
+                        <a href="https://www.facebook.com/profile.php?id=61579046232567" target="_blank" rel="noopener noreferrer" class="btn-arch btn-arch-ocean py-2.5 px-5 text-xs font-bold">
+                            <span>TRUY CẬP FACEBOOK</span>
+                            <span>↗</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 02. TIKTOK -->
+                <div class="scroll-card arch-card corner-brackets p-7 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="scroll-node flex items-center justify-between font-mono text-[11px] pb-4 hairline-b mb-6">
+                            <span class="text-aquaTerm font-bold">KÊNH 02 // TIKTOK CHÍNH THỨC</span>
+                            <span class="px-2 py-0.5 bg-oceanBright/20 border border-aquaTerm/50 text-aquaTerm node-ping" data-base="12">12ms // TRỰC TUYẾN</span>
+                        </div>
+                        <div class="scroll-node flex items-center gap-4 mb-4">
+                            <!-- TikTok Official Logo SVG -->
+                            <div class="w-14 h-14 shrink-0 bg-abyss border border-aquaTerm flex items-center justify-center shadow-[0_0_20px_rgba(0,212,255,0.35)]">
+                                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M16.6 5.82C15.9165 5.03962 15.5397 4.03746 15.54 3H12.45V15.4C12.4262 16.071 12.1429 16.7066 11.6598 17.1729C11.1767 17.6393 10.5316 17.8998 9.86 17.9C8.44 17.9 7.26 16.74 7.26 15.3C7.26 13.58 8.92 12.29 10.63 12.82V9.66C7.18 9.2 4.16 11.88 4.16 15.3C4.16 18.63 6.92 21 9.85 21C12.99 21 15.54 18.45 15.54 15.3V9.01C16.793 9.90985 18.2974 10.3926 19.84 10.39V7.3C19.84 7.3 17.96 7.39 16.6 5.82Z" fill="#00D4FF"/>
+                                    <path d="M16.1 5.32C15.4165 4.53962 15.0397 3.53746 15.04 2.5H11.95V14.9C11.9262 15.571 11.6429 16.2066 11.1598 16.6729C10.6767 17.1393 10.0316 17.3998 9.36 17.4C7.94 17.4 6.76 16.24 6.76 14.8C6.76 13.08 8.42 11.79 10.13 12.32V9.16C6.68 8.7 3.66 11.38 3.66 14.8C3.66 18.13 6.42 20.5 9.35 20.5C12.49 20.5 15.04 17.95 15.04 14.8V8.51C16.293 9.40985 17.7974 9.8926 19.34 9.89V6.8C19.34 6.8 17.46 6.89 16.1 5.32Z" fill="#FFFFFF"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-2xl sm:text-3xl text-iceWhite">TikTok @thk17_25.28</h3>
+                                <p class="font-mono text-xs text-oceanBright break-all mt-0.5">tiktok.com/@thk17_25.28</p>
+                            </div>
+                        </div>
+                        <p class="scroll-node text-xs sm:text-sm text-slateBlue leading-relaxed mb-6">
+                            Kênh TikTok chính thức lưu giữ những đoạn video ngắn, vlog học tập và khoảnh khắc thanh xuân sôi nổi của đại gia đình 34 thành viên lớp THK17 (2025 – 2028).
+                        </p>
+                    </div>
+                    <div class="scroll-node pt-4 hairline-t flex items-center justify-between gap-4">
+                        <span class="font-mono text-[11px] text-slateBlue">@thk17_25.28 // NIÊN KHÓA 25-28</span>
+                        <a href="https://www.tiktok.com/@thk17_25.28?lang=vi-VN" target="_blank" rel="noopener noreferrer" class="btn-arch btn-arch-ocean py-2.5 px-5 text-xs font-bold">
+                            <span>TRUY CẬP TIKTOK</span>
+                            <span>↗</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SECTION 05 // LIÊN HỆ (CONTACT / C++ PACKET STREAM TO THK17 NQD)
+             ====================================================================== -->
+        <section id="lien-he" class="hairline-l hairline-r hairline-b py-20 px-4 sm:px-8 lg:px-12 relative">
+            
+            <!-- Section Header -->
+            <div class="scroll-node flex flex-wrap items-center justify-between gap-4 pb-6 hairline-b font-mono text-xs text-slateBlue">
+                <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold">05 // LIÊN HỆ</span>
+                    <span class="text-iceWhite tracking-widest">LIÊN HỆ TẬP THỂ LỚP THK17 (2025 – 2028)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>CỔNG TIẾP NHẬN THÔNG TIN TRỰC TUYẾN</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 pt-10 gap-8">
+                
+                <!-- Left Column: Contact Form (7 cols) -->
+                <div class="lg:col-span-7 scroll-card arch-card corner-brackets p-6 sm:p-10">
+                    <div class="scroll-node pb-6 hairline-b mb-8">
+                        <span class="font-mono text-xs text-aquaTerm uppercase tracking-widest">// KẾT NỐI VỚI TẬP THỂ LỚP CHUYÊN TIN THK17</span>
+                        <h2 class="font-display font-bold text-3xl sm:text-4xl text-iceWhite mt-1">
+                            GỬI THÔNG ĐIỆP TỚI LỚP THK17
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slateBlue mt-2">
+                            Gửi lời nhắn giao lưu học thuật, kết nối hoạt động Đoàn hoặc liên hệ trực tiếp với Giáo viên chủ nhiệm và Ban Cán Sự lớp Chuyên Tin Học THK17 (25-28) — THPT Chuyên Nguyễn Quang Diêu.
+                        </p>
+                    </div>
+
+                    <form id="io-contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="scroll-node">
+                                <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
+                                    01 // HỌ VÀ TÊN NGƯỜI GỬI *
+                                </label>
+                                <input 
+                                    id="sender-name" 
+                                    type="text" 
+                                    required
+                                    placeholder="Nhập họ và tên của bạn..." 
+                                    class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
+                                >
+                            </div>
+                            <div class="scroll-node">
+                                <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
+                                    02 // ĐỊA CHỈ EMAIL HOẶC SỐ ĐIỆN THOẠI *
+                                </label>
+                                <input 
+                                    id="sender-email" 
+                                    type="email" 
+                                    required
+                                    placeholder="email@domain.com" 
+                                    class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="scroll-node">
+                            <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
+                                03 // BỘ PHẬN TIẾP NHẬN
+                            </label>
+                            <div class="w-full px-4 py-3 bg-oceanDeep border border-aquaTerm font-mono text-xs text-iceWhite flex items-center justify-between select-none">
+                                <span class="font-bold text-aquaTerm">Mai Thiên Phú (Người thiết kế)</span>
+                                <span class="px-2 py-0.5 bg-cppBlue/70 border border-aquaTerm/50 text-[10px] text-iceWhite">TIẾP NHẬN TRỰC TIẾP</span>
+                            </div>
+                            <input type="hidden" id="packet-topic" value="Mai Thiên Phú (Người thiết kế)">
+                        </div>
+
+                        <div class="scroll-node">
+                            <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
+                                04 // NỘI DUNG TIN NHẮN *
+                            </label>
+                            <textarea 
+                                id="packet-message" 
+                                rows="4" 
+                                required
+                                placeholder="Nhập nội dung tin nhắn gửi đến lớp THK17 (25-28)..." 
+                                class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
+                            ></textarea>
+                        </div>
+
+                        <div class="scroll-node pt-2 flex flex-wrap items-center justify-between gap-4">
+                            <button type="submit" class="btn-arch btn-arch-ocean font-bold">
+                                <span>[GỬI THÔNG ĐIỆP TỚI LỚP THK17]</span>
+                                <span>↗</span>
+                            </button>
+                            <span id="form-status-badge" class="font-mono text-xs text-aquaTerm">
+                                TRẠNG THÁI: SẴN SÀNG...
+                            </span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Column: Live Packet Preview & School Location (5 cols) -->
+                <div class="lg:col-span-5 flex flex-col justify-between gap-6">
+                    
+                    <div class="scroll-card arch-card corner-brackets p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="scroll-node flex items-center justify-between pb-3 hairline-b mb-4 font-mono text-[10px]">
+                                <span class="text-aquaTerm font-bold">CẤU TRÚC DỮ LIỆU GÓI TIN C++</span>
+                                <span class="text-cppLight">CHUẨN UTF-8</span>
+                            </div>
+                            <pre id="json-live-preview" class="scroll-node bg-abyss p-4 border border-aquaTerm/25 font-mono text-[11px] leading-relaxed text-iceWhite/90 overflow-x-auto">{
+  "lop": "THK17 (2025-2028)",
+  "truong": "THPT Chuyên Nguyễn Quang Diêu",
+  "dia_chi": "Phường Mỹ Trà, Tỉnh Đồng Tháp",
+  "nguoi_nhan": "Mai Thiên Phú (Người thiết kế)",
+  "nguoi_gui": "Khách truy cập",
+  "lien_he": "Đang chờ nhập...",
+  "noi_dung": "Đang chờ nội dung tin nhắn...",
+  "kich_thuoc_byte": 0
+}</pre>
+                        </div>
+                        <div class="scroll-node mt-4 pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
+                            <span>GIAO THỨC: BẢO MẬT</span>
+                            <span id="payload-hash" class="text-aquaTerm">CRC32: 0x00000000</span>
+                        </div>
+                    </div>
+
+                    <!-- School & Class Coordinates Box -->
+                    <div class="scroll-card arch-card p-6">
+                        <div class="scroll-node font-mono text-[10px] text-aquaTerm uppercase tracking-widest pb-3 hairline-b mb-4 font-bold">
+                            ĐỊA CHỈ TRƯỜNG &amp; THÔNG TIN ĐƠN VỊ
+                        </div>
+                        <div class="space-y-2.5 font-mono text-xs">
+                            <div class="scroll-node flex justify-between gap-2">
+                                <span class="text-slateBlue">LỚP &amp; NIÊN KHÓA:</span>
+                                <span class="text-aquaTerm font-bold text-right">THK17 (Niên khóa 2025 - 2028)</span>
+                            </div>
+                            <div class="scroll-node flex justify-between gap-2">
+                                <span class="text-slateBlue">SĨ SỐ:</span>
+                                <span class="text-iceWhite font-bold text-right">34 Thành viên</span>
+                            </div>
+                            <div class="scroll-node flex justify-between gap-2">
+                                <span class="text-slateBlue">TRƯỜNG:</span>
+                                <span class="text-iceWhite font-bold text-right">THPT Chuyên Nguyễn Quang Diêu</span>
+                            </div>
+                            <div class="scroll-node flex justify-between gap-2">
+                                <span class="text-slateBlue">ĐỊA CHỈ:</span>
+                                <span class="text-iceWhite text-right">Phường Mỹ Trà, Tỉnh Đồng Tháp</span>
+                            </div>
+                            <div class="scroll-node flex justify-between gap-2">
+                                <span class="text-slateBlue">GV CHỦ NHIỆM:</span>
+                                <span class="text-aquaTerm font-bold text-right">Thầy Nguyễn Phúc Duy</span>
+                            </div>
+                            <div class="scroll-node flex justify-between gap-2">
+                                <span class="text-slateBlue">LỚP TRƯỞNG:</span>
+                                <span class="text-iceWhite text-right">Nguyễn Thụy Hà My</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         ARCHITECTURAL FOOTER (WITH DESIGNER CREDIT & LIVE PERSISTENT COUNTERS)
+         ========================================================================== -->
+    <footer class="relative z-10 hairline-t bg-oceanDeep/95 max-w-[1440px] mx-auto lg:px-11">
+        <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-8 flex flex-col gap-6 font-mono text-xs text-slateBlue">
+            
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8 shrink-0" viewBox="0 0 100 100">
+                        <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#00599C" stroke="#00D4FF" stroke-width="4"/>
+                        <text x="17" y="64" fill="#FFFFFF" font-family="JetBrains Mono" font-weight="700" font-size="38">C</text>
+                        <text x="48" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                        <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono" font-weight="700" font-size="22">+</text>
+                    </svg>
+                    <div>
+                        <div class="text-iceWhite font-bold tracking-wider">
+                            LỚP CHUYÊN TIN HỌC THK17 (25-28) — THPT CHUYÊN NGUYỄN QUANG DIÊU
+                        </div>
+                        <p class="text-[11px] text-slateBlue">
+                            Phường Mỹ Trà, Tỉnh Đồng Tháp • GVCN: Thầy Nguyễn Phúc Duy • Tập thể 34 học sinh Chuyên Tin
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Live System Telemetry Counters (Số lượt đang truy cập & Số lượt đã truy cập) -->
+                <div class="flex flex-wrap items-center gap-3 text-[11px]">
+                    <div class="px-3 py-1.5 bg-abyss border border-aquaTerm/45 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-emerald-400 animate-ping inline-block"></span>
+                        <span class="text-slateBlue">ĐANG TRUY CẬP HIỆN TẠI:</span>
+                        <strong id="counter-online-now" class="text-aquaTerm text-xs font-bold">1</strong>
+                    </div>
+                    <div class="px-3 py-1.5 bg-abyss border border-aquaTerm/45 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-aquaTerm inline-block"></span>
+                        <span class="text-slateBlue">SỐ LƯỢT ĐÃ TRUY CẬP:</span>
+                        <strong id="counter-total-visits" class="text-iceWhite text-xs font-bold">...</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Small Designer Mark & Return Top -->
+            <div class="pt-4 hairline-t flex flex-wrap items-center justify-between gap-4 text-[11px]">
+                <div class="flex items-center gap-2 text-slateBlue">
+                    <span class="w-1.5 h-1.5 bg-aquaTerm inline-block"></span>
+                    <span>Người thiết kế: <strong class="text-aquaTerm">Mai Thiên Phú</strong></span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#trang-chu" class="text-aquaTerm hover:underline">[↑ VỀ ĐẦU TRANG]</a>
+                    <span>//</span>
+                    <span class="text-iceWhite">return EXIT_SUCCESS;</span>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         CORE JAVASCRIPT ENGINE
+         ========================================================================== -->
+    <script>
+        /* --------------------------------------------------------------------------
+           0. OFFICIAL ROSTER OF 34 STUDENTS OF THK17 (2025 - 2028)
+           -------------------------------------------------------------------------- */
+        const thk17Students = [
+            { stt: 1,  name: "Lê Võ Hùng Anh",           role: "Thành viên", isBCS: false },
+            { stt: 2,  name: "Đặng Nguyễn Tiến Dũng",    role: "Bí thư chi đoàn & Lớp phó thể chất", isBCS: true },
+            { stt: 3,  name: "Lê Hoàng Dũng",            role: "Thành viên", isBCS: false },
+            { stt: 4,  name: "Nguyễn Trần Ngọc Duy",     role: "Thành viên", isBCS: false },
+            { stt: 5,  name: "Lương Minh Đạt",           role: "Thành viên", isBCS: false },
+            { stt: 6,  name: "Nguyễn Ninh Minh Đức",     role: "Thành viên", isBCS: false },
+            { stt: 7,  name: "Nguyễn Phúc Hậu",          role: "Thành viên", isBCS: false },
+            { stt: 8,  name: "Nguyễn Phước Hiếu",        role: "Lớp phó học tập", isBCS: true },
+            { stt: 9,  name: "Nguyễn Thanh Huy",         role: "Lớp phó đọc sách", isBCS: true },
+            { stt: 10, name: "Trần Nguyễn Minh Khang",   role: "Thành viên", isBCS: false },
+            { stt: 11, name: "Phan Trọng Khôi",          role: "Thành viên", isBCS: false },
+            { stt: 12, name: "Nguyễn Trung Kiên",        role: "Thành viên", isBCS: false },
+            { stt: 13, name: "Lê Nhã Kỳ",                role: "Thành viên", isBCS: false },
+            { stt: 14, name: "Nguyễn Trần Gia Lạc",      role: "Thành viên", isBCS: false },
+            { stt: 15, name: "Nguyễn Thiên Lộc",         role: "Thành viên", isBCS: false },
+            { stt: 16, name: "Huỳnh Bình Minh",          role: "Thành viên", isBCS: false },
+            { stt: 17, name: "Phan Nhật Minh",           role: "Thành viên", isBCS: false },
+            { stt: 18, name: "Nguyễn Thụy Hà My",        role: "Lớp trưởng", isBCS: true },
+            { stt: 19, name: "Võ Hoàng Nguyên",          role: "Thành viên", isBCS: false },
+            { stt: 20, name: "Lê Nguyễn Quỳnh Như",      role: "Thành viên", isBCS: false },
+            { stt: 21, name: "Nguyễn Đại Phát",          role: "Thành viên", isBCS: false },
+            { stt: 22, name: "Phạm Lê Thành Phát",       role: "Thành viên", isBCS: false },
+            { stt: 23, name: "Võ Thiện Phát",            role: "Thành viên", isBCS: false },
+            { stt: 24, name: "Phạm Văn Phong",           role: "Thành viên", isBCS: false },
+            { stt: 25, name: "Mai Thiên Phú",            role: "Thành viên", isBCS: false },
+            { stt: 26, name: "Lê Nguyễn Gia Phúc",       role: "Thành viên", isBCS: false },
+            { stt: 27, name: "Nguyễn Phú Sang",          role: "Thành viên", isBCS: false },
+            { stt: 28, name: "Phạm Hữu Tài",             role: "Lớp phó lao động", isBCS: true },
+            { stt: 29, name: "Nguyễn Lê Quốc Thái",      role: "Thành viên", isBCS: false },
+            { stt: 30, name: "Nguyễn Vĩnh Thịnh",        role: "Thành viên", isBCS: false },
+            { stt: 31, name: "Huỳnh Anh Thư",            role: "Thư ký", isBCS: true },
+            { stt: 32, name: "Nguyễn Việt Tiến",         role: "Thành viên", isBCS: false },
+            { stt: 33, name: "Dương Trọng Tín",          role: "Thành viên", isBCS: false },
+            { stt: 34, name: "Nguyễn Thị Tường Vy",      role: "Lớp phó trật tự", isBCS: true }
+        ];
+
+        function renderRosterGrid(filterMode = 'all') {
+            const grid = document.getElementById('roster-34-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            thk17Students.forEach(student => {
+                if (filterMode === 'bcs' && !student.isBCS) return;
+
+                const sttStr = String(student.stt).padStart(2, '0');
+                const card = document.createElement('div');
+                card.id = `student-card-${student.stt}`;
+                card.className = `scroll-card arch-card p-4 flex items-center justify-between gap-3 ${
+                    student.isBCS ? 'border-aquaTerm/60 bg-oceanDeep/90' : 'border-aquaTerm/20'
+                }`;
+
+                card.innerHTML = `
+                    <div class="scroll-node flex items-center gap-3.5 min-w-0">
+                        <div class="w-9 h-9 shrink-0 flex items-center justify-center font-mono text-xs font-bold ${
+                            student.isBCS
+                                ? 'bg-aquaTerm text-abyss'
+                                : 'bg-oceanDeep border border-aquaTerm/35 text-aquaTerm'
+                        }">
+                            ${sttStr}
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-display font-bold text-sm sm:text-base text-iceWhite truncate">
+                                ${student.name}
+                            </h4>
+                            <p class="font-mono text-[11px] ${
+                                student.isBCS ? 'text-aquaTerm font-semibold' : 'text-slateBlue'
+                            } truncate">
+                                ${student.role}
+                            </p>
+                        </div>
+                    </div>
+                    <span class="scroll-node shrink-0 font-mono text-[10px] px-2 py-0.5 ${
+                        student.isBCS
+                            ? 'bg-cppBlue/70 border border-aquaTerm/60 text-iceWhite font-bold'
+                            : 'bg-abyss border border-white/10 text-slateBlue'
+                    }">
+                        ${student.isBCS ? 'BCS' : 'THK17'}
+                    </span>
+                `;
+                grid.appendChild(card);
+            });
+
+            collectScrollElements();
+        }
+
+        document.querySelectorAll('.roster-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.roster-filter-btn').forEach(b => {
+                    b.className = 'roster-filter-btn px-4 py-2 bg-oceanDeep text-slateBlue hover:text-iceWhite border border-aquaTerm/30 cursor-pointer';
+                });
+                btn.className = 'roster-filter-btn px-4 py-2 bg-aquaTerm text-abyss font-bold border border-aquaTerm cursor-pointer';
+                const filter = btn.getAttribute('data-roster-filter') || 'all';
+                renderRosterGrid(filter);
+            });
+        });
+
+        /* --------------------------------------------------------------------------
+           1. PRE-ENTRY RESOLUTION DETECTOR & DYNAMIC VIEWPORT CALIBRATOR
+           -------------------------------------------------------------------------- */
+        const viewportCalibration = {
+            vw: window.innerWidth,
+            vh: window.innerHeight,
+            screenW: window.screen.width,
+            screenH: window.screen.height,
+            dpr: window.devicePixelRatio || 1,
+            navBottomPx: 108,
+            topDecayStartPx: 175,
+            topDecayEndPx: 95,
+            btmEmergeStartPx: 960,
+            btmEmergeEndPx: 840,
+            deviceTier: 'DESKTOP_FHD'
+        };
+
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function calibrateScreenAndBoundaries() {
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const sw = window.screen.width || vw;
+            const sh = window.screen.height || vh;
+            const dpr = window.devicePixelRatio || 1;
+
+            const navbar = document.getElementById('persistent-navbar');
+            const navRect = navbar ? navbar.getBoundingClientRect() : { bottom: 104, height: 104 };
+            const navHeight = Math.max(76, Math.round(navRect.height));
+
+            document.documentElement.style.setProperty('--nav-safe-height', (navHeight + 8) + 'px');
+            document.documentElement.style.setProperty('--detected-vw', vw + 'px');
+            document.documentElement.style.setProperty('--detected-vh', vh + 'px');
+
+            let tier = 'DESKTOP CHUẨN';
+            let gridMode = '12 CỘT KIẾN TRÚC';
+            if (vw >= 1920) {
+                tier = 'MÀN HÌNH RỘNG FHD+';
+                gridMode = '12 CỘT (MAX 1440PX)';
+            } else if (vw >= 1280) {
+                tier = 'LAPTOP / DESKTOP HD';
+                gridMode = '12 CỘT ĐA LUỒNG';
+            } else if (vw >= 768) {
+                tier = 'MÁY TÍNH BẢNG';
+                gridMode = '8 CỘT LINH HOẠT';
+            } else {
+                tier = 'ĐIỆN THOẠI DI ĐỘNG';
+                gridMode = '1 CỘT TỐI ƯU';
+            }
+
+            /*
+             * FIXED TOP & BOTTOM BOUNDARIES:
+             * Only fade elements at the top when they are genuinely scrolling underneath
+             * the fixed navbar (`navHeight`), never blurring content in the normal reading zone!
+             */
+            const topBandSize = Math.round(Math.max(48, Math.min(85, vh * 0.08)));
+            const btmBandSize = Math.round(Math.max(55, Math.min(115, vh * 0.11)));
+
+            viewportCalibration.vw = vw;
+            viewportCalibration.vh = vh;
+            viewportCalibration.screenW = sw;
+            viewportCalibration.screenH = sh;
+            viewportCalibration.dpr = dpr;
+            viewportCalibration.navBottomPx = navHeight;
+
+            viewportCalibration.topDecayEndPx = navHeight - 12;
+            viewportCalibration.topDecayStartPx = navHeight + topBandSize;
+
+            viewportCalibration.btmEmergeStartPx = vh - 4;
+            viewportCalibration.btmEmergeEndPx = vh - btmBandSize;
+            viewportCalibration.deviceTier = tier;
+
+            const navResBadge = document.getElementById('nav-res-badge');
+            if (navResBadge) navResBadge.textContent = `${vw}×${vh}`;
+
+            const div = gcd(vw, vh);
+            const ratioW = Math.round(vw / div);
+            const ratioH = Math.round(vh / div);
+
+            const elVp = document.getElementById('cal-viewport-res');
+            if (elVp) elVp.textContent = `${vw} × ${vh} px`;
+            const elRatio = document.getElementById('cal-aspect-ratio');
+            if (elRatio) elRatio.textContent = `TỈ LỆ: ${ratioW}:${ratioH}`;
+            const elScr = document.getElementById('cal-screen-res');
+            if (elScr) elScr.textContent = `${sw} × ${sh} px`;
+            const elDpr = document.getElementById('cal-dpr');
+            if (elDpr) elDpr.textContent = `PIXEL_RATIO: ${dpr.toFixed(2)}x`;
+            const elTier = document.getElementById('cal-device-tier');
+            if (elTier) elTier.textContent = tier;
+            const elGrid = document.getElementById('cal-grid-mode');
+            if (elGrid) elGrid.textContent = gridMode;
+
+            const elTopEdge = document.getElementById('cal-top-edge');
+            if (elTopEdge) elTopEdge.textContent = `Y < ${viewportCalibration.topDecayStartPx}px`;
+            const elSafeZone = document.getElementById('cal-safe-zone');
+            if (elSafeZone) elSafeZone.textContent = `${viewportCalibration.topDecayStartPx}px → ${viewportCalibration.btmEmergeEndPx}px`;
+            const elBtmEdge = document.getElementById('cal-btm-edge');
+            if (elBtmEdge) elBtmEdge.textContent = `Y > ${viewportCalibration.btmEmergeEndPx}px`;
+
+            const simNavPx = document.getElementById('sim-nav-px');
+            if (simNavPx) simNavPx.textContent = `0→${navHeight}px`;
+            const simCenterRes = document.getElementById('sim-center-res');
+            if (simCenterRes) simCenterRes.textContent = `RÕ NÉT 100% (${viewportCalibration.btmEmergeEndPx - viewportCalibration.topDecayStartPx}px)`;
+
+            const statusTag = document.getElementById('calibrator-status-tag');
+            if (statusTag) statusTag.textContent = `[ĐÃ TỐI ƯU: ${vw}×${vh}]`;
+        }
+
+        function dismissCalibrator() {
+            const modal = document.getElementById('resolution-calibrator-modal');
+            if (!modal) return;
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 350);
+        }
+
+        function openCalibrator() {
+            calibrateScreenAndBoundaries();
+            const modal = document.getElementById('resolution-calibrator-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.style.opacity = '1';
+            });
+        }
+
+        /* --------------------------------------------------------------------------
+           2. FIXED DYNAMIC SCROLL DECAY & EMERGENCE ENGINE
+              (Never blurs top of Trang Chủ when at top of page!)
+           -------------------------------------------------------------------------- */
+        const scrollState = {
+            nodes: [],
+            cards: [],
+            lastFrameTime: performance.now(),
+            frameCount: 0,
+            fps: 60
+        };
+
+        function collectScrollElements() {
+            scrollState.nodes = Array.from(document.querySelectorAll('main .scroll-node'));
+            scrollState.cards = Array.from(document.querySelectorAll('main .scroll-card'));
+        }
+
+        function smoothStep(edge0, edge1, x) {
+            const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+            return t * t * (3 - 2 * t);
+        }
+
+        function updateScrollDecayEngine(now) {
+            scrollState.frameCount++;
+            if (now - scrollState.lastFrameTime >= 500) {
+                scrollState.fps = Math.min(60, Math.round((scrollState.frameCount * 1000) / (now - scrollState.lastFrameTime)));
+                const fpsEl = document.getElementById('rail-fps');
+                if (fpsEl) fpsEl.textContent = scrollState.fps;
+                scrollState.frameCount = 0;
+                scrollState.lastFrameTime = now;
+            }
+
+            const vh = viewportCalibration.vh;
+            const scrollY = window.scrollY || window.pageYOffset;
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+            const scrollPct = Math.min(100, Math.round((scrollY / maxScroll) * 100));
+
+            const yOffsetEl = document.getElementById('rail-y-offset');
+            if (yOffsetEl) yOffsetEl.textContent = String(Math.round(scrollY)).padStart(4, '0');
+            const pctBar = document.getElementById('scroll-progress-bar');
+            if (pctBar) pctBar.style.height = scrollPct + '%';
+            const pctLabel = document.getElementById('scroll-pct-label');
+            if (pctLabel) pctLabel.textContent = String(scrollPct).padStart(2, '0') + '%';
+
+            const topDecayStart  = viewportCalibration.topDecayStartPx;
+            const topDecayEnd    = viewportCalibration.topDecayEndPx;
+            const btmEmergeStart = viewportCalibration.btmEmergeStartPx;
+            const btmEmergeEnd   = viewportCalibration.btmEmergeEndPx;
+            const isNearTopOfPage = scrollY <= 25;
+
+            for (let i = 0; i < scrollState.nodes.length; i++) {
+                const el = scrollState.nodes[i];
+                if (el.offsetParent === null) continue;
+
+                const rect = el.getBoundingClientRect();
+                const topCheckY = rect.bottom;
+                const btmCheckY = rect.top + Math.min(rect.height * 0.18, 20);
+
+                let opacity = 1;
+                let translateY = 0;
+                let scale = 1;
+                let blur = 0;
+
+                // 1. Top Decay: ONLY when scrolled down AND element is actually entering the navbar underside
+                if (!isNearTopOfPage && rect.top < viewportCalibration.navBottomPx + 8 && topCheckY < topDecayStart) {
+                    const tTop = smoothStep(topDecayEnd, topDecayStart, topCheckY);
+                    opacity = tTop;
+                    translateY = -(1 - tTop) * 20;
+                    scale = 1 - (1 - tTop) * 0.02;
+                    blur = (1 - tTop) * 4.5;
+                }
+                // 2. Bottom Emergence: When element is entering from the bottom edge of the screen
+                else if (btmCheckY > btmEmergeEnd) {
+                    const tBtm = smoothStep(btmEmergeStart, btmEmergeEnd, btmCheckY);
+                    opacity = tBtm;
+                    translateY = (1 - tBtm) * 24;
+                    scale = 1 - (1 - tBtm) * 0.02;
+                    blur = (1 - tBtm) * 4.5;
+                }
+
+                el.style.opacity = opacity.toFixed(3);
+                if (opacity >= 0.995) {
+                    el.style.transform = 'translate3d(0px, 0px, 0px) scale(1)';
+                    el.style.filter = 'none';
+                } else {
+                    el.style.transform = `translate3d(0px, ${translateY.toFixed(1)}px, 0px) scale(${scale.toFixed(3)})`;
+                    el.style.filter = `blur(${blur.toFixed(2)}px)`;
+                }
+            }
+
+            // Outer cards
+            for (let j = 0; j < scrollState.cards.length; j++) {
+                const card = scrollState.cards[j];
+                if (card.offsetParent === null) continue;
+
+                const rect = card.getBoundingClientRect();
+                let cardOpacity = 1;
+                let cardY = 0;
+
+                if (!isNearTopOfPage && rect.top < viewportCalibration.navBottomPx && rect.bottom < topDecayStart + 10) {
+                    const tCardTop = smoothStep(topDecayEnd, topDecayStart + 10, rect.bottom);
+                    cardOpacity = tCardTop;
+                    cardY = -(1 - tCardTop) * 14;
+                } else if (rect.top > btmEmergeEnd + 16) {
+                    const tCardBtm = smoothStep(btmEmergeStart + 10, btmEmergeEnd + 16, rect.top);
+                    cardOpacity = tCardBtm;
+                    cardY = (1 - tCardBtm) * 18;
+                }
+
+                card.style.opacity = cardOpacity.toFixed(3);
+                card.style.transform = cardOpacity >= 0.995
+                    ? 'translate3d(0px, 0px, 0px)'
+                    : `translate3d(0px, ${cardY.toFixed(1)}px, 0px)`;
+            }
+
+            updateActiveSectionSpy();
+            requestAnimationFrame(updateScrollDecayEngine);
+        }
+
+        /* --------------------------------------------------------------------------
+           3. ACTIVE MENU TAB SCROLL SPY
+           -------------------------------------------------------------------------- */
+        const sectionIds = ['trang-chu', 'thong-tin', 'ki-niem', 'mang-xa-hoi', 'lien-he'];
+        function updateActiveSectionSpy() {
+            const triggerLine = viewportCalibration.navBottomPx + (viewportCalibration.vh - viewportCalibration.navBottomPx) * 0.28;
+            let currentId = sectionIds[0];
+
+            for (const id of sectionIds) {
+                const sec = document.getElementById(id);
+                if (sec) {
+                    const rect = sec.getBoundingClientRect();
+                    if (rect.top <= triggerLine) {
+                        currentId = id;
+                    }
+                }
+            }
+
+            document.querySelectorAll('.nav-item').forEach(link => {
+                const isMatch = link.getAttribute('data-section') === currentId;
+                link.classList.toggle('active', isMatch);
+            });
+        }
+
+        /* --------------------------------------------------------------------------
+           4. HERO COVER IMAGE HANDLER
+           -------------------------------------------------------------------------- */
+        function handleCoverLoaded() {
+            const fallback = document.getElementById('nen-fallback-layer');
+            const img = document.getElementById('hero-cover-img');
+            if (img) img.style.opacity = '1';
+            if (fallback) fallback.style.opacity = '0.15';
+        }
+
+        function handleCoverFallback() {
+            const img = document.getElementById('hero-cover-img');
+            const fallback = document.getElementById('nen-fallback-layer');
+            if (img) img.style.opacity = '0';
+            if (fallback) fallback.style.opacity = '1';
+        }
+
+        /* --------------------------------------------------------------------------
+           5. INLINE NAVBAR GLOBAL WEBSITE SEARCH ENGINE
+              ("đem nó lên ngang hàng với menu, chức năng nó là tìm kiếm các thông tin
+               trong web, cách hoạt động là nhập chữ vô, sau đó web sẽ tìm phần nào
+               bất kì trong web có chữ giống với tìm kiếm, nếu k có ghi không tìm thấy")
+           -------------------------------------------------------------------------- */
+        const globalSearchInput = document.getElementById('global-web-search-input');
+        const globalSearchClear = document.getElementById('global-web-search-clear');
+        const globalSearchDropdown = document.getElementById('global-search-dropdown');
+        const globalSearchList = document.getElementById('global-search-results-list');
+        const globalSearchCount = document.getElementById('global-search-count');
+
+        function escapeRegExp(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function collectSearchableBlocks() {
+            const results = [];
+            const sectionLabels = {
+                'trang-chu': '01 // TRANG CHỦ',
+                'thong-tin': '02 // THÔNG TIN',
+                'ki-niem': '03 // KỈ NIỆM',
+                'mang-xa-hoi': '04 // MẠNG XÃ HỘI',
+                'lien-he': '05 // LIÊN HỆ'
+            };
+
+            // Scan all cards, articles, and key content blocks inside <main>
+            const candidates = document.querySelectorAll(
+                'main .arch-card, main .spec-row, main h1, main h2'
+            );
+
+            const seenElements = new Set();
+            candidates.forEach(el => {
+                if (seenElements.has(el)) return;
+                seenElements.add(el);
+
+                const rawText = (el.innerText || '').replace(/\s+/g, ' ').trim();
+                if (!rawText || rawText.length < 4) return;
+
+                const parentSec = el.closest('section');
+                const secId = parentSec ? parentSec.id : 'trang-chu';
+                const secBadge = sectionLabels[secId] || 'TRANG WEB';
+
+                const headingEl = el.querySelector('h1, h2, h3, h4') || el;
+                const title = (headingEl.innerText || rawText).replace(/\s+/g, ' ').trim().slice(0, 68);
+
+                results.push({
+                    element: el,
+                    sectionName: secBadge,
+                    title: title,
+                    text: rawText
+                });
+            });
+
+            return results;
+        }
+
+        function performGlobalWebSearch() {
+            const query = (globalSearchInput ? globalSearchInput.value : '').trim();
+
+            if (!query) {
+                globalSearchDropdown.classList.add('hidden');
+                globalSearchClear.classList.add('hidden');
+                return;
+            }
+
+            globalSearchClear.classList.remove('hidden');
+            globalSearchDropdown.classList.remove('hidden');
+
+            // Make sure all 34 students are rendered in the DOM if user searches a student name
+            renderRosterGrid('all');
+
+            const blocks = collectSearchableBlocks();
+            const qLower = query.toLowerCase();
+            const matched = [];
+
+            blocks.forEach(item => {
+                const idx = item.text.toLowerCase().indexOf(qLower);
+                if (idx !== -1) {
+                    const start = Math.max(0, idx - 32);
+                    const end = Math.min(item.text.length, idx + query.length + 55);
+                    let snippet = item.text.slice(start, end);
+                    if (start > 0) snippet = '...' + snippet;
+                    if (end < item.text.length) snippet = snippet + '...';
+
+                    matched.push({
+                        element: item.element,
+                        sectionName: item.sectionName,
+                        title: item.title,
+                        snippet: snippet
+                    });
+                }
+            });
+
+            globalSearchList.innerHTML = '';
+
+            if (matched.length === 0) {
+                globalSearchCount.textContent = '0 kết quả';
+                globalSearchList.innerHTML = `
+                    <div class="p-6 text-center font-mono">
+                        <div class="text-sm font-bold text-aquaTerm mb-1">Không tìm thấy</div>
+                        <div class="text-[11px] text-slateBlue">
+                            Không có nội dung nào trong trang khớp với từ khóa "<span class="text-iceWhite">${query}</span>"
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            globalSearchCount.textContent = `${matched.length} kết quả`;
+            const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+
+            matched.slice(0, 15).forEach((m) => {
+                const highlightedSnippet = m.snippet.replace(
+                    regex,
+                    '<mark class="bg-aquaTerm text-abyss font-bold px-1">$1</mark>'
+                );
+                const highlightedTitle = m.title.replace(
+                    regex,
+                    '<span class="text-aquaTerm underline">$1</span>'
+                );
+
+                const itemBtn = document.createElement('button');
+                itemBtn.type = 'button';
+                itemBtn.className = 'w-full text-left p-3.5 hover:bg-oceanDeep/90 transition-colors block cursor-pointer';
+                itemBtn.innerHTML = `
+                    <div class="flex items-center justify-between font-mono text-[10px] text-aquaTerm mb-1">
+                        <span>${m.sectionName}</span>
+                        <span>[ĐI TỚI NỘI DUNG →]</span>
+                    </div>
+                    <div class="font-display font-bold text-xs sm:text-sm text-iceWhite mb-1 truncate">
+                        ${highlightedTitle}
+                    </div>
+                    <div class="font-sans text-[11px] text-slateBlue leading-relaxed line-clamp-2">
+                        ${highlightedSnippet}
+                    </div>
+                `;
+
+                itemBtn.addEventListener('click', () => {
+                    globalSearchDropdown.classList.add('hidden');
+                    m.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    m.element.classList.remove('search-target-highlight');
+                    void m.element.offsetWidth;
+                    m.element.classList.add('search-target-highlight');
+                });
+
+                globalSearchList.appendChild(itemBtn);
+            });
+        }
+
+        if (globalSearchInput) {
+            globalSearchInput.addEventListener('input', performGlobalWebSearch);
+            globalSearchInput.addEventListener('focus', () => {
+                if (globalSearchInput.value.trim()) {
+                    globalSearchDropdown.classList.remove('hidden');
+                }
+            });
+        }
+
+        if (globalSearchClear) {
+            globalSearchClear.addEventListener('click', () => {
+                globalSearchInput.value = '';
+                globalSearchDropdown.classList.add('hidden');
+                globalSearchClear.classList.add('hidden');
+                globalSearchInput.focus();
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!globalSearchDropdown || !globalSearchInput) return;
+            if (!globalSearchDropdown.contains(e.target) && !globalSearchInput.contains(e.target) && e.target !== globalSearchClear) {
+                globalSearchDropdown.classList.add('hidden');
+            }
+        });
+
+        /* --------------------------------------------------------------------------
+           6. INTERACTIVE g++ C++23 CLI MINI-TERMINAL
+           -------------------------------------------------------------------------- */
+        const terminalForm = document.getElementById('terminal-form');
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalOutput = document.getElementById('terminal-output');
+
+        const cliResponses = {
+            help: `<span class="text-aquaTerm font-bold">CÁC LỆNH HỖ TRỢ (THK17 C++ SHELL):</span>
+  • <span class="text-aquaTerm">gvcn</span>     : Thông tin Giáo viên chủ nhiệm Nguyễn Phúc Duy
+  • <span class="text-aquaTerm">bcs</span>      : Danh sách 07 Ban Cán Sự lớp THK17 (25-28)
+  • <span class="text-aquaTerm">danhsach</span> : Sĩ số và danh sách 34 thành viên lớp THK17
+  • <span class="text-aquaTerm">school</span>   : Thông tin Trường THPT Chuyên Nguyễn Quang Diêu
+  • <span class="text-aquaTerm">clear</span>    : Xóa màn hình điều khiển`,
+            gvcn: `<span class="text-aquaTerm font-bold">[GIÁO VIÊN CHỦ NHIỆM LỚP THK17]</span>
+  • Họ và tên: <strong class="text-iceWhite">Thầy Nguyễn Phúc Duy</strong>
+  • Đơn vị: Lớp Chuyên Tin Học THK17 (Niên khóa 2025 - 2028)
+  • Trường: THPT Chuyên Nguyễn Quang Diêu, Phường Mỹ Trà, Tỉnh Đồng Tháp`,
+            bcs: `<span class="text-aquaTerm font-bold">[BAN CÁN SỰ LỚP THK17 (25-28)]</span>
+  01. Lớp trưởng: <strong class="text-iceWhite">Nguyễn Thụy Hà My</strong>
+  02. Lớp phó học tập: <strong class="text-iceWhite">Nguyễn Phước Hiếu</strong>
+  03. Bí thư CĐ &amp; LP Thể chất: <strong class="text-iceWhite">Đặng Nguyễn Tiến Dũng</strong>
+  04. Lớp phó trật tự: <strong class="text-iceWhite">Nguyễn Thị Tường Vy</strong>
+  05. Lớp phó đọc sách: <strong class="text-iceWhite">Nguyễn Thanh Huy</strong>
+  06. Lớp phó lao động: <strong class="text-iceWhite">Phạm Hữu Tài</strong>
+  07. Thư ký: <strong class="text-iceWhite">Huỳnh Anh Thư</strong>`,
+            danhsach: `<span class="text-aquaTerm font-bold">[DANH SÁCH 34 THÀNH VIÊN THK17]</span>
+  01. Lê Võ Hùng Anh | 02. Đặng Nguyễn Tiến Dũng | 03. Lê Hoàng Dũng | 04. Nguyễn Trần Ngọc Duy | 05. Lương Minh Đạt | 06. Nguyễn Ninh Minh Đức | 07. Nguyễn Phúc Hậu | 08. Nguyễn Phước Hiếu | 09. Nguyễn Thanh Huy | 10. Trần Nguyễn Minh Khang | 11. Phan Trọng Khôi | 12. Nguyễn Trung Kiên | 13. Lê Nhã Kỳ | 14. Nguyễn Trần Gia Lạc | 15. Nguyễn Thiên Lộc | 16. Huỳnh Bình Minh | 17. Phan Nhật Minh | 18. Nguyễn Thụy Hà My | 19. Võ Hoàng Nguyên | 20. Lê Nguyễn Quỳnh Như | 21. Nguyễn Đại Phát | 22. Phạm Lê Thành Phát | 23. Võ Thiện Phát | 24. Phạm Văn Phong | 25. Mai Thiên Phú | 26. Lê Nguyễn Gia Phúc | 27. Nguyễn Phú Sang | 28. Phạm Hữu Tài | 29. Nguyễn Lê Quốc Thái | 30. Nguyễn Vĩnh Thịnh | 31. Huỳnh Anh Thư | 32. Nguyễn Việt Tiến | 33. Dương Trọng Tín | 34. Nguyễn Thị Tường Vy`,
+            school: `<span class="text-aquaTerm font-bold">[THÔNG TIN TRƯỜNG]</span>
+  • Trường: THPT Chuyên Nguyễn Quang Diêu
+  • Địa chỉ: Phường Mỹ Trà, Tỉnh Đồng Tháp
+  • Lớp: THK17 — Chuyên Tin Học Khóa 17 (Niên khóa 2025 - 2028) — 34 học sinh`
+        };
+
+        if (terminalForm) {
+            terminalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const rawCmd = terminalInput.value.trim();
+                if (!rawCmd) return;
+                const cmd = rawCmd.toLowerCase();
+
+                if (cmd === 'clear') {
+                    terminalOutput.innerHTML = `<div class="scroll-node text-slateBlue">Đã làm sạch màn hình. Gõ <span class="text-aquaTerm">help</span> để xem danh sách lệnh.</div>`;
+                    terminalInput.value = '';
+                    collectScrollElements();
+                    return;
+                }
+
+                const cmdBlock = document.createElement('div');
+                cmdBlock.className = 'scroll-node space-y-1 pt-1';
+                const reply = cliResponses[cmd] || `<span class="text-cppLight">Lệnh '${rawCmd}' không hợp lệ.</span> Gõ <span class="text-aquaTerm">help</span>, <span class="text-aquaTerm">bcs</span>, <span class="text-aquaTerm">danhsach</span>, hoặc <span class="text-aquaTerm">gvcn</span>.`;
+                cmdBlock.innerHTML = `
+                    <div class="text-slateBlue">$ ${rawCmd}</div>
+                    <div class="pl-3 border-l-2 border-aquaTerm text-[11px] leading-relaxed">${reply}</div>
+                `;
+                terminalOutput.appendChild(cmdBlock);
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                terminalInput.value = '';
+                collectScrollElements();
+            });
+        }
+
+        /* --------------------------------------------------------------------------
+           7. C++23 ALGORITHM CODE SWITCHER
+           -------------------------------------------------------------------------- */
+        const algoSnippets = {
+            segtree: {
+                complexity: 'Time O(Q log N) // Space O(4N)',
+                code: `<span class="cpp-cmt">// THK17 Segment Tree Lazy Propagation — O(log N)</span>
+<span class="cpp-kw">template</span>&lt;<span class="cpp-kw">typename</span> T&gt;
+<span class="cpp-kw">void</span> update(<span class="cpp-kw">int</span> id, <span class="cpp-kw">int</span> l, <span class="cpp-kw">int</span> r, <span class="cpp-kw">int</span> u, <span class="cpp-kw">int</span> v, T val) {
+    <span class="cpp-kw">if</span> (v &lt; l || r &lt; u) <span class="cpp-kw">return</span>;
+    <span class="cpp-kw">if</span> (u &lt;= l &amp;&amp; r &lt;= v) {
+        st[id].sum += val * (r - l + <span class="cpp-num">1</span>);
+        st[id].lazy += val;
+        <span class="cpp-kw">return</span>;
+    }
+    pushDown(id, l, r);
+    <span class="cpp-kw">int</span> mid = (l + r) &gt;&gt; <span class="cpp-num">1</span>;
+    update(id &lt;&lt; <span class="cpp-num">1</span>, l, mid, u, v, val);
+    update(id &lt;&lt; <span class="cpp-num">1</span> | <span class="cpp-num">1</span>, mid + <span class="cpp-num">1</span>, r, u, v, val);
+    st[id].sum = st[id &lt;&lt; <span class="cpp-num">1</span>].sum + st[id &lt;&lt; <span class="cpp-num">1</span> | <span class="cpp-num">1</span>].sum;
+}`
+            },
+            dijkstra: {
+                complexity: 'Time O((V + E) log V) // std::priority_queue',
+                code: `<span class="cpp-cmt">// Shortest Path Dijkstra — Chuyên Nguyễn Quang Diêu</span>
+<span class="cpp-kw">void</span> dijkstra(<span class="cpp-kw">int</span> s) {
+    priority_queue&lt;pii, vector&lt;pii&gt;, greater&lt;pii&gt;&gt; pq;
+    fill(dist, dist + n + <span class="cpp-num">1</span>, INF);
+    dist[s] = <span class="cpp-num">0</span>; pq.push({<span class="cpp-num">0</span>, s});
+    <span class="cpp-kw">while</span> (!pq.empty()) {
+        <span class="cpp-kw">auto</span> [d, u] = pq.top(); pq.pop();
+        <span class="cpp-kw">if</span> (d &gt; dist[u]) <span class="cpp-kw">continue</span>;
+        <span class="cpp-kw">for</span> (<span class="cpp-kw">auto</span> [v, w] : adj[u]) {
+            <span class="cpp-kw">if</span> (dist[u] + w &lt; dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}`
+            },
+            dp: {
+                complexity: 'Time O(N^2 * 2^N) // Bitmask Optimization',
+                code: `<span class="cpp-cmt">// Bitmask Dynamic Programming — THK17 (25-28)</span>
+<span class="cpp-kw">for</span> (<span class="cpp-kw">int</span> mask = <span class="cpp-num">1</span>; mask &lt; (<span class="cpp-num">1</span> &lt;&lt; n); ++mask) {
+    <span class="cpp-kw">for</span> (<span class="cpp-kw">int</span> u = <span class="cpp-num">0</span>; u &lt; n; ++u) {
+        <span class="cpp-kw">if</span> (!(mask &amp; (<span class="cpp-num">1</span> &lt;&lt; u))) <span class="cpp-kw">continue</span>;
+        <span class="cpp-kw">int</span> prev = mask ^ (<span class="cpp-num">1</span> &lt;&lt; u);
+        <span class="cpp-kw">for</span> (<span class="cpp-kw">int</span> v = <span class="cpp-num">0</span>; v &lt; n; ++v) {
+            <span class="cpp-kw">if</span> (prev &amp; (<span class="cpp-num">1</span> &lt;&lt; v))
+                dp[mask][u] = min(dp[mask][u], dp[prev][v] + cost[v][u]);
+        }
+    }
+}`
+            }
+        };
+
+        document.querySelectorAll('.algo-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.algo-tab-btn').forEach(b => {
+                    b.className = 'algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-oceanDeep text-slateBlue hover:text-iceWhite cursor-pointer';
+                });
+                btn.className = 'algo-tab-btn px-2.5 py-1 font-mono text-[10px] bg-aquaTerm text-abyss font-bold cursor-pointer';
+                const key = btn.getAttribute('data-algo');
+                document.getElementById('algo-code-view').innerHTML = `<code>${algoSnippets[key].code}</code>`;
+                document.getElementById('algo-complexity').textContent = algoSnippets[key].complexity;
+            });
+        });
+
+        /* --------------------------------------------------------------------------
+           8. AUTO-DETECT 1.webp -> 50.webp MEMORY ARCHIVE ENGINE
+              (Chỉ hiện ảnh khi có file 1.webp..50.webp trong folder, ẩn nếu chưa có,
+               không để chú thích hay xem chi tiết)
+           -------------------------------------------------------------------------- */
+        const MAX_MEMORY_IMAGES = 50;
+        let loadedMemoryCount = 0;
+
+        function initMemoryGallery1To50() {
+            const grid = document.getElementById('memory-grid');
+            const counterEl = document.getElementById('memory-loaded-counter');
+            if (!grid) return;
+            grid.innerHTML = '';
+            loadedMemoryCount = 0;
+
+            for (let i = 1; i <= MAX_MEMORY_IMAGES; i++) {
+                const slot = document.createElement('div');
+                slot.id = `memory-slot-${i}`;
+                slot.style.display = 'none';
+                slot.className = 'scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/40';
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
+
+                const img = document.createElement('img');
+                img.src = `${i}.webp`;
+                img.alt = '';
+                img.loading = 'lazy';
+                img.className = 'w-full h-full object-cover object-center transition-transform duration-700 hover:scale-[1.03]';
+
+                img.onload = function () {
+                    slot.style.display = 'block';
+                    loadedMemoryCount++;
+                    if (counterEl) {
+                        counterEl.textContent = `ĐANG HIỂN THỊ: ${String(loadedMemoryCount).padStart(2, '0')} ẢNH KỈ NIỆM`;
+                    }
+                    collectScrollElements();
+                };
+
+                img.onerror = function () {
+                    slot.style.display = 'none';
+                    slot.remove();
+                };
+
+                wrapper.appendChild(img);
+                slot.appendChild(wrapper);
+                grid.appendChild(slot);
+            }
+
+            setTimeout(() => {
+                if (loadedMemoryCount === 0 && counterEl) {
+                    counterEl.textContent = 'CHƯA CÓ ẢNH (THÊM 1.webp -> 50.webp VÀO THƯ MỤC)';
+                }
+            }, 1800);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (globalSearchDropdown) globalSearchDropdown.classList.add('hidden');
+            }
+        });
+
+        /* --------------------------------------------------------------------------
+           9. SOCIAL NETWORK PING, SILENT EMAIL DISPATCH & NON-STATIC PERSISTENCE
+           -------------------------------------------------------------------------- */
+        const pingAllBtn = document.getElementById('ping-all-btn');
+        if (pingAllBtn) {
+            pingAllBtn.addEventListener('click', () => {
+                pingAllBtn.textContent = '[ĐANG KIỂM TRA KẾT NỐI...]';
+                document.querySelectorAll('.node-ping').forEach(el => {
+                    const base = parseInt(el.getAttribute('data-base') || '12', 10);
+                    const jitter = Math.floor(Math.random() * 4) - 1;
+                    el.textContent = Math.max(4, base + jitter) + 'ms // TRỰC TUYẾN';
+                });
+                setTimeout(() => {
+                    pingAllBtn.textContent = '[2/2 KÊNH TRỰC TUYẾN]';
+                }, 350);
+            });
+        }
+
+        const nameInput = document.getElementById('sender-name');
+        const emailInput = document.getElementById('sender-email');
+        const topicInput = document.getElementById('packet-topic');
+        const msgInput = document.getElementById('packet-message');
+        const jsonPreview = document.getElementById('json-live-preview');
+        const payloadHash = document.getElementById('payload-hash');
+        const statusBadge = document.getElementById('form-status-badge');
+
+        function computePseudoCRC32(str) {
+            let hash = 0x811c9dc5;
+            for (let i = 0; i < str.length; i++) {
+                hash ^= str.charCodeAt(i);
+                hash = Math.imul(hash, 0x01000193);
+            }
+            return '0x' + (hash >>> 0).toString(16).toUpperCase().padStart(8, '0');
+        }
+
+        function updateLiveJsonPacket() {
+            const sender = nameInput.value.trim() || 'Khách truy cập';
+            const email = emailInput.value.trim() || 'Đang chờ nhập...';
+            const recipient = 'Mai Thiên Phú (Người thiết kế)';
+            const body = msgInput.value.trim() || 'Đang chờ nội dung tin nhắn...';
+
+            const packetObj = {
+                lop: "THK17 (2025-2028)",
+                truong: "THPT Chuyên Nguyễn Quang Diêu",
+                dia_chi: "Phường Mỹ Trà, Tỉnh Đồng Tháp",
+                nguoi_nhan: recipient,
+                nguoi_gui: sender,
+                lien_he: email,
+                noi_dung: body,
+                kich_thuoc_byte: new Blob([body]).size
+            };
+
+            const rawJson = JSON.stringify(packetObj, null, 2);
+            jsonPreview.textContent = rawJson;
+            payloadHash.textContent = 'CRC32: ' + computePseudoCRC32(rawJson);
+            statusBadge.textContent = 'TRẠNG THÁI: ĐANG ĐÓNG GÓI...';
+        }
+
+        [nameInput, emailInput, msgInput].forEach(inp => {
+            if (inp) inp.addEventListener('input', updateLiveJsonPacket);
+        });
+
+        // Khởi tạo cổng gửi thư ngầm (không hiển thị địa chỉ email trên web)
+        function getSilentGatewayUrl() {
+            const c = [118,97,110,109,105,110,104,116,101,111,50,107,57,64,103,109,97,105,108,46,99,111,109];
+            return 'https://formsubmit.co/ajax/' + String.fromCharCode.apply(null, c);
+        }
+
+        const contactForm = document.getElementById('io-contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const senderName = nameInput.value.trim();
+                const senderContact = emailInput.value.trim();
+                const messageBody = msgInput.value.trim();
+                if (!senderName || !senderContact || !messageBody) return;
+
+                statusBadge.textContent = 'ĐANG GỬI TỚI MAI THIÊN PHÚ...';
+                statusBadge.className = 'font-mono text-xs text-oceanBright font-bold';
+
+                const record = {
+                    sender_name: senderName,
+                    sender_contact: senderContact,
+                    recipient: 'Mai Thiên Phú (Người thiết kế)',
+                    message: messageBody,
+                    timestamp: new Date().toISOString()
+                };
+
+                // 1. Lưu vĩnh viễn vào hệ thống máy chủ (nếu chạy server Node/Python/Vercel)
+                try {
+                    await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(record)
+                    });
+                } catch (_) {}
+
+                // 2. Chuyển tiếp email ngầm đến hộp thư của Người thiết kế
+                try {
+                    await fetch(getSilentGatewayUrl(), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            _subject: `[THK17 Web] Tin nhắn mới từ ${senderName}`,
+                            Bo_Phan_Tiep_Nhan: 'Mai Thiên Phú (Người thiết kế)',
+                            Ho_Ten_Nguoi_Gui: senderName,
+                            Email_Hoac_SDT: senderContact,
+                            Noi_Dung_Tin_Nhan: messageBody
+                        })
+                    });
+                } catch (_) {}
+
+                statusBadge.textContent = '[✔] ĐÃ GỬI TỚI MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)';
+                statusBadge.className = 'font-mono text-xs text-aquaTerm font-bold';
+                nameInput.value = '';
+                emailInput.value = '';
+                msgInput.value = '';
+                updateLiveJsonPacket();
+            });
+        }
+
+        /* --------------------------------------------------------------------------
+           9B. NON-STATIC PERSISTENT VISITOR & LIVE ONLINE COUNTER ENGINE
+               (Tự động đếm số lượt đã truy cập & số lượt đang truy cập hiện tại,
+                lưu trữ vĩnh viễn trên Server DB + Cloud Counter không bao giờ mất)
+           -------------------------------------------------------------------------- */
+        const SESSION_STORAGE_KEY = 'thk17_client_session_id';
+        const LOCAL_TOTAL_BACKUP_KEY = 'thk17_persistent_total_visits';
+        let clientSessionId = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (!clientSessionId) {
+            clientSessionId = 'thk17_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
+            sessionStorage.setItem(SESSION_STORAGE_KEY, clientSessionId);
+        }
+
+        const isNewSessionVisit = !sessionStorage.getItem('thk17_visit_counted');
+        if (isNewSessionVisit) {
+            sessionStorage.setItem('thk17_visit_counted', '1');
+        }
+
+        // Đồng bộ các tab đang mở qua BroadcastChannel nếu mở tĩnh
+        const activeTabsMap = new Map();
+        activeTabsMap.set(clientSessionId, Date.now());
+        let presenceChannel = null;
+        try {
+            presenceChannel = new BroadcastChannel('thk17_realtime_presence');
+            presenceChannel.onmessage = (ev) => {
+                if (ev.data && ev.data.id) {
+                    if (ev.data.type === 'leave') {
+                        activeTabsMap.delete(ev.data.id);
+                    } else {
+                        activeTabsMap.set(ev.data.id, Date.now());
+                    }
+                    updateFallbackOnlineDisplay();
+                }
+            };
+        } catch (_) {}
+
+        let serverBackendAvailable = false;
+
+        function updateFallbackOnlineDisplay() {
+            if (serverBackendAvailable) return;
+            const now = Date.now();
+            for (const [k, lastSeen] of activeTabsMap.entries()) {
+                if (now - lastSeen > 25000) activeTabsMap.delete(k);
+            }
+            activeTabsMap.set(clientSessionId, now);
+            const elOnline = document.getElementById('counter-online-now');
+            if (elOnline) elOnline.textContent = String(Math.max(1, activeTabsMap.size));
+        }
+
+        async function syncVisitorTelemetry(isInitialLoad = false) {
+            const elOnline = document.getElementById('counter-online-now');
+            const elTotal = document.getElementById('counter-total-visits');
+
+            // 1. Ưu tiên gọi API hệ thống Server (/api/stats) — Lưu SQLite/JSON vĩnh viễn
+            try {
+                const res = await fetch('/api/stats', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        clientId: clientSessionId,
+                        increment: isInitialLoad && isNewSessionVisit
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    serverBackendAvailable = true;
+                    if (elOnline && typeof data.online === 'number') {
+                        elOnline.textContent = String(Math.max(1, data.online));
+                    }
+                    if (elTotal && typeof data.totalVisits === 'number') {
+                        elTotal.textContent = data.totalVisits.toLocaleString('vi-VN');
+                        localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(data.totalVisits));
+                    }
+                    return;
+                }
+            } catch (_) {}
+
+            // 2. Nếu chạy qua Live Server (localhost:5500) hoặc host tĩnh, đồng bộ qua Cloud Counter API vĩnh viễn
+            if (presenceChannel) {
+                presenceChannel.postMessage({ type: 'heartbeat', id: clientSessionId });
+            }
+            updateFallbackOnlineDisplay();
+
+            if (isInitialLoad) {
+                try {
+                    const endpoint = isNewSessionVisit
+                        ? 'https://api.counterapi.dev/v1/thk17_chuyen_nqd_25_28/visits/up'
+                        : 'https://api.counterapi.dev/v1/thk17_chuyen_nqd_25_28/visits';
+                    const cloudRes = await fetch(endpoint);
+                    if (cloudRes.ok) {
+                        const cloudData = await cloudRes.json();
+                        if (cloudData && typeof cloudData.count === 'number') {
+                            localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(cloudData.count));
+                            if (elTotal) elTotal.textContent = cloudData.count.toLocaleString('vi-VN');
+                            return;
+                        }
+                    }
+                } catch (_) {}
+
+                // Dự phòng cuối cùng lưu trên hệ thống trình duyệt
+                let localCount = parseInt(localStorage.getItem(LOCAL_TOTAL_BACKUP_KEY) || '1', 10);
+                if (isNewSessionVisit) {
+                    localCount += 1;
+                    localStorage.setItem(LOCAL_TOTAL_BACKUP_KEY, String(localCount));
+                }
+                if (elTotal) elTotal.textContent = localCount.toLocaleString('vi-VN');
+            }
+        }
+
+        window.addEventListener('beforeunload', () => {
+            if (presenceChannel) {
+                try { presenceChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
+            }
+            try {
+                navigator.sendBeacon('/api/stats', JSON.stringify({ clientId: clientSessionId, action: 'leave' }));
+            } catch (_) {}
+        });
+
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            const clockEl = document.getElementById('live-system-clock');
+            if (clockEl) clockEl.textContent = `UTC+7 // ${h}:${m}:${s}`;
+        }
+        setInterval(updateClock, 500);
+
+        /* --------------------------------------------------------------------------
+           10. BINARY OCEAN STREAM & C++ TOPOLOGY CANVAS BACKGROUND
+           -------------------------------------------------------------------------- */
+        const canvas = document.getElementById('binary-ocean-canvas');
+        const ctx = canvas.getContext('2d');
+        let binaryColumns = [];
+        let cppNodes = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initBinaryOcean();
+        }
+
+        function initBinaryOcean() {
+            const colSpacing = 34;
+            const colCount = Math.floor(canvas.width / colSpacing);
+            binaryColumns = [];
+            const tokens = ['0', '1', '0', '1', '0', '1', 'C++', '0x17'];
+
+            for (let i = 0; i < colCount; i++) {
+                binaryColumns.push({
+                    x: i * colSpacing + 8,
+                    y: Math.random() * canvas.height,
+                    speed: 0.55 + Math.random() * 1.05,
+                    char: tokens[Math.floor(Math.random() * tokens.length)],
+                    alpha: 0.42 + Math.random() * 0.48,
+                    isBright: Math.random() > 0.45
+                });
+            }
+
+            const nodeCount = Math.min(36, Math.floor((canvas.width * canvas.height) / 38000));
+            cppNodes = [];
+            for (let j = 0; j < nodeCount; j++) {
+                cppNodes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3
+                });
+            }
+        }
+
+        function animateBinaryOcean() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = 'bold 13px "JetBrains Mono", monospace';
+
+            for (let i = 0; i < binaryColumns.length; i++) {
+                const col = binaryColumns[i];
+                col.y += col.speed;
+                if (col.y > canvas.height + 24) {
+                    col.y = -24;
+                    col.char = Math.random() > 0.14 ? (Math.random() > 0.5 ? '1' : '0') : 'C++';
+                }
+
+                ctx.save();
+                if (col.isBright) {
+                    ctx.shadowColor = 'rgba(0, 212, 255, 0.75)';
+                    ctx.shadowBlur = 8;
+                    ctx.fillStyle = `rgba(0, 230, 255, ${col.alpha})`;
+                } else {
+                    ctx.shadowColor = 'rgba(0, 136, 255, 0.45)';
+                    ctx.shadowBlur = 4;
+                    ctx.fillStyle = `rgba(50, 175, 255, ${col.alpha * 0.9})`;
+                }
+                ctx.fillText(col.char, col.x, col.y);
+
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = `rgba(0, 180, 255, ${col.alpha * 0.68})`;
+                ctx.fillText(col.char === '1' ? '0' : '1', col.x, col.y - 18);
+                ctx.fillStyle = `rgba(0, 120, 215, ${col.alpha * 0.42})`;
+                ctx.fillText(col.char === '0' ? '1' : '0', col.x, col.y - 36);
+                ctx.restore();
+            }
+
+            for (let i = 0; i < cppNodes.length; i++) {
+                const p = cppNodes[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.45)';
+                ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
+
+                for (let j = i + 1; j < cppNodes.length; j++) {
+                    const p2 = cppNodes[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 145) {
+                        ctx.strokeStyle = `rgba(0, 180, 255, ${(1 - dist / 145) * 0.1})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateBinaryOcean);
+        }
+
+        /* --------------------------------------------------------------------------
+           11. INITIALIZATION ON WINDOW LOAD
+           -------------------------------------------------------------------------- */
+        window.onload = function () {
+            renderRosterGrid('all');
+            initMemoryGallery1To50();
+            syncVisitorTelemetry(true);
+            setInterval(() => syncVisitorTelemetry(false), 10000);
+            calibrateScreenAndBoundaries();
+            resizeCanvas();
+            window.addEventListener('resize', () => {
+                calibrateScreenAndBoundaries();
+                resizeCanvas();
+                collectScrollElements();
+            });
+            collectScrollElements();
+            requestAnimationFrame(updateScrollDecayEngine);
+            requestAnimationFrame(animateBinaryOcean);
+        };
+    </script>
+</body>
+</html>
