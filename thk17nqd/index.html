@@ -1697,7 +1697,7 @@
     </main>
 
     <!-- ==========================================================================
-         ARCHITECTURAL FOOTER (ĐỔI THÀNH TỔNG LƯỢT TRUY CẬP & LUÔN CỘNG DỒN)
+         ARCHITECTURAL FOOTER (ĐẾM TỔNG LƯỢT TRUY CẬP TOÀN CẦU MỌI THIẾT BỊ)
          ========================================================================== -->
     <footer class="relative z-10 hairline-t bg-oceanDeep/95 max-w-[1440px] mx-auto lg:px-11">
         <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-8 flex flex-col gap-5 font-mono text-xs text-slateBlue">
@@ -1720,7 +1720,7 @@
                     </div>
                 </div>
 
-                <!-- 2 Bộ đếm tự động: Số lượt đang truy cập hiện tại & Tổng lượt truy cập -->
+                <!-- 2 Bộ đếm tự động toàn cầu (Mọi thiết bị truy cập đều cộng dồn chung) -->
                 <div class="flex flex-wrap items-center gap-3 text-[11px]">
                     <div class="px-3.5 py-2 bg-abyss border border-aquaTerm/55 flex items-center gap-2">
                         <span class="w-2 h-2 bg-emerald-400 animate-ping inline-block"></span>
@@ -1979,7 +1979,7 @@
         });
 
         /* --------------------------------------------------------------------------
-           1. TỰ ĐỘNG NHẬN DIỆN ĐỘ PHÂN GIẢI NGẦM (KHÔNG HIỆN BẢNG LÚC MỚI VÀO)
+           1. TỰ ĐỘNG NHẬN DIỆN ĐỘ PHÂN GIẢI NGẦM
            -------------------------------------------------------------------------- */
         const viewportCalibration = {
             vw: window.innerWidth,
@@ -2683,19 +2683,6 @@
                 statusBadge.className = 'font-mono text-xs text-oceanBright font-bold';
 
                 try {
-                    await fetch('/api/contact', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            sender_name: senderName,
-                            sender_contact: senderContact,
-                            recipient: 'Mai Thiên Phú (Người thiết kế)',
-                            message: messageBody
-                        })
-                    });
-                } catch (_) {}
-
-                try {
                     await fetch(getHiddenMailEndpoint(), {
                         method: 'POST',
                         headers: {
@@ -2723,15 +2710,27 @@
         }
 
         /* --------------------------------------------------------------------------
-           9B. BỘ ĐẾM TỔNG LƯỢT TRUY CẬP LUÔN CỘNG DỒN (CLOUD + LOCAL MONOTONIC)
+           9B. BỘ ĐẾM TỔNG LƯỢT TRUY CẬP TOÀN CẦU (MỌI THIẾT BỊ CỘNG CHUNG 1 SỐ,
+               LƯU TRÊN CLOUD KV ĐỘC LẬP — UPLOAD GITHUB KHÔNG BAO GIỜ RESET)
            -------------------------------------------------------------------------- */
         const SESSION_ID_KEY = 'thk17_client_session_id';
-        const TOTAL_VISITS_KEY = 'thk17_cumulative_total_visits';
+        const GLOBAL_CACHE_KEY = 'thk17_global_cloud_cache';
+
+        // Định danh kho dữ liệu đám mây dùng chung cho tất cả thiết bị truy cập thk17nqd.vercel.app
+        const ABACUS_HIT_URL = 'https://abacus.jasoncameron.dev/hit/thk17nqd_chuyen_nqd_2528/global_visits';
+        const ABACUS_GET_URL = 'https://abacus.jasoncameron.dev/get/thk17nqd_chuyen_nqd_2528/global_visits';
+        const COUNTERAPI_HIT_URL = 'https://api.counterapi.dev/v1/thk17nqd_chuyen_nqd_2528/global_visits/up';
+        const COUNTERAPI_GET_URL = 'https://api.counterapi.dev/v1/thk17nqd_chuyen_nqd_2528/global_visits/';
 
         let clientSessionId = sessionStorage.getItem(SESSION_ID_KEY);
         if (!clientSessionId) {
             clientSessionId = 'thk17_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
             sessionStorage.setItem(SESSION_ID_KEY, clientSessionId);
+        }
+
+        let highestKnownGlobalTotal = parseInt(localStorage.getItem(GLOBAL_CACHE_KEY) || '1', 10);
+        if (isNaN(highestKnownGlobalTotal) || highestKnownGlobalTotal < 1) {
+            highestKnownGlobalTotal = 1;
         }
 
         const activePeers = new Map();
@@ -2761,64 +2760,71 @@
             if (elOnline) elOnline.textContent = String(Math.max(1, activePeers.size));
         }
 
+        async function fetchCloudGlobalTotal(increment = false) {
+            const urlAbacus = increment ? ABACUS_HIT_URL : ABACUS_GET_URL;
+            const urlCounterApi = increment ? COUNTERAPI_HIT_URL : COUNTERAPI_GET_URL;
+
+            const results = await Promise.allSettled([
+                fetch(urlAbacus, { cache: 'no-store' }).then(r => r.ok ? r.json() : null),
+                fetch(urlCounterApi, { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
+            ]);
+
+            let cloudNumbers = [];
+            if (results[0].status === 'fulfilled' && results[0].value && typeof results[0].value.value === 'number') {
+                cloudNumbers.push(results[0].value.value);
+            }
+            if (results[1].status === 'fulfilled' && results[1].value && typeof results[1].value.count === 'number') {
+                cloudNumbers.push(results[1].value.count);
+            }
+
+            if (cloudNumbers.length > 0) {
+                return Math.max(...cloudNumbers);
+            }
+            return null;
+        }
+
         async function syncPersistentCounters(initialLoad = false) {
             const elOnline = document.getElementById('counter-online-now');
             const elTotal = document.getElementById('counter-total-visits');
 
-            // 1. Luôn cộng dồn (+1) ngay khi có người truy cập / tải trang (initialLoad = true)
-            let localTotal = parseInt(localStorage.getItem(TOTAL_VISITS_KEY) || '0', 10);
-            if (isNaN(localTotal) || localTotal < 0) localTotal = 0;
-
-            if (initialLoad) {
-                localTotal += 1;
-                localStorage.setItem(TOTAL_VISITS_KEY, String(localTotal));
-            } else if (localTotal < 1) {
-                localTotal = 1;
-                localStorage.setItem(TOTAL_VISITS_KEY, '1');
+            if (elTotal) {
+                elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
             }
-
-            if (elTotal) elTotal.textContent = localTotal.toLocaleString('vi-VN');
 
             if (bcChannel) {
                 try { bcChannel.postMessage({ type: 'ping', id: clientSessionId }); } catch (_) {}
             }
             refreshOnlineDisplay();
 
-            // 2. Đồng bộ cộng dồn trực tiếp lên Cloud Counter vĩnh viễn cho thk17nqd.vercel.app
+            // 1. Lấy/Cộng dồn TỔNG LƯỢT TRUY CẬP toàn cầu trên Cloud KV (Dùng chung cho mọi thiết bị)
             try {
-                const cloudEndpoint = initialLoad
-                    ? 'https://api.counterapi.dev/v1/thk17nqd_vercel_app/total_visits/up'
-                    : 'https://api.counterapi.dev/v1/thk17nqd_vercel_app/total_visits';
-                const cloudRes = await fetch(cloudEndpoint, { cache: 'no-store' });
-                if (cloudRes.ok) {
-                    const cloudData = await cloudRes.json();
-                    if (cloudData && typeof cloudData.count === 'number') {
-                        localTotal = Math.max(localTotal, cloudData.count);
-                        localStorage.setItem(TOTAL_VISITS_KEY, String(localTotal));
-                        if (elTotal) elTotal.textContent = localTotal.toLocaleString('vi-VN');
+                const cloudTotal = await fetchCloudGlobalTotal(initialLoad);
+                if (typeof cloudTotal === 'number' && cloudTotal > 0) {
+                    highestKnownGlobalTotal = Math.max(highestKnownGlobalTotal, cloudTotal);
+                    localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal));
+                    if (elTotal) {
+                        elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+                    }
+                } else if (initialLoad) {
+                    highestKnownGlobalTotal += 1;
+                    localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal));
+                    if (elTotal) {
+                        elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
                     }
                 }
             } catch (_) {}
 
-            // 3. Đồng bộ qua /api/stats (nếu có) nhưng luôn giữ Math.max để không bao giờ bị tụt về 1
+            // 2. Đồng bộ SỐ LƯỢT ĐANG TRUY CẬP HIỆN TẠI qua /api/stats (chỉ lấy online, tuyệt đối không ghi đè lùi tổng truy cập)
             try {
                 const res = await fetch('/api/stats', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        clientId: clientSessionId,
-                        increment: initialLoad
-                    })
+                    body: JSON.stringify({ clientId: clientSessionId })
                 });
                 if (res.ok) {
                     const data = await res.json();
                     if (elOnline && typeof data.online === 'number') {
                         elOnline.textContent = String(Math.max(1, data.online, activePeers.size));
-                    }
-                    if (elTotal && typeof data.totalVisits === 'number') {
-                        localTotal = Math.max(localTotal, data.totalVisits);
-                        localStorage.setItem(TOTAL_VISITS_KEY, String(localTotal));
-                        elTotal.textContent = localTotal.toLocaleString('vi-VN');
                     }
                 }
             } catch (_) {}
@@ -2828,6 +2834,9 @@
             if (bcChannel) {
                 try { bcChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
             }
+            try {
+                navigator.sendBeacon('/api/stats', JSON.stringify({ clientId: clientSessionId, action: 'leave' }));
+            } catch (_) {}
         });
 
         function updateClock() {
@@ -2951,7 +2960,7 @@
             renderRosterGrid('all');
             initMemoryGallery1To50();
             syncPersistentCounters(true);
-            setInterval(() => syncPersistentCounters(false), 10000);
+            setInterval(() => syncPersistentCounters(false), 8000);
             calibrateScreenAndBoundaries();
             resizeCanvas();
             window.addEventListener('resize', () => {
