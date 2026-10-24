@@ -259,8 +259,8 @@
             opacity: 1 !important;
             filter: none !important;
             transform: none !important;
-            background: rgba(2, 8, 20, 0.97);
-            backdrop-filter: blur(14px);
+            background: rgba(2, 8, 20, 0.98);
+            backdrop-filter: none;
             border-bottom: 1px solid rgba(0, 212, 255, 0.35);
             box-shadow: 0 8px 32px rgba(0, 12, 32, 0.85);
         }
@@ -320,8 +320,18 @@
 
         .scroll-node,
         .scroll-card {
-            will-change: opacity, transform, filter;
+            will-change: opacity, transform;
             transform-origin: center center;
+            contain: layout style;
+        }
+
+        /* Mobile: giảm tải hiệu ứng cuộn cho mượt */
+        @media (max-width: 1023px) {
+            .scroll-node,
+            .scroll-card {
+                will-change: auto;
+                contain: none;
+            }
         }
 
         @keyframes searchTargetPulse {
@@ -367,6 +377,26 @@
         .thk17-dino-svg {
             overflow: visible;
             animation: dinoBodyBob 0.55s steps(2, end) infinite;
+        }
+
+        /* Mobile: tắt animation Dino để giảm tải */
+        @media (max-width: 1023px) {
+            .thk17-dino-svg,
+            .thk17-dino-svg .dino-leg-left,
+            .thk17-dino-svg .dino-leg-right,
+            .thk17-dino-svg .dino-arm,
+            .thk17-dino-svg .dino-tail,
+            .thk17-dino-svg .dino-crown,
+            .thk17-dino-svg .dino-eye,
+            .thk17-dino-svg .dino-pearl {
+                animation: none !important;
+            }
+            .dino-patrol-runner {
+                animation: none !important;
+            }
+            .dino-patrol-hop {
+                animation: none !important;
+            }
         }
         .thk17-dino-svg .dino-leg-left {
             animation: dinoLegStepA 0.36s steps(2, end) infinite;
@@ -702,8 +732,8 @@
     <!-- ==========================================================================
          1. INTERACTIVE BINARY OCEAN & C++ TOPOLOGY CANVAS BACKGROUND
          ========================================================================== -->
-    <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95"></canvas>
-    <div class="fixed inset-0 crt-overlay z-0 opacity-20"></div>
+    <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95 hidden lg:block"></canvas>
+    <div class="fixed inset-0 crt-overlay z-0 opacity-20 hidden lg:block"></div>
 
     <!-- ==========================================================================
          2. FIXED SIDE TELEMETRY RAILS (LEFT & RIGHT)
