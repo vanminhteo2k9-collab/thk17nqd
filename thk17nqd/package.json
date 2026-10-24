@@ -6,5 +6,8 @@
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Mai Thiên Phú"
+  "author": "Mai Thiên Phú",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
 }
