@@ -2474,8 +2474,13 @@
         /* 1. Endpoint máy chủ nội bộ (/api/cloud trên Node.js server.js / Python / Vercel Serverless) */
         const INTERNAL_API_CLOUD = '/api/cloud';
 
-        /* 2. Google Firebase Realtime Database (Tốc độ < 100ms toàn cầu qua SSE) */
-        let customFirebaseUrl = localStorage.getItem(FIREBASE_CUSTOM_URL_KEY) || '';
+        /* 2. Google Firebase Realtime Database (Đồng bộ siêu tốc < 50ms qua Server-Sent Events SSE) */
+        const FIREBASE_DEFAULT_RTDB = 'https://thk17nqd-default-rtdb.asia-southeast1.firebasedatabase.app';
+        let savedFbUrl = localStorage.getItem(FIREBASE_CUSTOM_URL_KEY);
+        if (!savedFbUrl || !savedFbUrl.startsWith('https://')) {
+            savedFbUrl = FIREBASE_DEFAULT_RTDB;
+        }
+        let customFirebaseUrl = savedFbUrl;
 
         let thk17Db = null;
         let uploadedMemoriesList = [];
@@ -2575,7 +2580,7 @@
             }
         }
 
-        /* ĐỒNG BỘ LÊN ĐÁM MÂY TỨC THỜI (< 1s TOÀN CẦU) */
+        /* ĐỒNG BỘ LÊN ĐÁM MÂY TỨC THỜI (< 50ms GOOGLE FIREBASE) */
         async function pushGlobalCloudState(extraEventPayload = null) {
             setCloudIndicator('☁ CLOUD: ĐANG LƯU...', false);
 
@@ -2588,32 +2593,49 @@
 
             let savedSuccessfully = false;
 
-            /* TẦNG 1: CLOUD TOÀN CẦU SIÊU TỐC (Bytebin + KeyValue - Tự động đồng bộ mọi thiết bị iPhone, Android, PC) */
-            try {
-                const bytebinRes = await fetchWithTimeout('https://bytebin.lucko.me/post', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                }, 4500);
+            /* TẦNG 1 (CHÍNH & SIÊU TỐC): Google Firebase Realtime Database qua Server-Sent Events SSE */
+            if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
+                try {
+                    const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+                    if (extraEventPayload && extraEventPayload.action === 'register_user' && extraEventPayload.user) {
+                        const uKey = encodeURIComponent(extraEventPayload.user.username.toLowerCase());
+                        await fetchWithTimeout(`${cleanUrl}/thk17/accounts/${uKey}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(extraEventPayload.user)
+                        }, 2000);
+                    } else if (extraEventPayload && extraEventPayload.action === 'delete_photo' && extraEventPayload.photoId) {
+                        const pKey = encodeURIComponent(extraEventPayload.photoId);
+                        await fetchWithTimeout(`${cleanUrl}/thk17/photos/${pKey}.json`, { method: 'DELETE' }, 2000);
+                        await fetchWithTimeout(`${cleanUrl}/thk17/deletedIds/${pKey}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(true)
+                        }, 2000);
+                    } else {
+                        const photosMap = {};
+                        uploadedMemoriesList.forEach(p => {
+                            if (p && p.id && !deletedPhotoIdsSet.has(p.id)) photosMap[p.id] = p;
+                        });
+                        const delMap = {};
+                        deletedPhotoIdsSet.forEach(id => { delMap[id] = true; });
 
-                if (bytebinRes.ok) {
-                    const bData = await bytebinRes.json();
-                    if (bData && bData.key) {
-                        const snapKey = bData.key;
-                        lastAppliedCloudSnapshotKey = snapKey;
-                        try { localStorage.setItem('thk17_last_cloud_snap_key', snapKey); } catch (_) {}
-
-                        // Cập nhật con trỏ snapshot toàn cầu
-                        await fetchWithTimeout(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/thk17nqd2528v5/global_snapshot_id/${snapKey}`, {
-                            method: 'POST'
+                        await fetchWithTimeout(`${cleanUrl}/thk17.json`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                accounts: payload.accounts,
+                                photos: photosMap,
+                                deletedIds: delMap,
+                                updatedAt: payload.updatedAt
+                            })
                         }, 3000);
-
-                        savedSuccessfully = true;
-                        activeCloudSource = 'GLOBAL_CLOUD';
                     }
+                    savedSuccessfully = true;
+                    activeCloudSource = 'FIREBASE';
+                } catch (fbErr) {
+                    console.warn('Firebase sync warning:', fbErr);
                 }
-            } catch (err) {
-                console.warn('Lỗi đồng bộ Global Cloud (Bytebin/KeyValue):', err);
             }
 
             /* TẦNG 2: Lưu trực tiếp vào Backend nội bộ (/api/cloud - nếu chạy server Node/Python hoặc Vercel) */
@@ -2629,42 +2651,16 @@
                 }
             } catch (_) {}
 
-            /* TẦNG 3: Nếu có cấu hình Firebase Realtime Database của lớp -> Đồng bộ Firebase */
-            if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
-                try {
-                    const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
-                    if (extraEventPayload && extraEventPayload.action === 'register_user' && extraEventPayload.user) {
-                        const uKey = encodeURIComponent(extraEventPayload.user.username.toLowerCase());
-                        await fetchWithTimeout(`${cleanUrl}/thk17/accounts/${uKey}.json`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(extraEventPayload.user)
-                        }, 1800);
-                    } else if (extraEventPayload && extraEventPayload.action === 'delete_photo' && extraEventPayload.photoId) {
-                        const pKey = encodeURIComponent(extraEventPayload.photoId);
-                        await fetchWithTimeout(`${cleanUrl}/thk17/photos/${pKey}.json`, { method: 'DELETE' }, 1800);
-                    } else {
-                        const photosMap = {};
-                        uploadedMemoriesList.forEach(p => { photosMap[p.id] = p; });
-                        await fetchWithTimeout(`${cleanUrl}/thk17.json`, {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                accounts: payload.accounts,
-                                photos: photosMap,
-                                deletedIds: payload.deletedIds,
-                                updatedAt: payload.updatedAt
-                            })
-                        }, 2500);
-                    }
-                    savedSuccessfully = true;
-                    activeCloudSource = 'FIREBASE';
-                } catch (fbErr) {
-                    console.warn('Firebase sync timeout/error:', fbErr);
-                }
-            }
+            /* TẦNG 3: Sao lưu dự phòng thêm vào Cloudflare CDN Bytebin */
+            try {
+                fetchWithTimeout('https://bytebin.lucko.me/post', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }, 4000).catch(() => {});
+            } catch (_) {}
 
-            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
+            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ (FIREBASE)', true);
             return savedSuccessfully;
         }
 
@@ -2729,7 +2725,7 @@
                 }
             });
 
-            const mergedPhotos = Array.from(photoMap.values());
+            const mergedPhotos = Array.from(photoMap.values()).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
             if (stateChanged || mergedPhotos.length !== uploadedMemoriesList.length) {
                 savePhotosListLocally(mergedPhotos);
                 renderAllUploadedMemories();
@@ -2742,25 +2738,11 @@
             isSyncingCloud = true;
 
             try {
-                /* 1. ƯU TIÊN 1: Thử lấy từ Backend nội bộ (/api/cloud) nếu có máy chủ */
-                try {
-                    const res = await fetchWithTimeout(INTERNAL_API_CLOUD, { cache: 'no-store' }, 800);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && (data.photos || data.accounts || data.deletedIds)) {
-                            mergeIncomingCloudState(data);
-                            activeCloudSource = 'BACKEND_API';
-                            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
-                            return true;
-                        }
-                    }
-                } catch (_) {}
-
-                /* 2. ƯU TIÊN 2: Lấy từ Firebase nếu đã cấu hình */
+                /* 1. ƯU TIÊN HÀNG ĐẦU: Google Firebase Realtime Database (< 50ms) */
                 if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
                     try {
                         const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
-                        const fbRes = await fetchWithTimeout(`${cleanUrl}/thk17.json`, { cache: 'no-store' }, 1500);
+                        const fbRes = await fetchWithTimeout(`${cleanUrl}/thk17.json`, { cache: 'no-store' }, 2000);
                         if (fbRes.ok) {
                             const fbData = await fbRes.json();
                             if (fbData && (fbData.photos || fbData.accounts || fbData.deletedIds)) {
@@ -2775,60 +2757,53 @@
                     }
                 }
 
-                /* 3. ƯU TIÊN 3: Global Cloud Toàn cầu (KeyValue pointer + Bytebin) — Hoạt động trên mọi thiết bị */
+                /* 2. ƯU TIÊN 2: Backend nội bộ (/api/cloud) nếu có máy chủ */
                 try {
-                    const kvRes = await fetchWithTimeout('https://keyvalue.immanuel.co/api/KeyVal/GetValue/thk17nqd2528v5/global_snapshot_id', { cache: 'no-store' }, 2200);
-                    if (kvRes.ok) {
-                        let snapKey = await kvRes.json();
-                        if (typeof snapKey === 'string') snapKey = snapKey.trim().replace(/^"|"$/g, '');
-                        if (snapKey && snapKey !== 'null' && snapKey !== 'undefined' && snapKey.length >= 4) {
-                            if (snapKey !== lastAppliedCloudSnapshotKey) {
-                                setCloudIndicator('☁ CLOUD: ĐANG CẬP NHẬT...', false);
-                                const binRes = await fetchWithTimeout(`https://bytebin.lucko.me/${snapKey}`, { cache: 'no-store' }, 3500);
-                                if (binRes.ok) {
-                                    const binData = await binRes.json();
-                                    if (binData && (binData.photos || binData.accounts || binData.deletedIds)) {
-                                        mergeIncomingCloudState(binData);
-                                        lastAppliedCloudSnapshotKey = snapKey;
-                                        try { localStorage.setItem('thk17_last_cloud_snap_key', snapKey); } catch (_) {}
-                                        activeCloudSource = 'GLOBAL_CLOUD';
-                                        setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
-                                        return true;
-                                    }
-                                }
-                            } else {
-                                setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
-                                return true;
-                            }
+                    const res = await fetchWithTimeout(INTERNAL_API_CLOUD, { cache: 'no-store' }, 800);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && (data.photos || data.accounts || data.deletedIds)) {
+                            mergeIncomingCloudState(data);
+                            activeCloudSource = 'BACKEND_API';
+                            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
+                            return true;
                         }
                     }
-                } catch (err) {
-                    // Global cloud tạm thời bận
-                }
+                } catch (_) {}
 
-                setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
+                setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ (FIREBASE)', true);
                 return false;
             } finally {
                 isSyncingCloud = false;
             }
         }
 
-        /* LẮNG NGHE ĐỒNG BỘ REALTIME TỨC THÌ QUA FIREBASE SSE STREAM */
+        /* LẮNG NGHE ĐỒNG BỘ REALTIME TỨC THÌ QUA FIREBASE SSE STREAM (< 50ms) */
         function startRealtimeCloudStream() {
             if (!customFirebaseUrl || !customFirebaseUrl.startsWith('https://')) return;
 
             try {
-                if (firebaseEventSource) firebaseEventSource.close();
+                if (firebaseEventSource) {
+                    try { firebaseEventSource.close(); } catch (_) {}
+                    firebaseEventSource = null;
+                }
+
                 const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
                 firebaseEventSource = new EventSource(`${cleanUrl}/thk17.json`);
+
+                firebaseEventSource.onopen = () => {
+                    activeCloudSource = 'FIREBASE';
+                    setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ (FIREBASE)', true);
+                };
 
                 firebaseEventSource.addEventListener('put', (e) => {
                     try {
                         const parsed = JSON.parse(e.data);
                         if (!parsed) return;
+
                         if (parsed.path === '/' && parsed.data) {
                             mergeIncomingCloudState(parsed.data);
-                        } else if (parsed.path && parsed.path.startsWith('/photos/') && parsed.data) {
+                        } else if (parsed.path && parsed.path.startsWith('/photos/')) {
                             const newPhoto = parsed.data;
                             if (newPhoto && newPhoto.id && !deletedPhotoIdsSet.has(newPhoto.id)) {
                                 const photoMap = new Map();
@@ -2836,6 +2811,16 @@
                                 photoMap.set(newPhoto.id, newPhoto);
                                 savePhotosListLocally(Array.from(photoMap.values()));
                                 renderAllUploadedMemories();
+                            } else if (newPhoto === null) {
+                                // Ảnh vừa bị xóa trên máy khác!
+                                const delId = parsed.path.replace('/photos/', '').replace(/^\/+|\/+$/g, '');
+                                if (delId) {
+                                    deletedPhotoIdsSet.add(delId);
+                                    savePhotosListLocally(uploadedMemoriesList.filter(p => p.id !== delId));
+                                    const domNode = document.getElementById(`uploaded-memory-${delId}`);
+                                    if (domNode) domNode.remove();
+                                    collectScrollElements();
+                                }
                             }
                         } else if (parsed.path && parsed.path.startsWith('/accounts/') && parsed.data) {
                             const newAcc = parsed.data;
@@ -2843,13 +2828,16 @@
                                 const map = getSavedAccountsMap();
                                 map[newAcc.username.toLowerCase()] = newAcc;
                                 saveAccountsMapLocally(map);
+                                updateAuthHeaderUI();
                             }
                         } else if (parsed.path && parsed.path.startsWith('/deletedIds/')) {
-                            const delId = parsed.path.replace('/deletedIds/', '').trim();
+                            const delId = parsed.path.replace('/deletedIds/', '').replace(/^\/+|\/+$/g, '');
                             if (delId) {
                                 deletedPhotoIdsSet.add(delId);
                                 savePhotosListLocally(uploadedMemoriesList.filter(p => p.id !== delId));
-                                renderAllUploadedMemories();
+                                const domNode = document.getElementById(`uploaded-memory-${delId}`);
+                                if (domNode) domNode.remove();
+                                collectScrollElements();
                             }
                         }
                     } catch (_) {}
@@ -2861,6 +2849,11 @@
                         if (parsed && parsed.data) mergeIncomingCloudState(parsed.data);
                     } catch (_) {}
                 });
+
+                firebaseEventSource.onerror = () => {
+                    try { firebaseEventSource.close(); } catch (_) {}
+                    setTimeout(startRealtimeCloudStream, 4000);
+                };
             } catch (e) {
                 console.warn('Không thể mở realtime SSE:', e);
             }

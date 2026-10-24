@@ -26,12 +26,9 @@ Người thiết kế: Mai Thiên Phú
 3. HỆ THỐNG ĐỒNG BỘ ĐÁM MÂY SIÊU TỐC (FIREBASE REALTIME DATABASE):
    - Đã tích hợp Google Firebase Realtime Database: Tốc độ phản hồi cực nhanh (< 100ms) qua Server-Sent Events (SSE).
    - Bất kỳ ai ở bất kỳ thiết bị nào (máy tính, Android, iPhone) đăng ảnh hoặc tạo tài khoản, các thiết bị khác sẽ nhận được ngay lập tức theo thời gian thực mà không cần reload trang.
-   - Để dùng Firebase riêng của bạn (hoàn toàn miễn phí):
-     1. Truy cập https://console.firebase.google.com/ -> Tạo dự án (Create project).
-     2. Vào "Build" -> "Realtime Database" -> Nhấn "Create Database".
-     3. Chọn vị trí "Singapore (asia-southeast1)" hoặc "us-central1" -> Chọn chế độ "Start in test mode".
-     4. Sao chép đường dẫn URL (dạng: https://your-project-id.asia-southeast1.firebasedatabase.app).
-     5. Mở file index.html, tìm hằng số FIREBASE_DEFAULT_RTDB và dán URL vào là xong!
+   - Dự án Firebase chính thức của lớp:
+     https://thk17nqd-default-rtdb.asia-southeast1.firebasedatabase.app
+     (Đã được nhúng mặc định trong file index.html, tự động đồng bộ 24/24 cho toàn bộ học sinh trên mọi thiết bị).
 
 4. TỐI ƯU HÓA HIỂN THỊ TRÊN ĐIỆN THOẠI (ANDROID / IOS):
    - Đã loại bỏ hoàn toàn hiện tượng vuốt 1s sau mới hiện nội dung trên Android.
