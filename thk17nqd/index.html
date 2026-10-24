@@ -90,6 +90,7 @@
             position: relative;
             min-height: 100vh;
             padding-top: var(--nav-safe-height);
+            transition: padding-top 0.2s ease;
         }
 
         /* KHÓA TẢI / KÉO THẢ TẤT CẢ ẢNH NGOÀI MỤC KỈ NIỆM */
@@ -258,10 +259,10 @@
             opacity: 1 !important;
             filter: none !important;
             transform: none !important;
-            background: rgba(2, 8, 20, 0.96);
+            background: rgba(2, 8, 20, 0.97);
             backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.32);
-            box-shadow: 0 8px 32px rgba(0, 12, 32, 0.8);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.35);
+            box-shadow: 0 8px 32px rgba(0, 12, 32, 0.85);
         }
 
         .nav-item {
@@ -270,8 +271,8 @@
         }
         .nav-item.active {
             color: #00D4FF !important;
-            background: linear-gradient(180deg, rgba(0, 89, 156, 0.35) 0%, rgba(0, 212, 255, 0.14) 100%);
-            border-bottom: 3px solid #00D4FF;
+            background: linear-gradient(180deg, rgba(0, 89, 156, 0.35) 0%, rgba(0, 212, 255, 0.16) 100%);
+            box-shadow: inset 0 -3px 0 #00D4FF;
             text-shadow: 0 0 12px rgba(0, 212, 255, 0.45);
         }
         .nav-item.active .nav-hex {
@@ -741,37 +742,38 @@
     </aside>
 
     <!-- ==========================================================================
-         3. PERSISTENT FIXED TOP NAVIGATION BAR (CÓ LOGIN / SIGN UP ĐỒNG BỘ CLOUD)
+         3. PERSISTENT FIXED TOP NAVIGATION BAR (GỌN GÀNG, BỐ TRÍ HỢP LÝ,
+            CÓ NÚT ẨN/HIỆN MENU TRÊN ĐIỆN THOẠI & MENU TỰ CHIA 2 HÀNG NẾU HẸP)
          ========================================================================== -->
     <header id="persistent-navbar">
-        <div class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
-            <div class="flex items-center gap-3">
+        <!-- Dải trạng thái hệ thống phía trên (Tự động ẩn cùng Menu khi thu gọn trên điện thoại) -->
+        <div id="navbar-top-strip" class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
+            <div class="flex items-center gap-2.5">
                 <span class="flex items-center gap-1.5 text-aquaTerm font-bold">
                     <span class="w-2 h-2 bg-aquaTerm inline-block animate-pulse"></span>
-                    CHUYÊN TIN HỌC THK17 (2025 – 2028)
+                    <span>THK17 (2025 – 2028)</span>
                 </span>
-                <span class="hidden sm:inline text-white/20">|</span>
-                <span class="hidden sm:inline">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU (PHƯỜNG MỸ TRÀ, TỈNH ĐỒNG THÁP)</strong></span>
-            </div>
-
-            <!-- Khu vực Login / Sign Up + Trạng thái Cloud + Độ phân giải + Đồng hồ -->
-            <div class="flex flex-wrap items-center gap-2.5 ml-auto">
-                <span id="cloud-sync-indicator" class="px-2 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]">
+                <span class="hidden md:inline text-white/20">|</span>
+                <span class="hidden md:inline">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU (MỸ TRÀ, ĐỒNG THÁP)</strong></span>
+                <span id="cloud-sync-indicator" class="px-1.5 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]">
                     ☁ CLOUD: ĐANG ĐỒNG BỘ...
                 </span>
+            </div>
 
+            <!-- Cụm nút Tài khoản & Độ phân giải bố trí gọn trên 1 hàng -->
+            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 ml-auto">
                 <!-- Khi chưa đăng nhập -->
                 <div id="top-auth-guest" class="flex items-center gap-1.5">
-                    <button type="button" onclick="openAuthModal('login')" class="px-2.5 py-0.5 bg-aquaTerm text-abyss font-bold border border-aquaTerm hover:bg-iceWhite transition-colors cursor-pointer">
+                    <button type="button" onclick="openAuthModal('login')" class="px-2 py-0.5 bg-aquaTerm text-abyss font-bold border border-aquaTerm hover:bg-iceWhite transition-colors cursor-pointer">
                         [ĐĂNG NHẬP]
                     </button>
-                    <button type="button" onclick="openAuthModal('signup')" class="px-2.5 py-0.5 bg-[#041024] text-aquaTerm border border-aquaTerm/60 hover:bg-aquaTerm hover:text-abyss font-bold transition-colors cursor-pointer">
+                    <button type="button" onclick="openAuthModal('signup')" class="px-2 py-0.5 bg-[#041024] text-aquaTerm border border-aquaTerm/60 hover:bg-aquaTerm hover:text-abyss font-bold transition-colors cursor-pointer">
                         [ĐĂNG KÝ]
                     </button>
                 </div>
 
                 <!-- Khi đã đăng nhập -->
-                <div id="top-auth-user" class="hidden items-center gap-2">
+                <div id="top-auth-user" class="hidden items-center gap-1.5">
                     <span class="px-2 py-0.5 bg-[#06244a] border border-aquaTerm text-iceWhite flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 bg-emerald-400 inline-block"></span>
                         <strong id="top-user-name" class="text-aquaTerm">user</strong>
@@ -782,22 +784,21 @@
                     </button>
                 </div>
 
-                <span class="hidden sm:inline text-white/20">|</span>
                 <button onclick="openCalibrator()" class="px-2 py-0.5 bg-cppBlue/40 border border-aquaTerm/50 text-iceWhite hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer" title="Xem thông số độ phân giải màn hình">
-                    ĐỘ PHÂN GIẢI: <strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
+                    <span class="hidden sm:inline">ĐỘ PHÂN GIẢI: </span><strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
                 </button>
-                <span class="hidden md:inline text-white/20">|</span>
-                <span id="live-system-clock" class="hidden md:inline text-iceWhite">UTC+7 // 00:00:00</span>
+                <span id="live-system-clock" class="hidden xl:inline text-iceWhite pl-1">UTC+7 // 00:00:00</span>
             </div>
         </div>
 
+        <!-- Thanh điều hướng chính -->
         <div class="px-3 sm:px-6 lg:px-14 flex flex-col lg:flex-row lg:items-stretch justify-between relative">
             
-            <!-- Left Brand + Dino #1 -->
+            <!-- Hàng Thương hiệu + Dino + Nút Ẩn/Hiện Menu (Chỉ xuất hiện trên giao diện điện thoại lg:hidden) -->
             <div class="flex items-center justify-between py-2 lg:py-0 lg:pr-5 lg:hairline-r shrink-0">
-                <div class="flex items-center gap-3">
-                    <a href="#trang-chu" class="flex items-center gap-3 group">
-                        <svg class="w-9 h-9 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <div class="flex items-center gap-2.5">
+                    <a href="#trang-chu" class="flex items-center gap-2.5 group">
+                        <svg class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                             <polygon points="50,4 92,28 92,72 50,96 8,72 8,28" fill="#00599C" stroke="#00D4FF" stroke-width="4"/>
                             <polygon points="50,4 92,28 50,50 8,28" fill="#659AD2" opacity="0.45"/>
                             <polygon points="92,28 92,72 50,96 50,50" fill="#003865" opacity="0.7"/>
@@ -806,8 +807,8 @@
                             <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="22">+</text>
                         </svg>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <span class="font-display font-bold tracking-wider text-base text-iceWhite">THK17</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-display font-bold tracking-wider text-sm sm:text-base text-iceWhite">THK17</span>
                                 <span class="font-mono text-[10px] px-1.5 py-0.5 bg-cppBlue/50 border border-aquaTerm/50 text-aquaTerm font-bold">25—28</span>
                                 <span class="hidden sm:inline-block font-mono text-[10px] px-1.5 py-0.5 bg-oceanDeep border border-white/15 text-cppLight">C++23</span>
                             </div>
@@ -816,70 +817,85 @@
                             </p>
                         </div>
                     </a>
-                    <span class="thk17-dino-slot w-8 h-8 -mt-1" data-dino-size="w-8 h-8"></span>
+                    <span class="thk17-dino-slot w-7 h-7 sm:w-8 sm:h-8 -mt-1" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
                 </div>
+
+                <!-- Nút Ẩn / Hiện Menu (Chỉ hiện trên điện thoại & màn hình nhỏ lg:hidden) -->
+                <button 
+                    id="mobile-menu-toggle-btn" 
+                    type="button" 
+                    onclick="toggleMobileMenu()" 
+                    class="lg:hidden px-3 py-1.5 bg-[#06244a] border border-aquaTerm text-aquaTerm font-mono text-[11px] font-bold tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,212,255,0.25)] active:scale-95 transition-all cursor-pointer"
+                >
+                    <span id="mobile-menu-toggle-label">[▲ ẨN MENU]</span>
+                </button>
             </div>
 
-            <!-- Center: ALWAYS-VISIBLE 5 MENU TABS (ĐỔI MỤC 04 THÀNH LIÊN KẾT) -->
-            <nav aria-label="Menu thẻ chính" class="flex items-stretch overflow-x-auto no-scrollbar border-t lg:border-t-0 border-aquaTerm/20 shrink-0">
-                <a href="#trang-chu" data-section="trang-chu" class="nav-item active shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
-                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">01//</span>
-                    <span>Trang chủ</span>
-                </a>
-                <a href="#thong-tin" data-section="thong-tin" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
-                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">02//</span>
-                    <span>Thông tin</span>
-                </a>
-                <a href="#ki-niem" data-section="ki-niem" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
-                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">03//</span>
-                    <span>Kỉ niệm</span>
-                </a>
-                <a href="#mang-xa-hoi" data-section="mang-xa-hoi" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
-                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">04//</span>
-                    <span>Liên kết</span>
-                </a>
-                <a href="#lien-he" data-section="lien-he" class="nav-item shrink-0 flex items-center gap-1.5 px-3 sm:px-4 xl:px-5 py-2.5 lg:py-4 hairline-r font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite">
-                    <span class="nav-hex text-[10px] text-aquaTerm font-bold">05//</span>
-                    <span>Liên hệ</span>
-                </a>
-            </nav>
+            <!-- Phần thân Menu + Tìm kiếm (Có thể ẩn/hiện trên điện thoại, luôn hiện trên máy tính) -->
+            <div id="navbar-collapsible-body" class="flex flex-col lg:flex-row lg:items-stretch flex-1 justify-between">
+                
+                <!-- 5 THẺ MENU: Tự động thành 2 hàng cân đối nếu không còn chỗ, nếu còn chỗ thì xếp 1 hàng -->
+                <nav aria-label="Menu thẻ chính" class="flex flex-wrap lg:flex-nowrap items-stretch border-t lg:border-t-0 border-aquaTerm/25">
+                    <a href="#trang-chu" data-section="trang-chu" class="nav-item active flex-1 basis-[30%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">01//</span>
+                        <span>Trang chủ</span>
+                    </a>
+                    <a href="#thong-tin" data-section="thong-tin" class="nav-item flex-1 basis-[30%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">02//</span>
+                        <span>Thông tin</span>
+                    </a>
+                    <a href="#ki-niem" data-section="ki-niem" class="nav-item flex-1 basis-[30%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">03//</span>
+                        <span>Kỉ niệm</span>
+                    </a>
+                    <a href="#mang-xa-hoi" data-section="mang-xa-hoi" class="nav-item flex-1 basis-[45%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">04//</span>
+                        <span>Liên kết</span>
+                    </a>
+                    <a href="#lien-he" data-section="lien-he" class="nav-item flex-1 basis-[45%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">05//</span>
+                        <span>Liên hệ</span>
+                    </a>
+                </nav>
 
-            <!-- Right Inline Global Search Bar -->
-            <div class="flex items-center flex-1 lg:pl-4 py-2 lg:py-0 border-t lg:border-t-0 border-aquaTerm/20 relative min-w-[240px] max-w-full lg:max-w-sm ml-auto">
-                <div class="w-full relative">
-                    <div class="flex items-center bg-[#041024] border border-aquaTerm/60 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.35)]">
-                        <span class="pl-3 pr-1.5 font-mono text-[11px] text-aquaTerm font-bold select-none">
-                            🔍
-                        </span>
-                        <input 
-                            id="global-web-search-input" 
-                            type="text" 
-                            placeholder="Tìm kiếm thông tin trong web..." 
-                            autocomplete="off"
-                            class="w-full py-2 px-1.5 bg-transparent font-mono text-xs text-iceWhite focus:outline-none placeholder:text-slateBlue/60"
-                        >
-                        <button 
-                            id="global-web-search-clear" 
-                            type="button" 
-                            class="hidden px-2 py-1 mr-1 text-[10px] font-mono text-slateBlue hover:text-aquaTerm cursor-pointer"
-                            title="Xóa từ khóa"
-                        >
-                            ✕
-                        </button>
-                    </div>
-
-                    <!-- Bảng kết quả tìm kiếm ĐỤC 100% -->
-                    <div 
-                        id="global-search-dropdown" 
-                        class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1.5 bg-[#020814] border-2 border-aquaTerm z-[9999] max-h-[380px] overflow-y-auto"
-                    >
-                        <div class="px-3.5 py-2.5 bg-[#071936] flex items-center justify-between font-mono text-[10px]">
-                            <span class="text-aquaTerm font-bold">KẾT QUẢ TÌM KIẾM TRÊN TOÀN TRANG</span>
-                            <span id="global-search-count" class="text-iceWhite font-bold">0 kết quả</span>
+                <!-- Thanh tìm kiếm toàn trang (Giãn đều 100% hợp lý trên điện thoại, nằm gọn bên phải trên PC) -->
+                <div class="flex items-center w-full lg:w-auto lg:flex-1 lg:pl-4 py-2 lg:py-0 relative lg:max-w-xs xl:max-w-sm lg:ml-auto">
+                    <div class="w-full relative">
+                        <div class="flex items-center bg-[#041024] border border-aquaTerm/60 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.35)]">
+                            <span class="pl-3 pr-1.5 font-mono text-[11px] text-aquaTerm font-bold select-none">
+                                🔍
+                            </span>
+                            <input 
+                                id="global-web-search-input" 
+                                type="text" 
+                                placeholder="Tìm kiếm thông tin trong web..." 
+                                autocomplete="off"
+                                class="w-full py-1.5 lg:py-2 px-1.5 bg-transparent font-mono text-xs text-iceWhite focus:outline-none placeholder:text-slateBlue/60"
+                            >
+                            <button 
+                                id="global-web-search-clear" 
+                                type="button" 
+                                class="hidden px-2 py-1 mr-1 text-[10px] font-mono text-slateBlue hover:text-aquaTerm cursor-pointer"
+                                title="Xóa từ khóa"
+                            >
+                                ✕
+                            </button>
                         </div>
-                        <div id="global-search-results-list"></div>
+
+                        <!-- Bảng kết quả tìm kiếm ĐỤC 100% -->
+                        <div 
+                            id="global-search-dropdown" 
+                            class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1.5 bg-[#020814] border-2 border-aquaTerm z-[9999] max-h-[380px] overflow-y-auto"
+                        >
+                            <div class="px-3.5 py-2.5 bg-[#071936] flex items-center justify-between font-mono text-[10px]">
+                                <span class="text-aquaTerm font-bold">KẾT QUẢ TÌM KIẾM TRÊN TOÀN TRANG</span>
+                                <span id="global-search-count" class="text-iceWhite font-bold">0 kết quả</span>
+                            </div>
+                            <div id="global-search-results-list"></div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </header>
@@ -1759,16 +1775,14 @@
                             <span class="text-cppLight node-ping" data-base="10">10ms // TRỰC TUYẾN</span>
                         </div>
                         <div class="scroll-node flex items-center gap-4 mb-4">
-                            <!-- Logo Web thk17-20-10.netlify.app (Tự động ưu tiên lấy icon từ trang hoặc hiển thị Logo 20/10 THK17 chuẩn sắc nét) -->
                             <div class="w-14 h-14 shrink-0 bg-gradient-to-br from-[#06244a] via-[#1a103c] to-[#3b0d2c] border border-pink-400/80 flex items-center justify-center shadow-[0_0_22px_rgba(244,114,182,0.38)] relative overflow-hidden">
                                 <img 
-                                    src="https://scontent.fsgn5-1.fna.fbcdn.net/v/t39.30808-6/518403015_122104081376968207_7393148337921684705_n.jpg?stp=dst-jpg_tt6&cstp=mx1000x1000&ctp=s1000x1000&_nc_cat=109&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFXLt1VbaRW_S3acMTsXFgBc2zAWLsSkNZzbMBYuxKQ1jPyh0euVAXSP-xHFctL68FYeHhbE33q9ArhLEwuMAP7&_nc_ohc=tSEW0i2rhJYQ7kNvwGJSnA8&_nc_oc=Ado-iB0Jek0rrhETBnzpOyyoZGlUAZZ6hvhQkV0au-DiGjatpqac6BPLEhZ6myBHLxM&_nc_zt=23&_nc_ht=scontent.fsgn5-1.fna&_nc_gid=ctuQWwgUUYg2ScfdXphpnA&_nc_ss=7b2a8&oh=00_AQPqAqoNSXD8j_55TqPdS9iEoKF49uNkVguNRIK3NPUxGw&oe=6AE1FB3F" 
+                                    src="https://thk17-20-10.netlify.app/favicon.ico" 
                                     alt="Logo Web THK17 20-10" 
                                     class="w-9 h-9 object-contain relative z-10"
                                     onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
                                 >
                                 <svg class="hidden w-10 h-10" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <!-- Khung lục giác công nghệ kết hợp đóa hoa 20/10 & huy hiệu THK17 -->
                                     <polygon points="32,4 58,18 58,46 32,60 6,46 6,18" fill="#071936" stroke="#00D4FF" stroke-width="2.5"/>
                                     <circle cx="32" cy="25" r="10" fill="#F472B6" fill-opacity="0.2" stroke="#F472B6" stroke-width="2"/>
                                     <path d="M32 16C34.5 20 38.5 21.5 38.5 25.5C38.5 29 35.5 31.5 32 34C28.5 31.5 25.5 29 25.5 25.5C25.5 21.5 29.5 20 32 16Z" fill="#F472B6" stroke="#FFF1F2" stroke-width="1.2"/>
@@ -1782,7 +1796,7 @@
                             </div>
                         </div>
                         <p class="scroll-node text-xs sm:text-sm text-slateBlue leading-relaxed mb-6">
-                            Chuyên trang kỷ niệm ngày Phụ nữ Việt Nam 20/10 được thiết kế dành tặng riêng cho các bạn nữ và cô giáo của tập thể lớp Chuyên Tin Học THK17 (25-28).
+                            Chuyên trang kỷ niệm ngày Phụ nữ Việt Nam 20/10 được thiết kế dành tặng riêng cho các bạn nữ của tập thể lớp Chuyên Tin Học THK17 (25-28).
                         </p>
                     </div>
                     <div class="scroll-node pt-4 hairline-t flex items-center justify-between">
@@ -2011,8 +2025,31 @@
          ========================================================================== -->
     <script>
         /* --------------------------------------------------------------------------
-           0. CHỈ CHO PHÉP TẢI ẢNH TRONG MỤC KỈ NIỆM (#ki-niem), CẤM TẢI CÁC ẢNH KHÁC
+           0. ĐIỀU KHIỂN ẨN / HIỆN MENU TRÊN ĐIỆN THOẠI & CHỈ TẢI ẢNH MỤC KỈ NIỆM
            -------------------------------------------------------------------------- */
+        let isMobileMenuCollapsed = false;
+
+        function toggleMobileMenu() {
+            isMobileMenuCollapsed = !isMobileMenuCollapsed;
+            const bodyEl = document.getElementById('navbar-collapsible-body');
+            const topStripEl = document.getElementById('navbar-top-strip');
+            const labelEl = document.getElementById('mobile-menu-toggle-label');
+
+            if (isMobileMenuCollapsed) {
+                if (bodyEl) bodyEl.classList.add('hidden', 'lg:flex');
+                if (topStripEl) topStripEl.classList.add('hidden', 'lg:flex');
+                if (labelEl) labelEl.textContent = '[▼ HIỆN MENU]';
+            } else {
+                if (bodyEl) bodyEl.classList.remove('hidden');
+                if (topStripEl) topStripEl.classList.remove('hidden');
+                if (labelEl) labelEl.textContent = '[▲ ẨN MENU]';
+            }
+
+            requestAnimationFrame(() => {
+                calibrateScreenAndBoundaries();
+            });
+        }
+
         document.addEventListener('contextmenu', (e) => {
             const target = e.target;
             if (target && target.tagName === 'IMG' && !target.closest('#ki-niem')) {
@@ -2246,8 +2283,8 @@
             if (!el) return;
             el.textContent = text;
             el.className = isOk
-                ? 'px-2 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px]'
-                : 'px-2 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]';
+                ? 'px-1.5 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px]'
+                : 'px-1.5 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]';
         }
 
         function openPermanentDB() {
@@ -2321,7 +2358,7 @@
         }
 
         async function pushGlobalCloudState(extraEventPayload = null) {
-            setCloudIndicator('☁ CLOUD: ĐANG LƯU LÊN ĐÁM MÂY...', false);
+            setCloudIndicator('☁ CLOUD: ĐANG LƯU...', false);
             const fullState = {
                 accounts: getSavedAccountsMap(),
                 photos: uploadedMemoriesList,
@@ -2367,7 +2404,7 @@
                 });
             } catch (_) {}
 
-            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ MỌI THIẾT BỊ', true);
+            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
         }
 
         function mergeIncomingCloudState(cloudState) {
@@ -2415,7 +2452,7 @@
         }
 
         async function pullGlobalCloudState() {
-            setCloudIndicator('☁ CLOUD: ĐANG TẢI DỮ LIỆU...', false);
+            setCloudIndicator('☁ CLOUD: ĐANG TẢI...', false);
             let latestKey = null;
 
             try {
@@ -2456,7 +2493,7 @@
                 await pushGlobalCloudState();
             }
 
-            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ MỌI THIẾT BỊ', true);
+            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
         }
 
         function applySingleRealtimeEvent(ev) {
@@ -2870,8 +2907,8 @@
             const dpr = window.devicePixelRatio || 1;
 
             const navbar = document.getElementById('persistent-navbar');
-            const navRect = navbar ? navbar.getBoundingClientRect() : { bottom: 104, height: 104 };
-            const navHeight = Math.max(76, Math.round(navRect.height));
+            const navRect = navbar ? navbar.getBoundingClientRect() : { bottom: 60, height: 60 };
+            const navHeight = Math.max(48, Math.round(navRect.height));
 
             document.documentElement.style.setProperty('--nav-safe-height', (navHeight + 8) + 'px');
             document.documentElement.style.setProperty('--detected-vw', vw + 'px');
