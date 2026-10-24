@@ -2493,6 +2493,141 @@
         } catch (_) {}
         let isSyncingCloud = false;
 
+        /* HỆ THỐNG ĐẾM REALTIME TOÀN CẦU CHO MỌI THIẾT BỊ QUA FIREBASE */
+        const SESSION_ID_KEY = 'thk17_client_session_id';
+        const GLOBAL_CACHE_KEY = 'thk17_global_cloud_cache';
+
+        let clientSessionId = sessionStorage.getItem(SESSION_ID_KEY);
+        if (!clientSessionId) {
+            clientSessionId = 'thk17_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
+            try { sessionStorage.setItem(SESSION_ID_KEY, clientSessionId); } catch (_) {}
+        }
+
+        let highestKnownGlobalTotal = parseInt(localStorage.getItem(GLOBAL_CACHE_KEY) || '270', 10);
+        if (isNaN(highestKnownGlobalTotal) || highestKnownGlobalTotal < 1) {
+            highestKnownGlobalTotal = 270;
+        }
+
+        const livePresenceSessions = new Map();
+        let livePresenceHeartbeatTimer = null;
+        let bcChannel = null;
+        try {
+            bcChannel = new BroadcastChannel('thk17_live_presence');
+            bcChannel.onmessage = (ev) => {
+                if (ev.data && ev.data.id && ev.data.ts) {
+                    if (ev.data.type === 'leave') {
+                        livePresenceSessions.delete(ev.data.id);
+                    } else {
+                        livePresenceSessions.set(ev.data.id, ev.data.ts);
+                    }
+                    refreshLivePresenceDisplay();
+                }
+            };
+        } catch (_) {}
+
+        function refreshLivePresenceDisplay() {
+            const now = Date.now();
+            const TIMEOUT_MS = 22000;
+            let activeCount = 0;
+            for (const [id, ts] of livePresenceSessions.entries()) {
+                if (now - ts <= TIMEOUT_MS) {
+                    activeCount++;
+                } else {
+                    livePresenceSessions.delete(id);
+                }
+            }
+            if (!livePresenceSessions.has(clientSessionId)) {
+                livePresenceSessions.set(clientSessionId, now);
+                activeCount = Math.max(1, activeCount + 1);
+            }
+            activeCount = Math.max(1, activeCount);
+            const elOnline = document.getElementById('counter-online-now');
+            if (elOnline) {
+                elOnline.textContent = String(activeCount);
+            }
+        }
+
+        function sendLivePresenceHeartbeat() {
+            const now = Date.now();
+            livePresenceSessions.set(clientSessionId, now);
+            refreshLivePresenceDisplay();
+
+            if (bcChannel) {
+                try { bcChannel.postMessage({ type: 'ping', id: clientSessionId, ts: now }); } catch (_) {}
+            }
+
+            if (!customFirebaseUrl || !customFirebaseUrl.startsWith('https://')) return;
+            const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+
+            fetchWithTimeout(`${cleanUrl}/thk17/presence/${clientSessionId}.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ts: now })
+            }, 3000).catch(() => {});
+        }
+
+        function leaveLivePresence() {
+            livePresenceSessions.delete(clientSessionId);
+            refreshLivePresenceDisplay();
+
+            if (bcChannel) {
+                try { bcChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
+            }
+
+            if (!customFirebaseUrl || !customFirebaseUrl.startsWith('https://')) return;
+            const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+            const delUrl = `${cleanUrl}/thk17/presence/${clientSessionId}.json`;
+            try {
+                fetch(delUrl, { method: 'DELETE', keepalive: true }).catch(() => {});
+            } catch (_) {}
+        }
+
+        async function syncLiveTotalVisits(isNewVisit = false) {
+            const elTotal = document.getElementById('counter-total-visits');
+            if (elTotal) {
+                elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+            }
+
+            if (!customFirebaseUrl || !customFirebaseUrl.startsWith('https://')) return;
+            const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+
+            try {
+                if (isNewVisit) {
+                    let curFb = highestKnownGlobalTotal;
+                    try {
+                        const getRes = await fetchWithTimeout(`${cleanUrl}/thk17/metrics/total_visits.json`, { cache: 'no-store' }, 2000);
+                        if (getRes.ok) {
+                            const val = await getRes.json();
+                            if (typeof val === 'number' && val > 0) curFb = Math.max(curFb, val);
+                        }
+                    } catch (_) {}
+
+                    const newTotal = curFb + 1;
+                    highestKnownGlobalTotal = newTotal;
+                    try { localStorage.setItem(GLOBAL_CACHE_KEY, String(newTotal)); } catch (_) {}
+                    if (elTotal) elTotal.textContent = newTotal.toLocaleString('vi-VN');
+
+                    await fetchWithTimeout(`${cleanUrl}/thk17/metrics/total_visits.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newTotal)
+                    }, 3000);
+                } else {
+                    const getRes = await fetchWithTimeout(`${cleanUrl}/thk17/metrics/total_visits.json`, { cache: 'no-store' }, 2000);
+                    if (getRes.ok) {
+                        const val = await getRes.json();
+                        if (typeof val === 'number' && val > highestKnownGlobalTotal) {
+                            highestKnownGlobalTotal = val;
+                            try { localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal)); } catch (_) {}
+                            if (elTotal) elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Lỗi đồng bộ tổng lượt truy cập:', err);
+            }
+        }
+
         /* HÀM FETCH CÓ GIỚI HẠN THỜI GIAN: Chống treo mạng, tối đa 2 giây là tự ngắt */
         function fetchWithTimeout(resource, options = {}, timeoutMs = 2000) {
             const controller = new AbortController();
@@ -2612,6 +2747,17 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(true)
                         }, 2000);
+                        await fetchWithTimeout(`${cleanUrl}/thk17/updatedAt.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(Date.now())
+                        }, 2000).catch(() => {});
+                    } else if (extraEventPayload && extraEventPayload.action === 'upload_photo') {
+                        await fetchWithTimeout(`${cleanUrl}/thk17/updatedAt.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(Date.now())
+                        }, 3000).catch(() => {});
                     } else {
                         const photosMap = {};
                         uploadedMemoriesList.forEach(p => {
@@ -2742,13 +2888,48 @@
                 if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
                     try {
                         const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
-                        const fbRes = await fetchWithTimeout(`${cleanUrl}/thk17.json`, { cache: 'no-store' }, 2000);
+                        const fbRes = await fetchWithTimeout(`${cleanUrl}/thk17.json`, { cache: 'no-store' }, 2500);
                         if (fbRes.ok) {
                             const fbData = await fbRes.json();
-                            if (fbData && (fbData.photos || fbData.accounts || fbData.deletedIds)) {
+                            if (fbData) {
                                 mergeIncomingCloudState(fbData);
                                 activeCloudSource = 'FIREBASE';
                                 setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ (FIREBASE)', true);
+
+                                // Đồng bộ danh sách presence tức thì
+                                if (fbData.presence && typeof fbData.presence === 'object') {
+                                    const now = Date.now();
+                                    Object.keys(fbData.presence).forEach(k => {
+                                        if (fbData.presence[k] && fbData.presence[k].ts && (now - fbData.presence[k].ts <= 22000)) {
+                                            livePresenceSessions.set(k, fbData.presence[k].ts);
+                                        }
+                                    });
+                                    refreshLivePresenceDisplay();
+                                }
+
+                                // Đồng bộ tổng lượt truy cập
+                                if (fbData.metrics && typeof fbData.metrics.total_visits === 'number') {
+                                    const val = fbData.metrics.total_visits;
+                                    if (val > highestKnownGlobalTotal) {
+                                        highestKnownGlobalTotal = val;
+                                        try { localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal)); } catch (_) {}
+                                        const elTotal = document.getElementById('counter-total-visits');
+                                        if (elTotal) elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+                                    }
+                                }
+
+                                // Tự động đồng bộ các ảnh cục bộ lên Firebase nếu Firebase chưa có
+                                const fbPhotos = fbData.photos || {};
+                                uploadedMemoriesList.forEach(p => {
+                                    if (p && p.id && !fbPhotos[p.id] && !deletedPhotoIdsSet.has(p.id)) {
+                                        fetchWithTimeout(`${cleanUrl}/thk17/photos/${p.id}.json`, {
+                                            method: 'PUT',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify(p)
+                                        }, 5000).catch(() => {});
+                                    }
+                                });
+
                                 return true;
                             }
                         }
@@ -2839,6 +3020,52 @@
                                 if (domNode) domNode.remove();
                                 collectScrollElements();
                             }
+                        } else if (parsed.path && parsed.path.startsWith('/presence/')) {
+                            const sessId = parsed.path.replace('/presence/', '').replace(/^\/+|\/+$/g, '');
+                            if (sessId) {
+                                if (parsed.data && parsed.data.ts) {
+                                    livePresenceSessions.set(sessId, parsed.data.ts);
+                                } else if (parsed.data === null) {
+                                    livePresenceSessions.delete(sessId);
+                                }
+                                refreshLivePresenceDisplay();
+                            }
+                        } else if (parsed.path && (parsed.path === '/presence' || parsed.path === '/presence/')) {
+                            if (parsed.data && typeof parsed.data === 'object') {
+                                livePresenceSessions.clear();
+                                Object.keys(parsed.data).forEach(k => {
+                                    if (parsed.data[k] && parsed.data[k].ts) {
+                                        livePresenceSessions.set(k, parsed.data[k].ts);
+                                    }
+                                });
+                                refreshLivePresenceDisplay();
+                            }
+                        } else if (parsed.path && (parsed.path === '/metrics/total_visits' || parsed.path === '/metrics/total_visits/')) {
+                            const val = Number(parsed.data);
+                            if (!isNaN(val) && val > 0) {
+                                highestKnownGlobalTotal = Math.max(highestKnownGlobalTotal, val);
+                                try { localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal)); } catch (_) {}
+                                const elTotal = document.getElementById('counter-total-visits');
+                                if (elTotal) elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+                            }
+                        } else if (parsed.path && (parsed.path === '/metrics' || parsed.path === '/metrics/')) {
+                            if (parsed.data && typeof parsed.data === 'object' && parsed.data.total_visits) {
+                                const val = Number(parsed.data.total_visits);
+                                if (!isNaN(val) && val > 0) {
+                                    highestKnownGlobalTotal = Math.max(highestKnownGlobalTotal, val);
+                                    try { localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal)); } catch (_) {}
+                                    const elTotal = document.getElementById('counter-total-visits');
+                                    if (elTotal) elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+                                }
+                            }
+                        } else if (parsed.path === '/' && parsed.data && parsed.data.metrics && parsed.data.metrics.total_visits) {
+                            const val = Number(parsed.data.metrics.total_visits);
+                            if (!isNaN(val) && val > 0) {
+                                highestKnownGlobalTotal = Math.max(highestKnownGlobalTotal, val);
+                                try { localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal)); } catch (_) {}
+                                const elTotal = document.getElementById('counter-total-visits');
+                                if (elTotal) elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
+                            }
                         }
                     } catch (_) {}
                 });
@@ -2846,7 +3073,8 @@
                 firebaseEventSource.addEventListener('patch', (e) => {
                     try {
                         const parsed = JSON.parse(e.data);
-                        if (parsed && parsed.data) mergeIncomingCloudState(parsed.data);
+                        if (!parsed) return;
+                        if (parsed.data) mergeIncomingCloudState(parsed.data);
                     } catch (_) {}
                 });
 
@@ -4091,6 +4319,16 @@
                         createdAt: Date.now()
                     };
                     currentList.push(photoObj);
+
+                    // ĐẨY TRỰC TIẾP TỪNG ẢNH LÊN FIREBASE ĐỂ CÁC MÁY KHÁC THẤY NGAY LẬP TỨC (< 50ms)
+                    if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
+                        const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+                        fetchWithTimeout(`${cleanUrl}/thk17/photos/${photoObj.id}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(photoObj)
+                        }, 8000).catch(() => {});
+                    }
                 }
 
                 savePhotosListLocally(currentList);
@@ -4290,120 +4528,15 @@
         }
 
         /* --------------------------------------------------------------------------
-           9B. BỘ ĐẾM TỔNG LƯỢT TRUY CẬP TOÀN CẦU (MỌI THIẾT BỊ CỘNG CHUNG 1 SỐ)
+           9B. BỘ ĐẾM TỔNG LƯỢT TRUY CẬP & TRỰC TUYẾN TOÀN CẦU (ĐỒNG BỘ SIÊU TỐC QUA FIREBASE)
            -------------------------------------------------------------------------- */
-        const SESSION_ID_KEY = 'thk17_client_session_id';
-        const GLOBAL_CACHE_KEY = 'thk17_global_cloud_cache';
-
-        const ABACUS_HIT_URL = 'https://abacus.jasoncameron.dev/hit/thk17nqd_chuyen_nqd_2528/global_visits';
-        const ABACUS_GET_URL = 'https://abacus.jasoncameron.dev/get/thk17nqd_chuyen_nqd_2528/global_visits';
-        const COUNTERAPI_HIT_URL = 'https://api.counterapi.dev/v1/thk17nqd_chuyen_nqd_2528/global_visits/up';
-        const COUNTERAPI_GET_URL = 'https://api.counterapi.dev/v1/thk17nqd_chuyen_nqd_2528/global_visits/';
-
-        let clientSessionId = sessionStorage.getItem(SESSION_ID_KEY);
-        if (!clientSessionId) {
-            clientSessionId = 'thk17_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
-            sessionStorage.setItem(SESSION_ID_KEY, clientSessionId);
-        }
-
-        let highestKnownGlobalTotal = parseInt(localStorage.getItem(GLOBAL_CACHE_KEY) || '1', 10);
-        if (isNaN(highestKnownGlobalTotal) || highestKnownGlobalTotal < 1) {
-            highestKnownGlobalTotal = 1;
-        }
-
-        const activePeers = new Map();
-        activePeers.set(clientSessionId, Date.now());
-        let bcChannel = null;
-        try {
-            bcChannel = new BroadcastChannel('thk17_live_presence');
-            bcChannel.onmessage = (ev) => {
-                if (ev.data && ev.data.id) {
-                    if (ev.data.type === 'leave') {
-                        activePeers.delete(ev.data.id);
-                    } else {
-                        activePeers.set(ev.data.id, Date.now());
-                    }
-                    refreshOnlineDisplay();
-                }
-            };
-        } catch (_) {}
-
         function refreshOnlineDisplay() {
-            const now = Date.now();
-            for (const [id, ts] of activePeers.entries()) {
-                if (now - ts > 25000) activePeers.delete(id);
-            }
-            activePeers.set(clientSessionId, now);
-            const elOnline = document.getElementById('counter-online-now');
-            if (elOnline) elOnline.textContent = String(Math.max(1, activePeers.size));
-        }
-
-        async function fetchCloudGlobalTotal(increment = false) {
-            const urlAbacus = increment ? ABACUS_HIT_URL : ABACUS_GET_URL;
-            const urlCounterApi = increment ? COUNTERAPI_HIT_URL : COUNTERAPI_GET_URL;
-
-            const results = await Promise.allSettled([
-                fetch(urlAbacus, { cache: 'no-store' }).then(r => r.ok ? r.json() : null),
-                fetch(urlCounterApi, { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
-            ]);
-
-            let cloudNumbers = [];
-            if (results[0].status === 'fulfilled' && results[0].value && typeof results[0].value.value === 'number') {
-                cloudNumbers.push(results[0].value.value);
-            }
-            if (results[1].status === 'fulfilled' && results[1].value && typeof results[1].value.count === 'number') {
-                cloudNumbers.push(results[1].value.count);
-            }
-
-            if (cloudNumbers.length > 0) {
-                return Math.max(...cloudNumbers);
-            }
-            return null;
+            refreshLivePresenceDisplay();
         }
 
         async function syncPersistentCounters(initialLoad = false) {
-            const elOnline = document.getElementById('counter-online-now');
-            const elTotal = document.getElementById('counter-total-visits');
-
-            if (elTotal) {
-                elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
-            }
-
-            if (bcChannel) {
-                try { bcChannel.postMessage({ type: 'ping', id: clientSessionId }); } catch (_) {}
-            }
-            refreshOnlineDisplay();
-
-            try {
-                const cloudTotal = await fetchCloudGlobalTotal(initialLoad);
-                if (typeof cloudTotal === 'number' && cloudTotal > 0) {
-                    highestKnownGlobalTotal = Math.max(highestKnownGlobalTotal, cloudTotal);
-                    localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal));
-                    if (elTotal) {
-                        elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
-                    }
-                } else if (initialLoad) {
-                    highestKnownGlobalTotal += 1;
-                    localStorage.setItem(GLOBAL_CACHE_KEY, String(highestKnownGlobalTotal));
-                    if (elTotal) {
-                        elTotal.textContent = highestKnownGlobalTotal.toLocaleString('vi-VN');
-                    }
-                }
-            } catch (_) {}
-
-            try {
-                const res = await fetch('/api/stats', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ clientId: clientSessionId })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (elOnline && typeof data.online === 'number') {
-                        elOnline.textContent = String(Math.max(1, data.online, activePeers.size));
-                    }
-                }
-            } catch (_) {}
+            sendLivePresenceHeartbeat();
+            await syncLiveTotalVisits(initialLoad);
         }
 
         window.addEventListener('beforeunload', (e) => {
@@ -4413,12 +4546,11 @@
                 e.returnValue = 'Đang trong quá trình tải ảnh lên Đám mây. Nếu tải lại trang, ảnh có thể chưa kịp lưu!';
                 return e.returnValue;
             }
-            if (bcChannel) {
-                try { bcChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
-            }
-            try {
-                navigator.sendBeacon('/api/stats', JSON.stringify({ clientId: clientSessionId, action: 'leave' }));
-            } catch (_) {}
+            leaveLivePresence();
+        });
+
+        window.addEventListener('pagehide', () => {
+            leaveLivePresence();
         });
 
         /* Chặn phím tắt F5 hoặc Ctrl+R khi đang tải ảnh */
@@ -4555,14 +4687,32 @@
             await loadLocalCacheFromIndexedDB();
             await pullGlobalCloudState();
             startRealtimeCloudStream();
+            sendLivePresenceHeartbeat();
+            setInterval(sendLivePresenceHeartbeat, 6000);
+
+            // Đếm lượt truy cập phiên mới trên toàn cầu
+            const sessionCounted = sessionStorage.getItem('thk17_visit_counted');
+            if (!sessionCounted) {
+                try { sessionStorage.setItem('thk17_visit_counted', '1'); } catch (_) {}
+                syncLiveTotalVisits(true);
+            } else {
+                syncLiveTotalVisits(false);
+            }
+            setInterval(() => syncLiveTotalVisits(false), 15000);
+
             // Đồng bộ đám mây tự động mỗi 3.5 giây cho mọi thiết bị (iPhone, Android, PC)
             setInterval(() => pullGlobalCloudState(), 3500);
             document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') pullGlobalCloudState();
+                if (document.visibilityState === 'visible') {
+                    sendLivePresenceHeartbeat();
+                    pullGlobalCloudState();
+                    syncLiveTotalVisits(false);
+                }
             });
-            window.addEventListener('focus', () => pullGlobalCloudState());
-            syncPersistentCounters(true);
-            setInterval(() => syncPersistentCounters(false), 8000);
+            window.addEventListener('focus', () => {
+                sendLivePresenceHeartbeat();
+                pullGlobalCloudState();
+            });
             calibrateScreenAndBoundaries();
             resizeCanvas();
             window.addEventListener('resize', () => {
