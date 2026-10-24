@@ -745,60 +745,64 @@
          3. PERSISTENT FIXED TOP NAVIGATION BAR (GỌN GÀNG, BỐ TRÍ HỢP LÝ,
             CÓ NÚT ẨN/HIỆN MENU TRÊN ĐIỆN THOẠI & MENU TỰ CHIA 2 HÀNG NẾU HẸP)
          ========================================================================== -->
+    <!-- ==========================================================================
+         3. PERSISTENT FIXED TOP NAVIGATION BAR (SIÊU GỌN CHO IPHONE 8 & MOBILE,
+            LẤP ĐẦY KHOẢNG TRỐNG, TỰ XẾP 1 HÀNG HOẶC 2 HÀNG TÙY ĐỘ RỘNG)
+         ========================================================================== -->
     <header id="persistent-navbar">
-        <!-- Dải trạng thái hệ thống phía trên (Tự động ẩn cùng Menu khi thu gọn trên điện thoại) -->
-        <div id="navbar-top-strip" class="hairline-b bg-oceanDeep/95 px-3 sm:px-6 lg:px-14 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono tracking-wider text-slateBlue">
-            <div class="flex items-center gap-2.5">
-                <span class="flex items-center gap-1.5 text-aquaTerm font-bold">
-                    <span class="w-2 h-2 bg-aquaTerm inline-block animate-pulse"></span>
-                    <span>THK17 (2025 – 2028)</span>
+        <!-- Dải trạng thái mảnh trên cùng: Kéo giãn đều 100% không còn khoảng trống thừa -->
+        <div id="navbar-top-strip" class="hairline-b bg-oceanDeep/95 px-2.5 sm:px-6 lg:px-14 py-1 flex items-center justify-between gap-1.5 text-[10px] font-mono tracking-wider text-slateBlue">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="hidden md:flex items-center gap-1.5 text-aquaTerm font-bold shrink-0">
+                    <span class="w-1.5 h-1.5 bg-aquaTerm inline-block animate-pulse"></span>
+                    <span>CHUYÊN TIN THK17 (25–28)</span>
                 </span>
-                <span class="hidden md:inline text-white/20">|</span>
-                <span class="hidden md:inline">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU (MỸ TRÀ, ĐỒNG THÁP)</strong></span>
-                <span id="cloud-sync-indicator" class="px-1.5 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]">
-                    ☁ CLOUD: ĐANG ĐỒNG BỘ...
+                <span class="hidden xl:inline text-white/20">|</span>
+                <span class="hidden xl:inline truncate">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU</strong></span>
+                <span id="cloud-sync-indicator" class="px-1.5 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px] whitespace-nowrap shrink-0">
+                    ☁ CLOUD: ĐÃ ĐỒNG BỘ
                 </span>
             </div>
 
-            <!-- Cụm nút Tài khoản & Độ phân giải bố trí gọn trên 1 hàng -->
-            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 ml-auto">
+            <!-- Cụm nút Tài khoản & Độ phân giải nằm gọn trên cùng 1 hàng -->
+            <div class="flex items-center gap-1.5 shrink-0 ml-auto">
                 <!-- Khi chưa đăng nhập -->
-                <div id="top-auth-guest" class="flex items-center gap-1.5">
-                    <button type="button" onclick="openAuthModal('login')" class="px-2 py-0.5 bg-aquaTerm text-abyss font-bold border border-aquaTerm hover:bg-iceWhite transition-colors cursor-pointer">
+                <div id="top-auth-guest" class="flex items-center gap-1">
+                    <button type="button" onclick="openAuthModal('login')" class="px-2 py-0.5 bg-aquaTerm text-abyss font-bold border border-aquaTerm hover:bg-iceWhite transition-colors cursor-pointer text-[9px] sm:text-[10px]">
                         [ĐĂNG NHẬP]
                     </button>
-                    <button type="button" onclick="openAuthModal('signup')" class="px-2 py-0.5 bg-[#041024] text-aquaTerm border border-aquaTerm/60 hover:bg-aquaTerm hover:text-abyss font-bold transition-colors cursor-pointer">
+                    <button type="button" onclick="openAuthModal('signup')" class="px-2 py-0.5 bg-[#041024] text-aquaTerm border border-aquaTerm/60 hover:bg-aquaTerm hover:text-abyss font-bold transition-colors cursor-pointer text-[9px] sm:text-[10px]">
                         [ĐĂNG KÝ]
                     </button>
                 </div>
 
                 <!-- Khi đã đăng nhập -->
-                <div id="top-auth-user" class="hidden items-center gap-1.5">
-                    <span class="px-2 py-0.5 bg-[#06244a] border border-aquaTerm text-iceWhite flex items-center gap-1.5">
+                <div id="top-auth-user" class="hidden items-center gap-1">
+                    <span class="px-1.5 py-0.5 bg-[#06244a] border border-aquaTerm text-iceWhite flex items-center gap-1 text-[9px] sm:text-[10px]">
                         <span class="w-1.5 h-1.5 bg-emerald-400 inline-block"></span>
                         <strong id="top-user-name" class="text-aquaTerm">user</strong>
-                        <span id="top-user-badge" class="px-1 bg-aquaTerm text-abyss font-extrabold text-[9px]">ADMIN</span>
+                        <span id="top-user-badge" class="px-1 bg-aquaTerm text-abyss font-extrabold text-[8px] sm:text-[9px]">ADMIN</span>
                     </span>
-                    <button type="button" onclick="handleLogout()" class="px-2 py-0.5 bg-red-950/80 border border-red-400/60 text-red-200 hover:bg-red-600 hover:text-white transition-colors cursor-pointer">
-                        [ĐĂNG XUẤT]
+                    <button type="button" onclick="handleLogout()" class="px-1.5 py-0.5 bg-red-950/80 border border-red-400/60 text-red-200 hover:bg-red-600 hover:text-white transition-colors cursor-pointer text-[9px] sm:text-[10px]">
+                        [THOÁT]
                     </button>
                 </div>
 
-                <button onclick="openCalibrator()" class="px-2 py-0.5 bg-cppBlue/40 border border-aquaTerm/50 text-iceWhite hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer" title="Xem thông số độ phân giải màn hình">
-                    <span class="hidden sm:inline">ĐỘ PHÂN GIẢI: </span><strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
+                <button onclick="openCalibrator()" class="px-1.5 py-0.5 bg-cppBlue/40 border border-aquaTerm/50 text-iceWhite hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer text-[9px] sm:text-[10px]" title="Xem thông số độ phân giải màn hình">
+                    <strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
                 </button>
-                <span id="live-system-clock" class="hidden xl:inline text-iceWhite pl-1">UTC+7 // 00:00:00</span>
+                <span id="live-system-clock" class="hidden 2xl:inline text-iceWhite pl-1">UTC+7 // 00:00:00</span>
             </div>
         </div>
 
-        <!-- Thanh điều hướng chính -->
-        <div class="px-3 sm:px-6 lg:px-14 flex flex-col lg:flex-row lg:items-stretch justify-between relative">
+        <!-- Thanh chính: Đem ô Tìm kiếm lên nằm chung hàng với Logo + Dino + Nút Ẩn/Hiện để lấp kín khoảng trống -->
+        <div class="px-2.5 sm:px-6 lg:px-14 flex flex-col lg:flex-row lg:items-stretch justify-between relative">
             
-            <!-- Hàng Thương hiệu + Dino + Nút Ẩn/Hiện Menu (Chỉ xuất hiện trên giao diện điện thoại lg:hidden) -->
-            <div class="flex items-center justify-between py-2 lg:py-0 lg:pr-5 lg:hairline-r shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <a href="#trang-chu" class="flex items-center gap-2.5 group">
-                        <svg class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Hàng 1: Logo THK17 + Dino + Ô Tìm kiếm (lấp khoảng trống giữa) + Nút Ẩn/Hiện Menu -->
+            <div class="flex items-center justify-between gap-2 py-1.5 lg:py-0 lg:pr-4 lg:hairline-r shrink-0">
+                <div class="flex items-center gap-2 shrink-0">
+                    <a href="#trang-chu" class="flex items-center gap-2 group">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                             <polygon points="50,4 92,28 92,72 50,96 8,72 8,28" fill="#00599C" stroke="#00D4FF" stroke-width="4"/>
                             <polygon points="50,4 92,28 50,50 8,28" fill="#659AD2" opacity="0.45"/>
                             <polygon points="92,28 92,72 50,96 50,50" fill="#003865" opacity="0.7"/>
@@ -807,61 +811,74 @@
                             <text x="67" y="54" fill="#00D4FF" font-family="JetBrains Mono, monospace" font-weight="700" font-size="22">+</text>
                         </svg>
                         <div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="font-display font-bold tracking-wider text-sm sm:text-base text-iceWhite">THK17</span>
-                                <span class="font-mono text-[10px] px-1.5 py-0.5 bg-cppBlue/50 border border-aquaTerm/50 text-aquaTerm font-bold">25—28</span>
-                                <span class="hidden sm:inline-block font-mono text-[10px] px-1.5 py-0.5 bg-oceanDeep border border-white/15 text-cppLight">C++23</span>
+                            <div class="flex items-center gap-1">
+                                <span class="font-display font-bold tracking-wider text-sm sm:text-base text-iceWhite leading-none">THK17</span>
+                                <span class="font-mono text-[9px] px-1 py-0.5 bg-cppBlue/50 border border-aquaTerm/50 text-aquaTerm font-bold leading-none">25–28</span>
                             </div>
-                            <p class="font-mono text-[9px] text-slateBlue tracking-wider uppercase">
-                                THPT CHUYÊN NGUYỄN QUANG DIÊU
+                            <p class="hidden sm:block font-mono text-[8px] text-slateBlue tracking-wider uppercase mt-0.5">
+                                CHUYÊN NGUYỄN QUANG DIÊU
                             </p>
                         </div>
                     </a>
-                    <span class="thk17-dino-slot w-7 h-7 sm:w-8 sm:h-8 -mt-1" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
+                    <span class="thk17-dino-slot w-6 h-6 sm:w-7 sm:h-7" data-dino-size="w-6 h-6 sm:w-7 sm:h-7"></span>
                 </div>
 
-                <!-- Nút Ẩn / Hiện Menu (Chỉ hiện trên điện thoại & màn hình nhỏ lg:hidden) -->
+                <!-- Ô Tìm kiếm được đem lên nằm ngay khoảng trống giữa trên điện thoại & nằm gọn bên phải trên PC -->
+                <div class="flex-1 max-w-[260px] sm:max-w-xs lg:hidden mx-1 relative">
+                    <div class="flex items-center bg-[#041024] border border-aquaTerm/60 focus-within:border-aquaTerm">
+                        <span class="pl-2 pr-1 font-mono text-[10px] text-aquaTerm select-none">🔍</span>
+                        <input 
+                            type="text" 
+                            placeholder="Tìm trong web..." 
+                            autocomplete="off"
+                            oninput="syncMobileSearchInput(this.value)"
+                            onfocus="syncMobileSearchInput(this.value)"
+                            id="mobile-inline-search-input"
+                            class="w-full py-1 px-1 bg-transparent font-mono text-[11px] text-iceWhite focus:outline-none placeholder:text-slateBlue/60"
+                        >
+                    </div>
+                </div>
+
+                <!-- Nút Ẩn / Hiện Menu (Chỉ hiện trên điện thoại lg:hidden) -->
                 <button 
                     id="mobile-menu-toggle-btn" 
                     type="button" 
                     onclick="toggleMobileMenu()" 
-                    class="lg:hidden px-3 py-1.5 bg-[#06244a] border border-aquaTerm text-aquaTerm font-mono text-[11px] font-bold tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,212,255,0.25)] active:scale-95 transition-all cursor-pointer"
+                    class="lg:hidden px-2.5 py-1 bg-[#06244a] border border-aquaTerm text-aquaTerm font-mono text-[10px] font-bold tracking-wider flex items-center shrink-0 shadow-[0_0_10px_rgba(0,212,255,0.2)] active:scale-95 transition-all cursor-pointer"
                 >
-                    <span id="mobile-menu-toggle-label">[▲ ẨN MENU]</span>
+                    <span id="mobile-menu-toggle-label">[▲ ẨN]</span>
                 </button>
             </div>
 
-            <!-- Phần thân Menu + Tìm kiếm (Có thể ẩn/hiện trên điện thoại, luôn hiện trên máy tính) -->
+            <!-- Hàng 2: 5 Thẻ Menu (Đủ chỗ thì 1 hàng, thiếu chỗ như iPhone 8 thì tự chia 2 hàng mỏng khít 100%) -->
             <div id="navbar-collapsible-body" class="flex flex-col lg:flex-row lg:items-stretch flex-1 justify-between">
-                
-                <!-- 5 THẺ MENU: Tự động thành 2 hàng cân đối nếu không còn chỗ, nếu còn chỗ thì xếp 1 hàng -->
-                <nav aria-label="Menu thẻ chính" class="flex flex-wrap lg:flex-nowrap items-stretch border-t lg:border-t-0 border-aquaTerm/25">
-                    <a href="#trang-chu" data-section="trang-chu" class="nav-item active flex-1 basis-[30%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
-                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">01//</span>
+                <nav aria-label="Menu thẻ chính" class="flex flex-wrap sm:flex-nowrap items-stretch border-t lg:border-t-0 border-aquaTerm/25 w-full lg:w-auto">
+                    <a href="#trang-chu" onclick="autoCollapseOnMobileClick()" data-section="trang-chu" class="nav-item active flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">01//</span>
                         <span>Trang chủ</span>
                     </a>
-                    <a href="#thong-tin" data-section="thong-tin" class="nav-item flex-1 basis-[30%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
-                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">02//</span>
+                    <a href="#thong-tin" onclick="autoCollapseOnMobileClick()" data-section="thong-tin" class="nav-item flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">02//</span>
                         <span>Thông tin</span>
                     </a>
-                    <a href="#ki-niem" data-section="ki-niem" class="nav-item flex-1 basis-[30%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
-                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">03//</span>
+                    <a href="#ki-niem" onclick="autoCollapseOnMobileClick()" data-section="ki-niem" class="nav-item flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">03//</span>
                         <span>Kỉ niệm</span>
                     </a>
-                    <a href="#mang-xa-hoi" data-section="mang-xa-hoi" class="nav-item flex-1 basis-[45%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
-                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">04//</span>
+                    <a href="#mang-xa-hoi" onclick="autoCollapseOnMobileClick()" data-section="mang-xa-hoi" class="nav-item flex-1 basis-[48%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">04//</span>
                         <span>Liên kết</span>
                     </a>
-                    <a href="#lien-he" data-section="lien-he" class="nav-item flex-1 basis-[45%] sm:basis-auto flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 xl:px-5 py-2.5 lg:py-4 border-r border-b lg:border-b-0 border-aquaTerm/20 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
-                        <span class="nav-hex text-[10px] text-aquaTerm font-bold">05//</span>
+                    <a href="#lien-he" onclick="autoCollapseOnMobileClick()" data-section="lien-he" class="nav-item flex-1 basis-[48%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                        <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">05//</span>
                         <span>Liên hệ</span>
                     </a>
                 </nav>
 
-                <!-- Thanh tìm kiếm toàn trang (Giãn đều 100% hợp lý trên điện thoại, nằm gọn bên phải trên PC) -->
-                <div class="flex items-center w-full lg:w-auto lg:flex-1 lg:pl-4 py-2 lg:py-0 relative lg:max-w-xs xl:max-w-sm lg:ml-auto">
+                <!-- Ô Tìm kiếm trên màn hình lớn PC (lg:flex) & Bảng kết quả tìm kiếm chung -->
+                <div class="flex items-center w-full lg:w-auto lg:flex-1 lg:pl-4 relative lg:max-w-xs xl:max-w-sm lg:ml-auto">
                     <div class="w-full relative">
-                        <div class="flex items-center bg-[#041024] border border-aquaTerm/60 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.35)]">
+                        <div class="hidden lg:flex items-center bg-[#041024] border border-aquaTerm/60 focus-within:border-aquaTerm focus-within:shadow-[0_0_16px_rgba(0,212,255,0.35)]">
                             <span class="pl-3 pr-1.5 font-mono text-[11px] text-aquaTerm font-bold select-none">
                                 🔍
                             </span>
@@ -870,7 +887,7 @@
                                 type="text" 
                                 placeholder="Tìm kiếm thông tin trong web..." 
                                 autocomplete="off"
-                                class="w-full py-1.5 lg:py-2 px-1.5 bg-transparent font-mono text-xs text-iceWhite focus:outline-none placeholder:text-slateBlue/60"
+                                class="w-full py-1.5 px-1.5 bg-transparent font-mono text-xs text-iceWhite focus:outline-none placeholder:text-slateBlue/60"
                             >
                             <button 
                                 id="global-web-search-clear" 
@@ -885,9 +902,9 @@
                         <!-- Bảng kết quả tìm kiếm ĐỤC 100% -->
                         <div 
                             id="global-search-dropdown" 
-                            class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1.5 bg-[#020814] border-2 border-aquaTerm z-[9999] max-h-[380px] overflow-y-auto"
+                            class="hidden absolute right-0 left-0 lg:left-auto lg:w-[440px] top-full mt-1 bg-[#020814] border-2 border-aquaTerm z-[9999] max-h-[340px] overflow-y-auto"
                         >
-                            <div class="px-3.5 py-2.5 bg-[#071936] flex items-center justify-between font-mono text-[10px]">
+                            <div class="px-3.5 py-2 bg-[#071936] flex items-center justify-between font-mono text-[10px]">
                                 <span class="text-aquaTerm font-bold">KẾT QUẢ TÌM KIẾM TRÊN TOÀN TRANG</span>
                                 <span id="global-search-count" class="text-iceWhite font-bold">0 kết quả</span>
                             </div>
