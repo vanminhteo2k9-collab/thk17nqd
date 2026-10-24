@@ -139,6 +139,39 @@ const server = http.createServer(async (req, res) => {
         return res.end(JSON.stringify({ ok: true, saved: entry }));
     }
 
+    // 2B. API Đồng bộ Đám mây siêu tốc độ nội bộ (/api/cloud)
+    if (pathname === '/api/cloud') {
+        if (!appState.cloud) {
+            appState.cloud = { accounts: {}, photos: [], deletedIds: [], updatedAt: Date.now() };
+        }
+        if (req.method === 'GET') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            return res.end(JSON.stringify(appState.cloud));
+        }
+        if (req.method === 'POST') {
+            const body = await readBody(req);
+            if (body.accounts) {
+                appState.cloud.accounts = Object.assign({}, appState.cloud.accounts, body.accounts);
+            }
+            if (Array.isArray(body.photos)) {
+                const map = new Map();
+                (appState.cloud.photos || []).forEach(p => { if (p && p.id) map.set(p.id, p); });
+                body.photos.forEach(p => { if (p && p.id) map.set(p.id, p); });
+                appState.cloud.photos = Array.from(map.values());
+            }
+            if (Array.isArray(body.deletedIds)) {
+                const delSet = new Set(appState.cloud.deletedIds || []);
+                body.deletedIds.forEach(id => delSet.add(id));
+                appState.cloud.deletedIds = Array.from(delSet);
+                appState.cloud.photos = (appState.cloud.photos || []).filter(p => !delSet.has(p.id));
+            }
+            appState.cloud.updatedAt = Date.now();
+            saveState(appState);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            return res.end(JSON.stringify({ ok: true, updatedAt: appState.cloud.updatedAt }));
+        }
+    }
+
     // 3. Phục vụ file tĩnh (index.html, nen.webp, PD.webp, 1.webp -> 50.webp)
     let safePath = pathname === '/' ? '/index.html' : pathname;
     const filePath = path.join(ROOT_DIR, path.normalize(safePath).replace(/^(\.\.[\/\\])+/, ''));

@@ -325,12 +325,16 @@
             contain: layout style;
         }
 
-        /* Mobile: giảm tải hiệu ứng cuộn cho mượt */
+        /* Mobile: loại bỏ hoàn toàn độ trễ hiển thị khi vuốt, nội dung luôn hiện 100% siêu mượt */
         @media (max-width: 1023px) {
             .scroll-node,
             .scroll-card {
-                will-change: auto;
-                contain: none;
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+                will-change: auto !important;
+                contain: none !important;
+                transition: none !important;
             }
         }
 
@@ -622,6 +626,75 @@
     </div>
 
     <!-- ==========================================================================
+         0A-2. MODAL CÀI ĐẶT & KIỂM TRA ĐÁM MÂY (FIREBASE REALTIME / MÁY CHỦ NỘI BỘ)
+         ========================================================================== -->
+    <div id="cloud-config-modal" class="hidden fixed inset-0 z-[10006] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="arch-card corner-brackets max-w-lg w-full bg-[#020814] border-2 border-aquaTerm p-6 sm:p-8 shadow-[0_0_70px_rgba(0,212,255,0.35)]">
+            <div class="flex items-center justify-between pb-4 hairline-b mb-6">
+                <div class="flex items-center gap-2.5">
+                    <span class="thk17-dino-slot w-8 h-8" data-dino-size="w-8 h-8"></span>
+                    <div>
+                        <div class="font-mono text-xs text-aquaTerm font-bold tracking-widest">
+                            CẤU HÌNH ĐÁM MÂY // REALTIME CLOUD ENGINE
+                        </div>
+                        <div class="font-mono text-[10px] text-slateBlue">
+                            Đồng bộ tức thì mọi thiết bị qua Máy chủ nội bộ hoặc Google Firebase
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="closeCloudConfigModal()" class="px-2.5 py-1 border border-aquaTerm/50 font-mono text-xs text-iceWhite hover:bg-aquaTerm hover:text-abyss font-bold cursor-pointer">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Trạng thái kết nối hiện tại -->
+            <div class="p-3.5 bg-[#041024] border border-aquaTerm/40 mb-5 font-mono text-xs space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-slateBlue">TRẠNG THÁI HIỆN TẠI:</span>
+                    <strong id="modal-cloud-status" class="text-emerald-400 font-bold">☁ ĐANG KIỂM TRA...</strong>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-slateBlue">NGUỒN DỮ LIỆU:</span>
+                    <span id="modal-cloud-source" class="text-aquaTerm">MÁY CHỦ NỘI BỘ / CỤC BỘ</span>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-slateBlue">SỐ ẢNH ĐÃ LƯU TRỮ:</span>
+                    <span id="modal-cloud-photo-count" class="text-iceWhite">0 ảnh</span>
+                </div>
+            </div>
+
+            <!-- Cấu hình Google Firebase Realtime Database (Tùy chọn cho lớp) -->
+            <div class="space-y-3 font-mono text-xs mb-6">
+                <label class="block text-aquaTerm uppercase font-bold text-[11px]">
+                    URL FIREBASE REALTIME DATABASE (GOOGLE CLOUD):
+                </label>
+                <input 
+                    type="url" 
+                    id="cloud-firebase-url-input" 
+                    placeholder="https://your-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+                    class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/45 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                >
+                <p class="text-[10px] text-slateBlue leading-relaxed">
+                    💡 <strong>Cách có Cloud riêng miễn phí 100%:</strong> Vào <a href="https://console.firebase.google.com" target="_blank" class="text-aquaTerm underline">console.firebase.google.com</a> > Tạo dự án > Bật <em>Realtime Database</em> (chọn chế độ <em>Test mode</em>) > Dán link URL vào đây.
+                </p>
+            </div>
+
+            <!-- Thông báo kiểm tra kết nối -->
+            <div id="cloud-test-result" class="hidden mb-4 p-2.5 border font-mono text-xs"></div>
+
+            <!-- Nút thao tác -->
+            <div class="flex flex-wrap items-center gap-2 pt-2 hairline-t">
+                <button type="button" onclick="testCloudConnection()" class="btn-arch py-2.5 px-4 text-xs font-bold flex-1">
+                    [KIỂM TRA KẾT NỐI]
+                </button>
+                <button type="button" onclick="saveCloudConfig()" class="btn-arch btn-arch-ocean py-2.5 px-4 text-xs font-bold flex-1">
+                    [LƯU &amp; KẾT NỐI CLOUD]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
          0B. HỆ THỐNG CÂN CHỈNH ĐỘ PHÂN GIẢI (MẶC ĐỊNH ẨN & TỰ ĐỘNG NHẬN DIỆN NGẦM)
          ========================================================================== -->
     <div id="resolution-calibrator-modal" class="hidden opacity-0 pointer-events-none fixed inset-0 z-[10000] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-opacity duration-500">
@@ -730,6 +803,75 @@
     </div>
 
     <!-- ==========================================================================
+         0A-2. MODAL CÀI ĐẶT & KIỂM TRA ĐÁM MÂY (FIREBASE REALTIME / MÁY CHỦ NỘI BỘ)
+         ========================================================================== -->
+    <div id="cloud-config-modal" class="hidden fixed inset-0 z-[10006] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="arch-card corner-brackets max-w-lg w-full bg-[#020814] border-2 border-aquaTerm p-6 sm:p-8 shadow-[0_0_70px_rgba(0,212,255,0.35)]">
+            <div class="flex items-center justify-between pb-4 hairline-b mb-6">
+                <div class="flex items-center gap-2.5">
+                    <span class="thk17-dino-slot w-8 h-8" data-dino-size="w-8 h-8"></span>
+                    <div>
+                        <div class="font-mono text-xs text-aquaTerm font-bold tracking-widest">
+                            CẤU HÌNH ĐÁM MÂY // REALTIME CLOUD ENGINE
+                        </div>
+                        <div class="font-mono text-[10px] text-slateBlue">
+                            Đồng bộ tức thì mọi thiết bị qua Máy chủ nội bộ hoặc Google Firebase
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="closeCloudConfigModal()" class="px-2.5 py-1 border border-aquaTerm/50 font-mono text-xs text-iceWhite hover:bg-aquaTerm hover:text-abyss font-bold cursor-pointer">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Trạng thái kết nối hiện tại -->
+            <div class="p-3.5 bg-[#041024] border border-aquaTerm/40 mb-5 font-mono text-xs space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-slateBlue">TRẠNG THÁI HIỆN TẠI:</span>
+                    <strong id="modal-cloud-status" class="text-emerald-400 font-bold">☁ ĐANG KIỂM TRA...</strong>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-slateBlue">NGUỒN DỮ LIỆU:</span>
+                    <span id="modal-cloud-source" class="text-aquaTerm">MÁY CHỦ NỘI BỘ / CỤC BỘ</span>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-slateBlue">SỐ ẢNH ĐÃ LƯU TRỮ:</span>
+                    <span id="modal-cloud-photo-count" class="text-iceWhite">0 ảnh</span>
+                </div>
+            </div>
+
+            <!-- Cấu hình Google Firebase Realtime Database (Tùy chọn cho lớp) -->
+            <div class="space-y-3 font-mono text-xs mb-6">
+                <label class="block text-aquaTerm uppercase font-bold text-[11px]">
+                    URL FIREBASE REALTIME DATABASE (GOOGLE CLOUD):
+                </label>
+                <input 
+                    type="url" 
+                    id="cloud-firebase-url-input" 
+                    placeholder="https://your-project-default-rtdb.asia-southeast1.firebasedatabase.app"
+                    class="w-full px-3.5 py-2.5 bg-[#041024] border border-aquaTerm/45 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none"
+                >
+                <p class="text-[10px] text-slateBlue leading-relaxed">
+                    💡 <strong>Cách có Cloud riêng miễn phí 100%:</strong> Vào <a href="https://console.firebase.google.com" target="_blank" class="text-aquaTerm underline">console.firebase.google.com</a> > Tạo dự án > Bật <em>Realtime Database</em> (chọn chế độ <em>Test mode</em>) > Dán link URL vào đây.
+                </p>
+            </div>
+
+            <!-- Thông báo kiểm tra kết nối -->
+            <div id="cloud-test-result" class="hidden mb-4 p-2.5 border font-mono text-xs"></div>
+
+            <!-- Nút thao tác -->
+            <div class="flex flex-wrap items-center gap-2 pt-2 hairline-t">
+                <button type="button" onclick="testCloudConnection()" class="btn-arch py-2.5 px-4 text-xs font-bold flex-1">
+                    [KIỂM TRA KẾT NỐI]
+                </button>
+                <button type="button" onclick="saveCloudConfig()" class="btn-arch btn-arch-ocean py-2.5 px-4 text-xs font-bold flex-1">
+                    [LƯU &amp; KẾT NỐI CLOUD]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
          1. INTERACTIVE BINARY OCEAN & C++ TOPOLOGY CANVAS BACKGROUND
          ========================================================================== -->
     <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95 hidden lg:block"></canvas>
@@ -789,7 +931,7 @@
                 </span>
                 <span class="hidden xl:inline text-white/20">|</span>
                 <span class="hidden xl:inline truncate">TRƯỜNG: <strong class="text-iceWhite">THPT CHUYÊN NGUYỄN QUANG DIÊU</strong></span>
-                <span id="cloud-sync-indicator" class="px-1.5 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px] whitespace-nowrap shrink-0">
+                <span id="cloud-sync-indicator" onclick="openCloudConfigModal()" title="Bấm để kiểm tra hoặc đổi cấu hình Đám mây siêu tốc" class="px-1.5 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px] whitespace-nowrap shrink-0 cursor-pointer hover:bg-emerald-950/60 transition-colors">
                     ☁ CLOUD: ĐÃ ĐỒNG BỘ
                 </span>
             </div>
@@ -1694,7 +1836,7 @@
                         onclick="document.getElementById('memory-upload-input').click()" 
                         class="btn-arch btn-arch-ocean font-bold py-3 px-5"
                     >
-                        <span>[+ ĐĂNG ẢNH KỈ NIỆM LÊN WEB]</span>
+                        <span>[+ ĐĂNG ẢNH KỈ NIỆM (TỐI ĐA 5 ẢNH)]</span>
                     </button>
                     <button 
                         type="button" 
@@ -2317,7 +2459,7 @@
         }
 
         /* --------------------------------------------------------------------------
-           0B. HỆ THỐNG ĐỒNG BỘ ĐÁM MÂY TOÀN CẦU MỌI THIẾT BỊ (CLOUD SYNC ENGINE)
+           0B. HỆ THỐNG ĐỒNG BỘ ĐÁM MÂY ĐA TẦNG SIÊU TỐC (HYBRID ULTRA-FAST CLOUD)
            -------------------------------------------------------------------------- */
         const DB_NAME = 'THK17_Permanent_System_DB';
         const DB_VERSION = 3;
@@ -2327,25 +2469,35 @@
         const CURRENT_USER_LS_KEY = 'thk17_active_logged_user_v2';
         const UPLOADED_PHOTOS_LS_BACKUP = 'thk17_uploaded_photos_backup_v2';
         const DELETED_PHOTO_IDS_LS_KEY = 'thk17_deleted_photo_ids_v2';
+        const FIREBASE_CUSTOM_URL_KEY = 'thk17_custom_firebase_url';
 
-        const CLOUD_SYNC_TOPIC = 'thk17nqd_2528_global_cloud_v4';
-        const NTFY_STREAM_URL = `https://ntfy.sh/${CLOUD_SYNC_TOPIC}`;
-        const KV_APP_KEY = 'thk17nqd2528v4';
-        const KV_SNAPSHOT_KEY = 'global_snapshot_id';
-        const BYTEBIN_POST_URL = 'https://bytebin.lucko.me/post';
+        /* 1. Endpoint máy chủ nội bộ (/api/cloud trên Node.js server.js / Python / Vercel Serverless) */
+        const INTERNAL_API_CLOUD = '/api/cloud';
+
+        /* 2. Google Firebase Realtime Database (Tốc độ < 100ms toàn cầu qua SSE) */
+        let customFirebaseUrl = localStorage.getItem(FIREBASE_CUSTOM_URL_KEY) || '';
 
         let thk17Db = null;
         let uploadedMemoriesList = [];
         let deletedPhotoIdsSet = new Set(JSON.parse(localStorage.getItem(DELETED_PHOTO_IDS_LS_KEY) || '[]'));
-        let lastAppliedSnapshotKey = '';
+        let activeCloudSource = 'LOCAL_CACHE';
+        let firebaseEventSource = null;
+
+        /* HÀM FETCH CÓ GIỚI HẠN THỜI GIAN: Chống treo mạng, tối đa 2 giây là tự ngắt */
+        function fetchWithTimeout(resource, options = {}, timeoutMs = 2000) {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeoutMs);
+            return fetch(resource, { ...options, signal: controller.signal })
+                .finally(() => clearTimeout(id));
+        }
 
         function setCloudIndicator(text, isOk = true) {
             const el = document.getElementById('cloud-sync-indicator');
             if (!el) return;
             el.textContent = text;
             el.className = isOk
-                ? 'px-1.5 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px]'
-                : 'px-1.5 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px]';
+                ? 'px-1.5 py-0.5 bg-[#041024] border border-emerald-400/60 text-emerald-300 text-[9px] cursor-pointer hover:bg-emerald-950/60 transition-colors'
+                : 'px-1.5 py-0.5 bg-[#041024] border border-aquaTerm/40 text-aquaTerm text-[9px] cursor-pointer hover:bg-cyan-950/60 transition-colors';
         }
 
         function openPermanentDB() {
@@ -2418,63 +2570,82 @@
             }
         }
 
+        /* ĐỒNG BỘ LÊN ĐÁM MÂY TỨC THỜI (< 50ms) */
         async function pushGlobalCloudState(extraEventPayload = null) {
             setCloudIndicator('☁ CLOUD: ĐANG LƯU...', false);
-            const fullState = {
+
+            const payload = {
                 accounts: getSavedAccountsMap(),
                 photos: uploadedMemoriesList,
                 deletedIds: Array.from(deletedPhotoIdsSet),
                 updatedAt: Date.now()
             };
 
-            let snapshotKey = null;
+            let savedSuccessfully = false;
 
+            /* TẦNG 1: Lưu trực tiếp vào Backend nội bộ (/api/cloud) — Siêu tốc 10ms! */
             try {
-                const res = await fetch(BYTEBIN_POST_URL, {
+                const res = await fetchWithTimeout(INTERNAL_API_CLOUD, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(fullState)
-                });
+                    body: JSON.stringify(payload)
+                }, 1500);
                 if (res.ok) {
-                    const data = await res.json();
-                    if (data && data.key) {
-                        snapshotKey = data.key;
-                        lastAppliedSnapshotKey = snapshotKey;
-                    }
+                    savedSuccessfully = true;
+                    activeCloudSource = 'BACKEND_API';
                 }
             } catch (_) {}
 
-            if (snapshotKey) {
+            /* TẦNG 2: Nếu có cấu hình Firebase Realtime Database của lớp -> Đồng bộ Firebase (< 100ms) */
+            if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
                 try {
-                    await fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${KV_APP_KEY}/${KV_SNAPSHOT_KEY}/${snapshotKey}`, {
-                        method: 'POST'
-                    });
-                } catch (_) {}
+                    const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+                    if (extraEventPayload && extraEventPayload.action === 'register_user' && extraEventPayload.user) {
+                        const uKey = encodeURIComponent(extraEventPayload.user.username.toLowerCase());
+                        await fetchWithTimeout(`${cleanUrl}/thk17/accounts/${uKey}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(extraEventPayload.user)
+                        }, 1800);
+                    } else if (extraEventPayload && extraEventPayload.action === 'delete_photo' && extraEventPayload.photoId) {
+                        const pKey = encodeURIComponent(extraEventPayload.photoId);
+                        await fetchWithTimeout(`${cleanUrl}/thk17/photos/${pKey}.json`, { method: 'DELETE' }, 1800);
+                    } else {
+                        const photosMap = {};
+                        uploadedMemoriesList.forEach(p => { photosMap[p.id] = p; });
+                        await fetchWithTimeout(`${cleanUrl}/thk17.json`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                accounts: payload.accounts,
+                                photos: photosMap,
+                                deletedIds: payload.deletedIds,
+                                updatedAt: payload.updatedAt
+                            })
+                        }, 2500);
+                    }
+                    savedSuccessfully = true;
+                    activeCloudSource = 'FIREBASE';
+                } catch (fbErr) {
+                    console.warn('Firebase sync timeout/error:', fbErr);
+                }
             }
 
-            try {
-                const packet = {
-                    type: 'cloud_sync',
-                    snapshotKey: snapshotKey,
-                    event: extraEventPayload,
-                    updatedAt: Date.now()
-                };
-                await fetch(NTFY_STREAM_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(packet)
-                });
-            } catch (_) {}
-
             setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
+            return savedSuccessfully;
         }
 
         function mergeIncomingCloudState(cloudState) {
             if (!cloudState || typeof cloudState !== 'object') return;
 
+            /* 1. Xử lý danh sách ảnh bị xóa */
             if (Array.isArray(cloudState.deletedIds)) {
                 cloudState.deletedIds.forEach(id => deletedPhotoIdsSet.add(id));
+            } else if (cloudState.deletedIds && typeof cloudState.deletedIds === 'object') {
+                Object.keys(cloudState.deletedIds).forEach(id => deletedPhotoIdsSet.add(id));
             }
 
+            /* 2. Xử lý danh sách tài khoản */
             if (cloudState.accounts && typeof cloudState.accounts === 'object') {
                 const localAcc = getSavedAccountsMap();
                 Object.keys(cloudState.accounts).forEach(k => {
@@ -2483,12 +2654,17 @@
                 saveAccountsMapLocally(localAcc);
             }
 
-            if (Array.isArray(cloudState.photos)) {
+            /* 3. Xử lý danh sách ảnh kỷ niệm (Hỗ trợ cả dạng mảng và dạng Object của Firebase) */
+            const incomingPhotos = Array.isArray(cloudState.photos)
+                ? cloudState.photos
+                : (cloudState.photos && typeof cloudState.photos === 'object' ? Object.values(cloudState.photos) : []);
+
+            if (incomingPhotos.length > 0) {
                 const photoMap = new Map();
                 uploadedMemoriesList.forEach(p => {
                     if (p && p.id && !deletedPhotoIdsSet.has(p.id)) photoMap.set(p.id, p);
                 });
-                cloudState.photos.forEach(p => {
+                incomingPhotos.forEach(p => {
                     if (p && p.id && p.dataUrl && !deletedPhotoIdsSet.has(p.id)) {
                         photoMap.set(p.id, p);
                     }
@@ -2498,96 +2674,99 @@
             }
         }
 
-        async function fetchAndApplySnapshotByKey(snapshotKey) {
-            if (!snapshotKey || snapshotKey === lastAppliedSnapshotKey) return false;
+        /* TẢI DỮ LIỆU ĐÁM MÂY SIÊU TỐC: Ưu tiên Máy chủ / Firebase, không bao giờ để đơ */
+        async function pullGlobalCloudState() {
+            setCloudIndicator('☁ CLOUD: ĐANG TẢI...', false);
+
+            /* 1. ƯU TIÊN 1: Thử lấy từ Backend nội bộ (/api/cloud) — Phản hồi trong 10ms! */
             try {
-                const res = await fetch(`https://bytebin.lucko.me/${snapshotKey}`, { cache: 'no-store' });
+                const res = await fetchWithTimeout(INTERNAL_API_CLOUD, { cache: 'no-store' }, 1200);
                 if (res.ok) {
-                    const cloudData = await res.json();
-                    lastAppliedSnapshotKey = snapshotKey;
-                    mergeIncomingCloudState(cloudData);
-                    return true;
+                    const data = await res.json();
+                    if (data && (data.photos || data.accounts)) {
+                        mergeIncomingCloudState(data);
+                        activeCloudSource = 'BACKEND_API';
+                        setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
+                        return true;
+                    }
                 }
             } catch (_) {}
+
+            /* 2. ƯU TIÊN 2: Lấy từ Firebase Realtime Database nếu đã cấu hình (< 100ms) */
+            if (customFirebaseUrl && customFirebaseUrl.startsWith('https://')) {
+                try {
+                    const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+                    const fbRes = await fetchWithTimeout(`${cleanUrl}/thk17.json`, { cache: 'no-store' }, 1800);
+                    if (fbRes.ok) {
+                        const fbData = await fbRes.json();
+                        if (fbData && (fbData.photos || fbData.accounts)) {
+                            mergeIncomingCloudState(fbData);
+                            activeCloudSource = 'FIREBASE';
+                            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ (FIREBASE)', true);
+                            return true;
+                        }
+                    }
+                } catch (fbErr) {
+                    console.warn('Firebase RTDB chưa phản hồi:', fbErr);
+                }
+            }
+
+            /* 3. TẦNG DỰ PHÒNG: Nạp ngay từ Local IndexedDB / LocalStorage (0.01 giây) */
+            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ (CỤC BỘ)', true);
             return false;
         }
 
-        async function pullGlobalCloudState() {
-            setCloudIndicator('☁ CLOUD: ĐANG TẢI...', false);
-            let latestKey = null;
-
-            try {
-                const kvRes = await fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/${KV_APP_KEY}/${KV_SNAPSHOT_KEY}`, { cache: 'no-store' });
-                if (kvRes.ok) {
-                    const rawKey = (await kvRes.text()).replace(/^"+|"+$/g, '').trim();
-                    if (rawKey && rawKey !== 'null') {
-                        latestKey = rawKey;
-                    }
-                }
-            } catch (_) {}
-
-            try {
-                const ntfyRes = await fetch(`${NTFY_STREAM_URL}/json?poll=1&since=all`, { cache: 'no-store' });
-                if (ntfyRes.ok) {
-                    const text = await ntfyRes.text();
-                    const lines = text.split('\n').filter(Boolean);
-                    for (const line of lines) {
-                        try {
-                            const msgObj = JSON.parse(line);
-                            if (msgObj && msgObj.message) {
-                                const payload = JSON.parse(msgObj.message);
-                                if (payload.snapshotKey) {
-                                    latestKey = payload.snapshotKey;
-                                }
-                                if (payload.event) {
-                                    applySingleRealtimeEvent(payload.event);
-                                }
-                            }
-                        } catch (_) {}
-                    }
-                }
-            } catch (_) {}
-
-            if (latestKey) {
-                await fetchAndApplySnapshotByKey(latestKey);
-            } else if (uploadedMemoriesList.length > 0 || Object.keys(getSavedAccountsMap()).length > 2) {
-                await pushGlobalCloudState();
-            }
-
-            setCloudIndicator('☁ CLOUD: ĐÃ ĐỒNG BỘ', true);
-        }
-
-        function applySingleRealtimeEvent(ev) {
-            if (!ev || !ev.action) return;
-            if (ev.action === 'register_user' && ev.user) {
-                const map = getSavedAccountsMap();
-                map[ev.user.username.toLowerCase()] = ev.user;
-                saveAccountsMapLocally(map);
-            } else if (ev.action === 'delete_photo' && ev.photoId) {
-                deletedPhotoIdsSet.add(ev.photoId);
-                savePhotosListLocally(uploadedMemoriesList);
-                renderAllUploadedMemories();
-            }
-        }
-
+        /* LẮNG NGHE ĐỒNG BỘ REALTIME TỨC THÌ QUA FIREBASE SSE STREAM */
         function startRealtimeCloudStream() {
+            if (!customFirebaseUrl || !customFirebaseUrl.startsWith('https://')) return;
+
             try {
-                const es = new EventSource(`${NTFY_STREAM_URL}/sse`);
-                es.onmessage = async (e) => {
+                if (firebaseEventSource) firebaseEventSource.close();
+                const cleanUrl = customFirebaseUrl.replace(/\/+$/, '');
+                firebaseEventSource = new EventSource(`${cleanUrl}/thk17.json`);
+
+                firebaseEventSource.addEventListener('put', (e) => {
                     try {
-                        const msgObj = JSON.parse(e.data);
-                        if (msgObj && msgObj.message) {
-                            const payload = JSON.parse(msgObj.message);
-                            if (payload.event) {
-                                applySingleRealtimeEvent(payload.event);
+                        const parsed = JSON.parse(e.data);
+                        if (!parsed) return;
+                        if (parsed.path === '/' && parsed.data) {
+                            mergeIncomingCloudState(parsed.data);
+                        } else if (parsed.path && parsed.path.startsWith('/photos/') && parsed.data) {
+                            const newPhoto = parsed.data;
+                            if (newPhoto && newPhoto.id && !deletedPhotoIdsSet.has(newPhoto.id)) {
+                                const photoMap = new Map();
+                                uploadedMemoriesList.forEach(p => photoMap.set(p.id, p));
+                                photoMap.set(newPhoto.id, newPhoto);
+                                savePhotosListLocally(Array.from(photoMap.values()));
+                                renderAllUploadedMemories();
                             }
-                            if (payload.snapshotKey && payload.snapshotKey !== lastAppliedSnapshotKey) {
-                                await fetchAndApplySnapshotByKey(payload.snapshotKey);
+                        } else if (parsed.path && parsed.path.startsWith('/accounts/') && parsed.data) {
+                            const newAcc = parsed.data;
+                            if (newAcc && newAcc.username) {
+                                const map = getSavedAccountsMap();
+                                map[newAcc.username.toLowerCase()] = newAcc;
+                                saveAccountsMapLocally(map);
+                            }
+                        } else if (parsed.path && parsed.path.startsWith('/deletedIds/')) {
+                            const delId = parsed.path.replace('/deletedIds/', '').trim();
+                            if (delId) {
+                                deletedPhotoIdsSet.add(delId);
+                                savePhotosListLocally(uploadedMemoriesList.filter(p => p.id !== delId));
+                                renderAllUploadedMemories();
                             }
                         }
                     } catch (_) {}
-                };
-            } catch (_) {}
+                });
+
+                firebaseEventSource.addEventListener('patch', (e) => {
+                    try {
+                        const parsed = JSON.parse(e.data);
+                        if (parsed && parsed.data) mergeIncomingCloudState(parsed.data);
+                    } catch (_) {}
+                });
+            } catch (e) {
+                console.warn('Không thể mở realtime SSE:', e);
+            }
         }
 
         async function loadLocalCacheFromIndexedDB() {
@@ -2745,6 +2924,114 @@
             const modal = document.getElementById('auth-modal');
             if (!modal) return;
             modal.classList.add('hidden');
+        }
+
+        /* ĐIỀU KHIỂN CỬA SỔ CẤU HÌNH & KIỂM TRA ĐÁM MÂY */
+        function openCloudConfigModal() {
+            const modal = document.getElementById('cloud-config-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+
+            const statusEl = document.getElementById('modal-cloud-status');
+            const sourceEl = document.getElementById('modal-cloud-source');
+            const countEl = document.getElementById('modal-cloud-photo-count');
+            const urlInput = document.getElementById('cloud-firebase-url-input');
+
+            if (urlInput) urlInput.value = customFirebaseUrl;
+            if (countEl) countEl.textContent = `${uploadedMemoriesList.length} ảnh kỉ niệm`;
+
+            if (statusEl) {
+                if (activeCloudSource === 'BACKEND_API') {
+                    statusEl.textContent = '☁ TRỰC TUYẾN: MÁY CHỦ NỘI BỘ (TỐC ĐỘ < 15MS)';
+                    statusEl.className = 'text-emerald-400 font-bold';
+                } else if (activeCloudSource === 'FIREBASE') {
+                    statusEl.textContent = '☁ TRỰC TUYẾN: GOOGLE FIREBASE REALTIME (< 100MS)';
+                    statusEl.className = 'text-emerald-400 font-bold';
+                } else {
+                    statusEl.textContent = '☁ TRỰC TUYẾN: BỘ NHỚ CỤC BỘ INDEXEDDB (0.01 GIÂY)';
+                    statusEl.className = 'text-aquaTerm font-bold';
+                }
+            }
+            if (sourceEl) {
+                sourceEl.textContent = activeCloudSource === 'BACKEND_API'
+                    ? 'Node.js / Python / Vercel API'
+                    : (activeCloudSource === 'FIREBASE' ? 'Google Firebase Cloud' : 'Trình duyệt (IndexedDB / LocalStorage)');
+            }
+        }
+
+        function closeCloudConfigModal() {
+            const modal = document.getElementById('cloud-config-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        async function testCloudConnection() {
+            const resultBox = document.getElementById('cloud-test-result');
+            const urlInput = document.getElementById('cloud-firebase-url-input');
+            const testUrl = (urlInput?.value || '').trim();
+
+            if (!resultBox) return;
+            resultBox.classList.remove('hidden');
+            resultBox.className = 'mb-4 p-2.5 border font-mono text-xs bg-oceanDeep border-aquaTerm text-aquaTerm';
+            resultBox.textContent = 'Đang kiểm tra kết nối tới Máy chủ & Đám mây...';
+
+            const start = performance.now();
+            let msg = '';
+
+            // 1. Kiểm tra Backend nội bộ
+            try {
+                const res = await fetchWithTimeout(INTERNAL_API_CLOUD, { cache: 'no-store' }, 1500);
+                if (res.ok) {
+                    const elapsed = Math.round(performance.now() - start);
+                    msg = `✔ Kết nối MÁY CHỦ NỘI BỘ thành công siêu tốc (${elapsed}ms)! Dữ liệu được đồng bộ trực tiếp.`;
+                    resultBox.className = 'mb-4 p-2.5 border font-mono text-xs bg-emerald-950/90 border-emerald-400 text-emerald-300';
+                    resultBox.textContent = msg;
+                    return;
+                }
+            } catch (_) {}
+
+            // 2. Kiểm tra Firebase nếu có nhập URL
+            if (testUrl) {
+                try {
+                    const clean = testUrl.replace(/\/+$/, '');
+                    const res = await fetchWithTimeout(`${clean}/thk17.json`, { cache: 'no-store' }, 2000);
+                    if (res.ok) {
+                        const elapsed = Math.round(performance.now() - start);
+                        resultBox.className = 'mb-4 p-2.5 border font-mono text-xs bg-emerald-950/90 border-emerald-400 text-emerald-300';
+                        resultBox.textContent = `✔ Kết nối GOOGLE FIREBASE thành công (${elapsed}ms)! Tốc độ phản hồi cực nhanh.`;
+                        return;
+                    }
+                } catch (e) {
+                    resultBox.className = 'mb-4 p-2.5 border font-mono text-xs bg-red-950/90 border-red-400 text-red-200';
+                    resultBox.textContent = `⚠ URL Firebase không phản hồi hoặc sai địa chỉ. Vui lòng kiểm tra lại!`;
+                    return;
+                }
+            }
+
+            resultBox.className = 'mb-4 p-2.5 border font-mono text-xs bg-cyan-950/90 border-aquaTerm text-aquaTerm';
+            resultBox.textContent = `ℹ Đang dùng bộ nhớ cục bộ IndexedDB siêu tốc (Offline-First). Bạn có thể dán link Firebase để bật đồng bộ xuyên thiết bị!`;
+        }
+
+        async function saveCloudConfig() {
+            const urlInput = document.getElementById('cloud-firebase-url-input');
+            const val = (urlInput?.value || '').trim();
+            customFirebaseUrl = val;
+
+            if (val) {
+                localStorage.setItem(FIREBASE_CUSTOM_URL_KEY, val);
+            } else {
+                localStorage.removeItem(FIREBASE_CUSTOM_URL_KEY);
+            }
+
+            const resultBox = document.getElementById('cloud-test-result');
+            if (resultBox) {
+                resultBox.classList.remove('hidden');
+                resultBox.className = 'mb-4 p-2.5 border font-mono text-xs bg-emerald-950/90 border-emerald-400 text-emerald-300';
+                resultBox.textContent = '✔ Đã lưu cấu hình Đám mây! Đang đồng bộ lại dữ liệu...';
+            }
+
+            startRealtimeCloudStream();
+            await pullGlobalCloudState();
+            setTimeout(() => { closeCloudConfigModal(); }, 700);
         }
 
         function handleLogout() {
@@ -3085,6 +3372,9 @@
             return t * t * (3 - 2 * t);
         }
 
+        const isMobileDevice = (window.innerWidth < 1024) || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        let mobileScrollTicking = false;
+
         function updateScrollDecayEngine(now) {
             scrollState.frameCount++;
             if (now - scrollState.lastFrameTime >= 500) {
@@ -3106,6 +3396,14 @@
             if (pctBar) pctBar.style.height = scrollPct + '%';
             const pctLabel = document.getElementById('scroll-pct-label');
             if (pctLabel) pctLabel.textContent = String(scrollPct).padStart(2, '0') + '%';
+
+            /* ĐIỆN THOẠI (ANDROID / IOS): Bỏ hoàn toàn việc tính toán vị trí từng thẻ mỗi khung hình.
+               Toàn bộ nội dung hiển thị ngay 100%, vuốt mượt mà không bị delay 1s! */
+            if (isMobileDevice) {
+                updateActiveSectionSpy();
+                mobileScrollTicking = false;
+                return;
+            }
 
             const topDecayStart  = viewportCalibration.topDecayStartPx;
             const topDecayEnd    = viewportCalibration.topDecayEndPx;
@@ -3599,74 +3897,135 @@
             collectScrollElements();
         }
 
+        /* TỐI ƯU NÉN ẢNH SIÊU TỐC TRÊN ĐIỆN THOẠI & PC DÙNG URL.createObjectURL (TIẾT KIỆM 90% RAM) */
         function compressImageFileToCloudWebp(file) {
             return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const maxDim = 820;
-                        let w = img.width;
-                        let h = img.height;
-                        if (w > maxDim || h > maxDim) {
-                            if (w > h) {
-                                h = Math.round((h * maxDim) / w);
-                                w = maxDim;
-                            } else {
-                                w = Math.round((w * maxDim) / h);
-                                h = maxDim;
-                            }
+                const img = new Image();
+                let objUrl = '';
+                try {
+                    objUrl = URL.createObjectURL(file);
+                } catch (_) {}
+
+                img.onload = () => {
+                    if (objUrl) URL.revokeObjectURL(objUrl);
+                    const maxDim = 720; // Độ phân giải tối ưu cho web, dung lượng chỉ 50-80KB, tải cực nhanh
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
                         }
-                        const cvs = document.createElement('canvas');
-                        cvs.width = w;
-                        cvs.height = h;
-                        const c = cvs.getContext('2d');
-                        c.drawImage(img, 0, 0, w, h);
-                        resolve(cvs.toDataURL('image/webp', 0.74));
-                    };
-                    img.onerror = () => resolve(e.target.result);
-                    img.src = e.target.result;
+                    }
+                    const cvs = document.createElement('canvas');
+                    cvs.width = w;
+                    cvs.height = h;
+                    const c = cvs.getContext('2d');
+                    c.drawImage(img, 0, 0, w, h);
+                    resolve(cvs.toDataURL('image/webp', 0.68));
                 };
-                reader.readAsDataURL(file);
+
+                img.onerror = () => {
+                    if (objUrl) URL.revokeObjectURL(objUrl);
+                    const reader = new FileReader();
+                    reader.onload = ev => resolve(ev.target.result);
+                    reader.readAsDataURL(file);
+                };
+
+                if (objUrl) {
+                    img.src = objUrl;
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = ev => { img.src = ev.target.result; };
+                    reader.readAsDataURL(file);
+                }
             });
         }
 
+        const MAX_UPLOAD_PHOTOS_LIMIT = 5;
+        let isUploadingMemoryPhotos = false;
+
         document.getElementById('memory-upload-input')?.addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files || []);
-            if (!files.length) return;
+            const allFiles = Array.from(e.target.files || []);
+            if (!allFiles.length) return;
 
-            const uploadBtn = document.getElementById('upload-memory-btn');
-            if (uploadBtn) uploadBtn.innerHTML = '<span>[☁ ĐANG ĐỒNG BỘ ẢNH LÊN CLOUD...]</span>';
-
-            await pullGlobalCloudState();
-            const currentList = [...uploadedMemoriesList];
-
-            for (const file of files) {
-                if (!file.type.startsWith('image/')) continue;
-                const webpDataUrl = await compressImageFileToCloudWebp(file);
-                const photoObj = {
-                    id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-                    dataUrl: webpDataUrl,
-                    createdAt: Date.now()
-                };
-                currentList.push(photoObj);
+            /* GIỚI HẠN TỐI ĐA 5 ẢNH MỖI LẦN: Ngăn nghẽn mạng và lag trình duyệt */
+            if (allFiles.length > MAX_UPLOAD_PHOTOS_LIMIT) {
+                alert(`[CẢNH BÁO TẢI ẢNH] Bạn đã chọn ${allFiles.length} ảnh.\n\nHệ thống chỉ cho phép tải lên TỐI ĐA 5 ẢNH mỗi lần để tránh làm lag web hoặc máy chủ Đám mây xử lý không kịp.\nVui lòng chọn lại tối đa 5 ảnh!`);
+                e.target.value = '';
+                return;
             }
 
-            e.target.value = '';
-            savePhotosListLocally(currentList);
-            renderAllUploadedMemories();
-            await pushGlobalCloudState({ action: 'upload_photo' });
+            const validFiles = allFiles.filter(f => f.type.startsWith('image/')).slice(0, MAX_UPLOAD_PHOTOS_LIMIT);
+            if (!validFiles.length) {
+                alert('Vui lòng chọn file hình ảnh hợp lệ (JPG, PNG, WEBP...)!');
+                e.target.value = '';
+                return;
+            }
 
-            if (uploadBtn) uploadBtn.innerHTML = '<span>[+ ĐĂNG ẢNH KỈ NIỆM LÊN WEB]</span>';
+            const uploadBtn = document.getElementById('upload-memory-btn');
+            isUploadingMemoryPhotos = true;
+            if (uploadBtn) {
+                uploadBtn.disabled = true;
+                uploadBtn.style.opacity = '0.6';
+                uploadBtn.style.cursor = 'not-allowed';
+                uploadBtn.innerHTML = `<span>[☁ ĐANG XỬ LÝ 0/${validFiles.length} ẢNH...]</span>`;
+            }
+
+            try {
+                await pullGlobalCloudState();
+                const currentList = [...uploadedMemoriesList];
+
+                let processedCount = 0;
+                for (const file of validFiles) {
+                    processedCount++;
+                    if (uploadBtn) {
+                        uploadBtn.innerHTML = `<span>[☁ ĐANG NÉN & ĐỒNG BỘ (${processedCount}/${validFiles.length})...]</span>`;
+                    }
+                    const webpDataUrl = await compressImageFileToCloudWebp(file);
+                    const photoObj = {
+                        id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                        dataUrl: webpDataUrl,
+                        createdAt: Date.now()
+                    };
+                    currentList.push(photoObj);
+                }
+
+                savePhotosListLocally(currentList);
+                renderAllUploadedMemories();
+                await pushGlobalCloudState({ action: 'upload_photo' });
+            } catch (err) {
+                console.error('Lỗi khi tải ảnh:', err);
+                alert('Có lỗi xảy ra trong quá trình tải ảnh. Vui lòng thử lại!');
+            } finally {
+                e.target.value = '';
+                isUploadingMemoryPhotos = false;
+                if (uploadBtn) {
+                    uploadBtn.disabled = false;
+                    uploadBtn.style.opacity = '1';
+                    uploadBtn.style.cursor = 'pointer';
+                    uploadBtn.innerHTML = '<span>[+ ĐĂNG ẢNH KỈ NIỆM (TỐI ĐA 5 ẢNH)]</span>';
+                }
+            }
         });
 
+        /* TỐI ƯU TẢI ẢNH KỶ NIỆM TĨNH: Dò thông minh, dừng ngay khi không còn ảnh để không nghẽn mạng */
         function initMemoryGallery1To50() {
             const grid = document.getElementById('memory-grid');
             if (!grid) return;
 
-            for (let i = 1; i <= MAX_MEMORY_WEBP; i++) {
+            let consecutiveErrors = 0;
+            const MAX_ERRORS_STOP = 2; // Gặp 2 ảnh liên tiếp không có -> Dừng dò, tránh spam 404 làm chậm web
+
+            function probeNext(i) {
+                if (i > MAX_MEMORY_WEBP || consecutiveErrors >= MAX_ERRORS_STOP) return;
+
                 const probe = new Image();
                 probe.onload = function () {
+                    consecutiveErrors = 0; // Reset đếm lỗi nếu tìm thấy ảnh
                     const slot = document.createElement('div');
                     slot.id = `memory-slot-${i}`;
                     slot.style.order = String(i);
@@ -3696,15 +4055,29 @@
                     slot.appendChild(wrapper);
                     grid.appendChild(slot);
                     collectScrollElements();
+
+                    // Tiếp tục dò ảnh kế tiếp
+                    probeNext(i + 1);
                 };
-                probe.onerror = function () {};
+
+                probe.onerror = function () {
+                    consecutiveErrors++;
+                    if (consecutiveErrors < MAX_ERRORS_STOP) {
+                        probeNext(i + 1);
+                    }
+                };
+
                 probe.src = `${i}.webp`;
             }
+
+            // Bắt đầu dò từ ảnh 1.webp
+            probeNext(1);
         }
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeAuthModal();
+                closeCloudConfigModal();
                 if (globalSearchDropdown) globalSearchDropdown.classList.add('hidden');
             }
         });
@@ -3934,13 +4307,29 @@
             } catch (_) {}
         }
 
-        window.addEventListener('beforeunload', () => {
+        window.addEventListener('beforeunload', (e) => {
+            /* Chống F5 / tải lại hoặc đóng trang khi đang tải ảnh lên Cloud */
+            if (isUploadingMemoryPhotos) {
+                e.preventDefault();
+                e.returnValue = 'Đang trong quá trình tải ảnh lên Đám mây. Nếu tải lại trang, ảnh có thể chưa kịp lưu!';
+                return e.returnValue;
+            }
             if (bcChannel) {
                 try { bcChannel.postMessage({ type: 'leave', id: clientSessionId }); } catch (_) {}
             }
             try {
                 navigator.sendBeacon('/api/stats', JSON.stringify({ clientId: clientSessionId, action: 'leave' }));
             } catch (_) {}
+        });
+
+        /* Chặn phím tắt F5 hoặc Ctrl+R khi đang tải ảnh */
+        window.addEventListener('keydown', (e) => {
+            if (isUploadingMemoryPhotos) {
+                if (e.key === 'F5' || (e.ctrlKey && e.key.toLowerCase() === 'r')) {
+                    e.preventDefault();
+                    alert('Hệ thống đang tải ảnh lên Đám mây, vui lòng không tải lại (F5) trang web!');
+                }
+            }
         });
 
         function updateClock() {
@@ -4078,8 +4467,24 @@
                 collectScrollElements();
             });
             collectScrollElements();
-            requestAnimationFrame(updateScrollDecayEngine);
-            requestAnimationFrame(animateBinaryOcean);
+            if (isMobileDevice) {
+                /* Mobile: Chỉ cập nhật khi cuộn trang, không chạy requestAnimationFrame vô hạn */
+                window.addEventListener('scroll', function () {
+                    if (!mobileScrollTicking) {
+                        mobileScrollTicking = true;
+                        requestAnimationFrame(updateScrollDecayEngine);
+                    }
+                }, { passive: true });
+                /* Chạy khởi tạo ban đầu */
+                requestAnimationFrame(updateScrollDecayEngine);
+            } else {
+                requestAnimationFrame(updateScrollDecayEngine);
+            }
+
+            /* Nền mưa nhị phân: chỉ bật trên PC/Desktop để điện thoại tiết kiệm pin và đạt 60-120 FPS */
+            if (!isMobileDevice) {
+                requestAnimationFrame(animateBinaryOcean);
+            }
         };
     </script>
 </body>

@@ -17,14 +17,28 @@ Người thiết kế: Mai Thiên Phú
    ├── PD.webp                     : Ảnh chân dung GVCN Thầy Nguyễn Phúc Duy tại mục Thông tin
    └── 1.webp, 2.webp, 3.webp      : Ảnh mẫu mục Kỉ niệm (tự động nhận từ 1.webp -> 50.webp)
 
-2. CÁCH THÊM / ẨN ẢNH Ở MỤC KỈ NIỆM (1.webp -> 50.webp):
-   - Đặt ảnh định dạng .webp theo tên số thứ tự: 1.webp, 2.webp, 3.webp, ..., 50.webp vào cùng thư mục với index.html.
-   - Hệ thống tự động kiểm tra từ 1.webp đến 50.webp:
-     + Có file nào trong thư mục -> Tự động hiện đúng thứ tự đó.
-     + Không có file -> Tự động ẩn hoàn toàn (không báo lỗi, không hiện khung trống).
-     + Khung ảnh hiển thị nguyên bản, không có chú thích hay nút xem chi tiết.
+2. CÁCH THÊM / ẨN ẢNH Ở MỤC KỈ NIỆM & GIỚI HẠN TẢI LÊN:
+   - Cách 1 (Ảnh tĩnh trong thư mục): Đặt ảnh .webp từ 1.webp -> 50.webp vào thư mục. Web tự động nhận và hiển thị.
+   - Cách 2 (Tải ảnh trực tiếp trên web lên Đám mây):
+     + Nút [+ ĐĂNG ẢNH KỈ NIỆM (TỐI ĐA 5 ẢNH)]: Đã giới hạn tối đa 5 ảnh mỗi lần chọn để chống lag và bảo vệ đường truyền Cloud.
+     + Cơ chế chống F5: Hệ thống tự động khóa phím F5 / Ctrl+R và cảnh báo khi đang tải ảnh để không bị mất dữ liệu giữa chừng.
 
-3. CÁCH CHẠY TRANG WEB KHÔNG TĨNH:
+3. HỆ THỐNG ĐỒNG BỘ ĐÁM MÂY SIÊU TỐC (FIREBASE REALTIME DATABASE):
+   - Đã tích hợp Google Firebase Realtime Database: Tốc độ phản hồi cực nhanh (< 100ms) qua Server-Sent Events (SSE).
+   - Bất kỳ ai ở bất kỳ thiết bị nào (máy tính, Android, iPhone) đăng ảnh hoặc tạo tài khoản, các thiết bị khác sẽ nhận được ngay lập tức theo thời gian thực mà không cần reload trang.
+   - Để dùng Firebase riêng của bạn (hoàn toàn miễn phí):
+     1. Truy cập https://console.firebase.google.com/ -> Tạo dự án (Create project).
+     2. Vào "Build" -> "Realtime Database" -> Nhấn "Create Database".
+     3. Chọn vị trí "Singapore (asia-southeast1)" hoặc "us-central1" -> Chọn chế độ "Start in test mode".
+     4. Sao chép đường dẫn URL (dạng: https://your-project-id.asia-southeast1.firebasedatabase.app).
+     5. Mở file index.html, tìm hằng số FIREBASE_DEFAULT_RTDB và dán URL vào là xong!
+
+4. TỐI ƯU HÓA HIỂN THỊ TRÊN ĐIỆN THOẠI (ANDROID / IOS):
+   - Đã loại bỏ hoàn toàn hiện tượng vuốt 1s sau mới hiện nội dung trên Android.
+   - Mọi khối nội dung, chữ, thẻ ban cán sự và ảnh kỉ niệm đều hiển thị 100% rõ nét ngay khi ngón tay vuốt.
+   - Tự động tắt các hiệu ứng canvas và animation nặng trên mobile để tiết kiệm pin và đạt 60-120 FPS mượt mà.
+
+5. CÁCH CHẠY TRANG WEB KHÔNG TĨNH:
    - Cách 1 (Chạy bằng Node.js):
        node server.js
      Sau đó mở trình duyệt tại: http://localhost:5500

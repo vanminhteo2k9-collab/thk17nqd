@@ -84,6 +84,26 @@ def save_message(sender_name, sender_contact, message):
     conn.close()
 
 class THK17Handler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        if parsed.path == "/api/cloud":
+            state = {"accounts": {}, "photos": [], "deletedIds": [], "updatedAt": int(time.time() * 1000)}
+            if os.path.exists(JSON_PATH):
+                try:
+                    with open(JSON_PATH, "r", encoding="utf-8") as f:
+                        saved = json.load(f)
+                        state = saved.get("cloud", state)
+                except Exception:
+                    pass
+            resp = json.dumps(state).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(resp)))
+            self.end_headers()
+            self.wfile.write(resp)
+            return
+        return super().do_GET()
+
     def do_POST(self):
         parsed = urlparse(self.path)
         length = int(self.headers.get("Content-Length", 0))
@@ -121,6 +141,48 @@ class THK17Handler(SimpleHTTPRequestHandler):
                 payload.get("message", "")
             )
             resp = json.dumps({"ok": True}).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(resp)))
+            self.end_headers()
+            self.wfile.write(resp)
+            return
+
+        if parsed.path == "/api/cloud":
+            state = {"accounts": {}, "photos": [], "deletedIds": [], "updatedAt": int(time.time() * 1000)}
+            if os.path.exists(JSON_PATH):
+                try:
+                    with open(JSON_PATH, "r", encoding="utf-8") as f:
+                        saved = json.load(f)
+                        state = saved.get("cloud", state)
+                except Exception:
+                    pass
+            if payload.get("accounts"):
+                state["accounts"].update(payload["accounts"])
+            if isinstance(payload.get("photos"), list):
+                m = {p["id"]: p for p in state.get("photos", []) if p.get("id")}
+                for p in payload["photos"]:
+                    if p.get("id"):
+                        m[p["id"]] = p
+                state["photos"] = list(m.values())
+            if isinstance(payload.get("deletedIds"), list):
+                del_set = set(state.get("deletedIds", []))
+                for d in payload["deletedIds"]:
+                    del_set.add(d)
+                state["deletedIds"] = list(del_set)
+                state["photos"] = [p for p in state.get("photos", []) if p.get("id") not in del_set]
+            state["updatedAt"] = int(time.time() * 1000)
+            try:
+                full_saved = {}
+                if os.path.exists(JSON_PATH):
+                    with open(JSON_PATH, "r", encoding="utf-8") as f:
+                        full_saved = json.load(f)
+                full_saved["cloud"] = state
+                with open(JSON_PATH, "w", encoding="utf-8") as f:
+                    json.dump(full_saved, f, ensure_ascii=False, indent=2)
+            except Exception:
+                pass
+            resp = json.dumps({"ok": True, "updatedAt": state["updatedAt"]}).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(resp)))
