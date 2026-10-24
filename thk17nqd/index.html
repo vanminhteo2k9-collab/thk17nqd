@@ -2047,6 +2047,7 @@
         let isMobileMenuCollapsed = false;
 
         function toggleMobileMenu() {
+            
             isMobileMenuCollapsed = !isMobileMenuCollapsed;
             const bodyEl = document.getElementById('navbar-collapsible-body');
             const topStripEl = document.getElementById('navbar-top-strip');
@@ -2065,6 +2066,19 @@
             requestAnimationFrame(() => {
                 calibrateScreenAndBoundaries();
             });
+        }
+        function syncMobileSearchInput(val) {
+            const desktopInput = document.getElementById('global-web-search-input');
+            if (desktopInput) {
+                desktopInput.value = val;
+                performGlobalWebSearch();
+            }
+        }
+
+        function autoCollapseOnMobileClick() {
+            if (window.innerWidth < 1024 && !isMobileMenuCollapsed) {
+                toggleMobileMenu();
+            }
         }
 
         document.addEventListener('contextmenu', (e) => {
