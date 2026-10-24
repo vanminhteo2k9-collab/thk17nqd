@@ -383,25 +383,7 @@
             animation: dinoBodyBob 0.55s steps(2, end) infinite;
         }
 
-        /* Mobile: tắt animation Dino để giảm tải */
-        @media (max-width: 1023px) {
-            .thk17-dino-svg,
-            .thk17-dino-svg .dino-leg-left,
-            .thk17-dino-svg .dino-leg-right,
-            .thk17-dino-svg .dino-arm,
-            .thk17-dino-svg .dino-tail,
-            .thk17-dino-svg .dino-crown,
-            .thk17-dino-svg .dino-eye,
-            .thk17-dino-svg .dino-pearl {
-                animation: none !important;
-            }
-            .dino-patrol-runner {
-                animation: none !important;
-            }
-            .dino-patrol-hop {
-                animation: none !important;
-            }
-        }
+
         .thk17-dino-svg .dino-leg-left {
             animation: dinoLegStepA 0.36s steps(2, end) infinite;
         }
@@ -874,8 +856,8 @@
     <!-- ==========================================================================
          1. INTERACTIVE BINARY OCEAN & C++ TOPOLOGY CANVAS BACKGROUND
          ========================================================================== -->
-    <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95 hidden lg:block"></canvas>
-    <div class="fixed inset-0 crt-overlay z-0 opacity-20 hidden lg:block"></div>
+    <canvas id="binary-ocean-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-95 block"></canvas>
+    <div class="fixed inset-0 crt-overlay z-0 opacity-20 block"></div>
 
     <!-- ==========================================================================
          2. FIXED SIDE TELEMETRY RAILS (LEFT & RIGHT)
@@ -960,9 +942,6 @@
                     </button>
                 </div>
 
-                <button onclick="openCalibrator()" class="px-1.5 py-0.5 bg-cppBlue/40 border border-aquaTerm/50 text-iceWhite hover:bg-aquaTerm hover:text-abyss transition-colors cursor-pointer text-[9px] sm:text-[10px]" title="Xem thông số độ phân giải màn hình">
-                    <strong id="nav-res-badge" class="text-aquaTerm">AUTO</strong>
-                </button>
                 <span id="live-system-clock" class="hidden 2xl:inline text-iceWhite pl-1">UTC+7 // 00:00:00</span>
             </div>
         </div>
@@ -4805,10 +4784,8 @@
                 requestAnimationFrame(updateScrollDecayEngine);
             }
 
-            /* Nền mưa nhị phân: chỉ bật trên PC/Desktop để điện thoại tiết kiệm pin và đạt 60-120 FPS */
-            if (!isMobileDevice) {
-                requestAnimationFrame(animateBinaryOcean);
-            }
+            /* Nền mưa nhị phân 0 / 1 / C++ chạy trên tất cả thiết bị (Mobile & Desktop) */
+            requestAnimationFrame(animateBinaryOcean);
         };
     </script>
 </body>
