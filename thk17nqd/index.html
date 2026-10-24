@@ -677,6 +677,101 @@
     </div>
 
     <!-- ==========================================================================
+         0A-3. MODAL PHÓNG TO XEM ẢNH ĐẦY ĐỦ (IMAGE LIGHTBOX VIEWER)
+         ========================================================================== -->
+    <div 
+        id="image-lightbox-modal" 
+        class="hidden fixed inset-0 z-[10015] bg-[#010814]/90 backdrop-blur-xl flex flex-col items-center justify-between p-3 sm:p-6 select-none transition-opacity duration-300 opacity-0"
+        onclick="handleLightboxBackdropClick(event)"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Xem ảnh phóng to"
+    >
+        <!-- Thanh công cụ phía trên: Tiêu đề ảnh, bộ đếm & các nút chức năng -->
+        <div class="w-full max-w-6xl flex items-center justify-between gap-3 py-2.5 px-3 sm:px-5 bg-[#030e21]/95 border border-aquaTerm/40 corner-brackets shadow-[0_0_30px_rgba(0,212,255,0.25)] z-20" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-2.5 sm:gap-3 overflow-hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-aquaTerm animate-pulse flex-shrink-0"></span>
+                <div class="truncate">
+                    <span id="lightbox-image-title" class="font-display font-bold text-xs sm:text-sm text-iceWhite tracking-wide truncate block">
+                        ẢNH KỈ NIỆM THK17
+                    </span>
+                    <span id="lightbox-image-counter" class="font-mono text-[10px] sm:text-[11px] text-aquaTerm block">
+                        ẢNH 01 / 01
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button 
+                    type="button" 
+                    id="lightbox-download-btn"
+                    onclick="downloadCurrentLightboxImage()" 
+                    class="btn-arch py-1.5 px-3 font-mono text-[11px] sm:text-xs text-aquaTerm hover:text-white font-bold cursor-pointer"
+                    title="Tải ảnh này về máy"
+                >
+                    <span>[⬇ TẢI ẢNH]</span>
+                </button>
+                <button 
+                    type="button" 
+                    onclick="closeImageLightbox()" 
+                    class="px-3 py-1.5 border border-aquaTerm/60 bg-[#061730] hover:bg-aquaTerm hover:text-abyss font-mono text-xs text-iceWhite font-bold transition-colors cursor-pointer"
+                    title="Đóng (phím ESC hoặc bấm ra ngoài)"
+                >
+                    ✕ ĐÓNG
+                </button>
+            </div>
+        </div>
+
+        <!-- Vùng hiển thị ảnh phóng to ở trung tâm -->
+        <div class="relative flex-1 w-full max-w-6xl flex items-center justify-center my-3 sm:my-4 overflow-hidden" onclick="handleLightboxBackdropClick(event)">
+            <!-- Nút ảnh trước (Previous) -->
+            <button 
+                type="button" 
+                id="lightbox-prev-btn"
+                onclick="event.stopPropagation(); navigateLightbox(-1);" 
+                class="absolute left-1 sm:left-4 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-abyss/85 hover:bg-aquaTerm text-aquaTerm hover:text-abyss border border-aquaTerm/70 flex items-center justify-center transition-all duration-300 shadow-[0_0_20px_rgba(0,212,255,0.3)] hover:scale-110 cursor-pointer"
+                title="Ảnh trước (phím ◀)"
+            >
+                <span class="text-xl sm:text-2xl font-bold leading-none">◀</span>
+            </button>
+
+            <!-- Khung ảnh chính phóng to với hiệu ứng viền & bóng mờ neon -->
+            <div 
+                id="lightbox-img-container"
+                onclick="event.stopPropagation()"
+                class="relative max-w-full max-h-[75vh] sm:max-h-[80vh] flex items-center justify-center p-1 sm:p-2 border border-aquaTerm/40 bg-[#020b18]/80 shadow-[0_0_60px_rgba(0,212,255,0.3)] rounded-sm"
+            >
+                <img 
+                    id="lightbox-current-img" 
+                    src="" 
+                    alt="Ảnh kỷ niệm phóng to" 
+                    class="max-w-full max-h-[72vh] sm:max-h-[77vh] w-auto h-auto object-contain transition-all duration-300 transform scale-95"
+                >
+                <!-- Loading spinner khi đổi ảnh -->
+                <div id="lightbox-loader" class="hidden absolute inset-0 bg-abyss/80 flex items-center justify-center">
+                    <div class="w-10 h-10 border-2 border-aquaTerm border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </div>
+
+            <!-- Nút ảnh kế tiếp (Next) -->
+            <button 
+                type="button" 
+                id="lightbox-next-btn"
+                onclick="event.stopPropagation(); navigateLightbox(1);" 
+                class="absolute right-1 sm:right-4 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-abyss/85 hover:bg-aquaTerm text-aquaTerm hover:text-abyss border border-aquaTerm/70 flex items-center justify-center transition-all duration-300 shadow-[0_0_20px_rgba(0,212,255,0.3)] hover:scale-110 cursor-pointer"
+                title="Ảnh tiếp theo (phím ▶)"
+            >
+                <span class="text-xl sm:text-2xl font-bold leading-none">▶</span>
+            </button>
+        </div>
+
+        <!-- Hướng dẫn phím tắt & điều hướng phía dưới -->
+        <div class="font-mono text-[10px] sm:text-xs text-slateBlue py-1 px-3 bg-[#030e21]/80 border border-aquaTerm/25 rounded text-center z-20">
+            [PHÍM ◀ / ▶ ĐỂ CHUYỂN ẢNH • VUỐT TRÊN MÀN HÌNH CẢM ỨNG • PHÍM ESC HOẶC BẤM RA NGOÀI ĐỂ ĐÓNG]
+        </div>
+    </div>
+
+    <!-- ==========================================================================
          0B. HỆ THỐNG CÂN CHỈNH ĐỘ PHÂN GIẢI (MẶC ĐỊNH ẨN & TỰ ĐỘNG NHẬN DIỆN NGẦM)
          ========================================================================== -->
     <div id="resolution-calibrator-modal" class="hidden opacity-0 pointer-events-none fixed inset-0 z-[10000] bg-abyss/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-opacity duration-500">
@@ -1424,7 +1519,7 @@
                                 Thầy NGUYỄN PHÚC DUY
                             </h3>
                             <p class="scroll-node text-sm text-iceWhite/85 leading-relaxed pt-1">
-                                Người kiến trúc sư trưởng định hướng học tập, rèn luyện tư duy lập trình C++ và đồng hành cùng 34 học sinh tập thể lớp Chuyên Tin Học <strong class="text-aquaTerm">THK17 (Niên khóa 2025 - 2028)</strong> tại Trường THPT Chuyên Nguyễn Quang Diêu, Phường Mỹ Trà, Tỉnh Đồng Tháp.
+                                Người kiến trúc sư trưởng định hướng học tập, rèn luyện nề nếp và đồng hành cùng 34 bé khủng long tập thể chuyên Tin Học <strong class="text-aquaTerm">THK17 (Niên khóa 2025 - 2028)</strong> tại Trường THPT Chuyên Nguyễn Quang Diêu, Phường Mỹ Trà, Tỉnh Đồng Tháp.
                             </p>
                         </div>
 
@@ -1551,7 +1646,7 @@
                             Nguyễn Thanh Huy
                         </h3>
                         <p class="scroll-node text-xs text-slateBlue leading-relaxed mb-5">
-                            Quản lý tủ sách chuyên đề, tài liệu tham khảo thuật toán và lan tỏa văn hóa đọc, nghiên cứu tri thức mới cho tập thể lớp THK17.
+                            Quản lý giờ đọc sách, sữ trật tự và hỗ trợ sản phẩm đọc cho tập thể lớp THK17.
                         </p>
                     </div>
                     <div class="scroll-node pt-3 hairline-t font-mono text-[10px] text-slateBlue flex justify-between">
@@ -1793,14 +1888,14 @@
             <div class="py-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 hairline-b">
                 <div>
                     <p class="scroll-node font-mono text-xs text-aquaTerm uppercase tracking-widest mb-2">
-                        // LƯU TRỮ ĐÁM MÂY TOÀN CẦU MỌI THIẾT BỊ
+                        // NƠI LƯU GIỮ KÍ ỨC
                     </p>
                     <h2 class="scroll-node font-display font-bold text-3xl sm:text-5xl text-iceWhite tracking-tight">
                         BỘ NHỚ <span class="font-serif italic font-normal text-cppLight">THANH XUÂN</span> THK17.
                     </h2>
                 </div>
 
-                <!-- Cụm nút Tự đăng ảnh lên Cloud + Tải tất cả ảnh Kỉ niệm + Quyền Admin -->
+                <!-- Cụm nút Tải tất cả ảnh Kỉ niệm + Quyền Admin -->
                 <div class="scroll-node flex flex-wrap items-center gap-3">
                     <input 
                         type="file" 
@@ -1809,14 +1904,6 @@
                         multiple 
                         class="hidden"
                     >
-                    <button 
-                        id="upload-memory-btn"
-                        type="button" 
-                        onclick="document.getElementById('memory-upload-input').click()" 
-                        class="btn-arch btn-arch-ocean font-bold py-3 px-5"
-                    >
-                        <span>[+ ĐĂNG ẢNH KỈ NIỆM (TỐI ĐA 5 ẢNH)]</span>
-                    </button>
                     <button 
                         type="button" 
                         onclick="downloadAllMemoryImages()" 
@@ -1831,8 +1918,61 @@
                 </div>
             </div>
 
-            <!-- Lưới ảnh: Gồm ảnh 1.webp -> 50.webp trong folder + ảnh tự đăng đồng bộ Cloud -->
-            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10"></div>
+            <!-- Lưới ảnh: Ô thêm ảnh mờ có dấu cộng luôn ở vị trí đầu tiên + ảnh kỷ niệm -->
+            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
+                <!-- Nút Thêm ảnh dạng ô chữ nhật mờ có dấu cộng ở giữa, luôn hiển thị đầu tiên -->
+                <div 
+                    id="memory-add-card" 
+                    role="button"
+                    tabindex="0"
+                    onclick="document.getElementById('memory-upload-input').click()"
+                    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('memory-upload-input').click();}"
+                    style="order: -999; background: rgba(4, 16, 36, 0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);" 
+                    class="scroll-card arch-card corner-brackets cursor-pointer group relative overflow-hidden border-2 border-dashed border-aquaTerm/50 hover:border-aquaTerm transition-all duration-300 shadow-[0_0_20px_rgba(0,212,255,0.08)] hover:shadow-[0_0_35px_rgba(0,212,255,0.3)] flex flex-col items-center justify-center h-64 sm:h-72 select-none"
+                    title="Bấm để tải thêm ảnh kỉ niệm"
+                >
+                    <!-- Hiệu ứng gradient nền quét mờ -->
+                    <div class="absolute inset-0 bg-gradient-to-b from-aquaTerm/10 via-transparent to-aquaTerm/15 pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-aquaTerm/10 rounded-full blur-2xl pointer-events-none group-hover:bg-aquaTerm/25 transition-all"></div>
+                    <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-oceanBright/10 rounded-full blur-2xl pointer-events-none group-hover:bg-oceanBright/25 transition-all"></div>
+                    
+                    <!-- Biểu tượng dấu cộng ở giữa & mô tả -->
+                    <div class="relative z-10 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-dashed border-aquaTerm/70 group-hover:border-aquaTerm group-hover:scale-110 group-hover:rotate-90 bg-[#041024]/80 flex items-center justify-center transition-all duration-500 shadow-[0_0_20px_rgba(0,212,255,0.25)]">
+                            <span class="text-3xl sm:text-4xl text-aquaTerm font-light leading-none group-hover:text-iceWhite transition-colors">+</span>
+                        </div>
+                        <div class="mt-1">
+                            <p class="font-display font-bold text-sm sm:text-base text-iceWhite tracking-wider group-hover:text-aquaTerm transition-colors uppercase">
+                                Thêm ảnh kỉ niệm
+                            </p>
+                            <p class="font-mono text-[10px] sm:text-[11px] text-slateBlue mt-1 tracking-wide">
+                                [BẤM HOẶC KÉO THẢ ẢNH VÀO ĐÂY]
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Lớp phủ khi kéo thả ảnh (Drag & Drop Active) -->
+                    <div id="memory-add-dropzone-overlay" class="hidden absolute inset-0 bg-[#031329]/95 backdrop-blur-md z-20 flex flex-col items-center justify-center p-4 text-center border-2 border-dashed border-aquaTerm pointer-events-none">
+                        <div class="w-16 h-16 rounded-full bg-aquaTerm/20 border-2 border-aquaTerm flex items-center justify-center mb-3 shadow-[0_0_25px_rgba(0,212,255,0.6)] animate-bounce">
+                            <span class="text-3xl text-aquaTerm">📥</span>
+                        </div>
+                        <p class="font-display font-bold text-sm sm:text-base text-iceWhite tracking-wider uppercase">
+                            Thả ảnh vào đây
+                        </p>
+                        <p class="font-mono text-[10px] sm:text-[11px] text-aquaTerm mt-1">
+                            [ĐỒNG BỘ LÊN CLOUD NGAY LẬP TỨC]
+                        </p>
+                    </div>
+
+                    <!-- Lớp phủ trạng thái đang nén & đồng bộ ảnh -->
+                    <div id="memory-add-card-progress" class="hidden absolute inset-0 bg-abyss/95 backdrop-blur-md z-30 flex flex-col items-center justify-center p-4 text-center">
+                        <div class="w-10 h-10 border-2 border-aquaTerm border-t-transparent rounded-full animate-spin mb-3"></div>
+                        <p id="memory-add-progress-text" class="font-mono text-xs font-bold text-aquaTerm tracking-wide">
+                            ĐANG NÉN &amp; ĐỒNG BỘ...
+                        </p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ======================================================================
@@ -1945,7 +2085,7 @@
                         <div class="scroll-node flex items-center gap-4 mb-4">
                             <div class="w-14 h-14 shrink-0 bg-gradient-to-br from-[#06244a] via-[#1a103c] to-[#3b0d2c] border border-pink-400/80 flex items-center justify-center shadow-[0_0_22px_rgba(244,114,182,0.38)] relative overflow-hidden">
                                 <img 
-                                    src="https://thk17-20-10.netlify.app/favicon.ico" 
+                                    src="https://scontent.fsgn5-1.fna.fbcdn.net/v/t39.30808-6/518403015_122104081376968207_7393148337921684705_n.jpg?stp=dst-jpg_tt6&cstp=mx1000x1000&ctp=s1000x1000&_nc_cat=109&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFXLt1VbaRW_S3acMTsXFgBc2zAWLsSkNZzbMBYuxKQ1jPyh0euVAXSP-xHFctL68FYeHhbE33q9ArhLEwuMAP7&_nc_ohc=tSEW0i2rhJYQ7kNvwGwrshn&_nc_oc=Adol71gqvKW2Ywi0IgmvtaXPoXmQjrmqbQyclZTZUPm_04W7B3LryxakbzKlPvGtq58&_nc_zt=23&_nc_ht=scontent.fsgn5-1.fna&_nc_gid=ZsWjfS-biuwsTkrQKymsXA&_nc_ss=7b2a8&oh=00_AQN6VkKllj82CM6Jua6JK6FKKK4SEkPmJZOmpzT8FnI0IA&oe=6AE2A3FF" 
                                     alt="Logo Web THK17 20-10" 
                                     class="w-9 h-9 object-contain relative z-10"
                                     onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
@@ -2008,36 +2148,9 @@
                     </div>
 
                     <form id="io-contact-form" class="space-y-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="scroll-node">
-                                <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
-                                    01 // HỌ VÀ TÊN NGƯỜI GỬI *
-                                </label>
-                                <input 
-                                    id="sender-name" 
-                                    type="text" 
-                                    required
-                                    placeholder="Nhập họ và tên của bạn..." 
-                                    class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
-                                >
-                            </div>
-                            <div class="scroll-node">
-                                <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
-                                    02 // ĐỊA CHỈ EMAIL HOẶC SỐ ĐIỆN THOẠI *
-                                </label>
-                                <input 
-                                    id="sender-email" 
-                                    type="text" 
-                                    required
-                                    placeholder="email@domain.com hoặc SĐT" 
-                                    class="w-full px-4 py-3 bg-abyss border border-aquaTerm/35 font-mono text-xs text-iceWhite focus:border-aquaTerm focus:outline-none transition-colors"
-                                >
-                            </div>
-                        </div>
-
                         <div class="scroll-node">
                             <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
-                                03 // BỘ PHẬN TIẾP NHẬN
+                                01 // BỘ PHẬN TIẾP NHẬN
                             </label>
                             <div class="w-full px-4 py-3 bg-oceanDeep border-2 border-aquaTerm font-mono text-xs text-iceWhite flex items-center justify-between select-none">
                                 <span class="font-bold text-aquaTerm">Mai Thiên Phú (Người thiết kế)</span>
@@ -2048,7 +2161,7 @@
 
                         <div class="scroll-node">
                             <label class="block font-mono text-[11px] text-aquaTerm uppercase tracking-wider mb-2">
-                                04 // NỘI DUNG TIN NHẮN *
+                                02 // NỘI DUNG TIN NHẮN *
                             </label>
                             <textarea 
                                 id="packet-message" 
@@ -4228,7 +4341,7 @@
                 const slot = document.createElement('div');
                 slot.id = `uploaded-memory-${item.id}`;
                 slot.style.order = String(100 + idx);
-                slot.className = 'uploaded-memory-card scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45 relative group';
+                slot.className = 'uploaded-memory-card scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45 relative group cursor-pointer';
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
@@ -4236,9 +4349,9 @@
                 const downloadName = `THK17_KiNiem_Cloud_${String(idx + 1).padStart(2, '0')}.webp`;
                 const img = document.createElement('img');
                 img.src = item.dataUrl;
-                img.alt = '';
+                img.alt = `Ảnh kỷ niệm ${idx + 1}`;
                 img.setAttribute('data-download-name', downloadName);
-                img.className = 'memory-downloadable-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
+                img.className = 'memory-downloadable-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04] cursor-zoom-in';
                 wrapper.appendChild(img);
 
                 const dlBtn = document.createElement('button');
@@ -4327,29 +4440,36 @@
             });
         }
 
-        const MAX_UPLOAD_PHOTOS_LIMIT = 5;
         let isUploadingMemoryPhotos = false;
 
-        document.getElementById('memory-upload-input')?.addEventListener('change', async (e) => {
-            const allFiles = Array.from(e.target.files || []);
+        async function processAndUploadMemoryFiles(filesList) {
+            const allFiles = Array.from(filesList || []);
             if (!allFiles.length) return;
 
-            /* GIỚI HẠN TỐI ĐA 5 ẢNH MỖI LẦN: Ngăn nghẽn mạng và lag trình duyệt */
-            if (allFiles.length > MAX_UPLOAD_PHOTOS_LIMIT) {
-                alert(`[CẢNH BÁO TẢI ẢNH] Bạn đã chọn ${allFiles.length} ảnh.\n\nHệ thống chỉ cho phép tải lên TỐI ĐA 5 ẢNH mỗi lần để tránh làm lag web hoặc máy chủ Đám mây xử lý không kịp.\nVui lòng chọn lại tối đa 5 ảnh!`);
-                e.target.value = '';
-                return;
-            }
-
-            const validFiles = allFiles.filter(f => f.type.startsWith('image/')).slice(0, MAX_UPLOAD_PHOTOS_LIMIT);
+            const validFiles = allFiles.filter(f => f.type && f.type.startsWith('image/'));
             if (!validFiles.length) {
-                alert('Vui lòng chọn file hình ảnh hợp lệ (JPG, PNG, WEBP...)!');
-                e.target.value = '';
+                alert('Vui lòng chọn hoặc kéo thả file hình ảnh hợp lệ (JPG, PNG, WEBP...)!');
+                const fileInput = document.getElementById('memory-upload-input');
+                if (fileInput) fileInput.value = '';
                 return;
             }
 
             const uploadBtn = document.getElementById('upload-memory-btn');
+            const addCard = document.getElementById('memory-add-card');
+            const addCardProgress = document.getElementById('memory-add-card-progress');
+            const addCardProgressText = document.getElementById('memory-add-progress-text');
+            const fileInput = document.getElementById('memory-upload-input');
+
             isUploadingMemoryPhotos = true;
+            if (addCard) {
+                addCard.style.pointerEvents = 'none';
+            }
+            if (addCardProgress) {
+                addCardProgress.classList.remove('hidden');
+            }
+            if (addCardProgressText) {
+                addCardProgressText.textContent = `ĐANG XỬ LÝ 0/${validFiles.length} ẢNH...`;
+            }
             if (uploadBtn) {
                 uploadBtn.disabled = true;
                 uploadBtn.style.opacity = '0.6';
@@ -4364,6 +4484,9 @@
                 let processedCount = 0;
                 for (const file of validFiles) {
                     processedCount++;
+                    if (addCardProgressText) {
+                        addCardProgressText.textContent = `ĐANG NÉN & ĐỒNG BỘ (${processedCount}/${validFiles.length})...`;
+                    }
                     if (uploadBtn) {
                         uploadBtn.innerHTML = `<span>[☁ ĐANG NÉN & ĐỒNG BỘ (${processedCount}/${validFiles.length})...]</span>`;
                     }
@@ -4393,16 +4516,81 @@
                 console.error('Lỗi khi tải ảnh:', err);
                 alert('Có lỗi xảy ra trong quá trình tải ảnh. Vui lòng thử lại!');
             } finally {
-                e.target.value = '';
+                if (fileInput) fileInput.value = '';
                 isUploadingMemoryPhotos = false;
+                if (addCard) {
+                    addCard.style.pointerEvents = '';
+                }
+                if (addCardProgress) {
+                    addCardProgress.classList.add('hidden');
+                }
                 if (uploadBtn) {
                     uploadBtn.disabled = false;
                     uploadBtn.style.opacity = '1';
                     uploadBtn.style.cursor = 'pointer';
-                    uploadBtn.innerHTML = '<span>[+ ĐĂNG ẢNH KỈ NIỆM (TỐI ĐA 5 ẢNH)]</span>';
+                    uploadBtn.innerHTML = '<span>[+ ĐĂNG ẢNH KỈ NIỆM]</span>';
                 }
             }
+        }
+
+        // 1. CHỌN ẢNH BẰNG HỘP THOẠI FILE INPUT
+        document.getElementById('memory-upload-input')?.addEventListener('change', (e) => {
+            processAndUploadMemoryFiles(e.target.files);
         });
+
+        // 2. KÉO THẢ ẢNH TRỰC TIẾP TỪ MÁY TÍNH VÀO Ô THÊM ẢNH (DRAG & DROP)
+        const memoryAddCard = document.getElementById('memory-add-card');
+        const memoryDropOverlay = document.getElementById('memory-add-dropzone-overlay');
+        let memoryDragDepth = 0;
+
+        if (memoryAddCard) {
+            ['dragenter', 'dragover'].forEach(evtName => {
+                memoryAddCard.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (isUploadingMemoryPhotos) return;
+                    if (evtName === 'dragenter') memoryDragDepth++;
+                    if (memoryDropOverlay) memoryDropOverlay.classList.remove('hidden');
+                    memoryAddCard.classList.add('border-aquaTerm', 'shadow-[0_0_35px_rgba(0,212,255,0.45)]');
+                }, false);
+            });
+
+            ['dragleave', 'dragend'].forEach(evtName => {
+                memoryAddCard.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (evtName === 'dragleave') memoryDragDepth = Math.max(0, memoryDragDepth - 1);
+                    if (memoryDragDepth === 0 || evtName === 'dragend') {
+                        if (memoryDropOverlay) memoryDropOverlay.classList.add('hidden');
+                        memoryAddCard.classList.remove('border-aquaTerm', 'shadow-[0_0_35px_rgba(0,212,255,0.45)]');
+                    }
+                }, false);
+            });
+
+            memoryAddCard.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                memoryDragDepth = 0;
+                if (memoryDropOverlay) memoryDropOverlay.classList.add('hidden');
+                memoryAddCard.classList.remove('border-aquaTerm', 'shadow-[0_0_35px_rgba(0,212,255,0.45)]');
+                if (isUploadingMemoryPhotos) return;
+
+                const dt = e.dataTransfer;
+                if (dt && dt.files && dt.files.length) {
+                    processAndUploadMemoryFiles(dt.files);
+                }
+            }, false);
+
+            // Ngăn chặn trình duyệt tự mở ảnh khi lỡ tay kéo thả ra ngoài vùng thẻ
+            window.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            }, false);
+            window.addEventListener('drop', (e) => {
+                if (!e.target.closest('#memory-add-card')) {
+                    e.preventDefault();
+                }
+            }, false);
+        }
 
         /* TỐI ƯU TẢI ẢNH KỶ NIỆM TĨNH: Dò thông minh, dừng ngay khi không còn ảnh để không nghẽn mạng */
         function initMemoryGallery1To50() {
@@ -4421,7 +4609,7 @@
                     const slot = document.createElement('div');
                     slot.id = `memory-slot-${i}`;
                     slot.style.order = String(i);
-                    slot.className = 'scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45 relative group';
+                    slot.className = 'scroll-card arch-card corner-brackets overflow-hidden bg-abyss border border-aquaTerm/45 relative group cursor-pointer';
 
                     const wrapper = document.createElement('div');
                     wrapper.className = 'scroll-node relative w-full h-64 sm:h-72 bg-abyss overflow-hidden';
@@ -4429,9 +4617,9 @@
                     const downloadName = `THK17_KiNiem_${i}.webp`;
                     const img = document.createElement('img');
                     img.src = `${i}.webp`;
-                    img.alt = '';
+                    img.alt = `Ảnh kỷ niệm ${i}`;
                     img.setAttribute('data-download-name', downloadName);
-                    img.className = 'memory-downloadable-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]';
+                    img.className = 'memory-downloadable-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04] cursor-zoom-in';
 
                     const dlBtn = document.createElement('button');
                     dlBtn.type = 'button';
@@ -4467,12 +4655,220 @@
         }
 
         document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('image-lightbox-modal');
+            const isLightboxOpen = lightbox && !lightbox.classList.contains('hidden');
+
             if (e.key === 'Escape') {
+                if (isLightboxOpen) {
+                    closeImageLightbox();
+                    return;
+                }
                 closeAuthModal();
                 closeCloudConfigModal();
                 if (globalSearchDropdown) globalSearchDropdown.classList.add('hidden');
+            } else if (isLightboxOpen) {
+                if (e.key === 'ArrowLeft') {
+                    navigateLightbox(-1);
+                } else if (e.key === 'ArrowRight') {
+                    navigateLightbox(1);
+                }
             }
         });
+
+        /* ==========================================================================
+           HỆ THỐNG PHÓNG TO XEM ẢNH ĐẦY ĐỦ (IMAGE LIGHTBOX VIEWER)
+           ========================================================================== */
+        let currentLightboxIndex = -1;
+        let lightboxGalleryItems = [];
+
+        function getAllMemoryGalleryImages() {
+            const grid = document.getElementById('memory-grid');
+            if (!grid) return [];
+            const cards = Array.from(grid.querySelectorAll('.arch-card:not(#memory-add-card)'));
+            cards.sort((a, b) => {
+                const orderA = parseInt(a.style.order || '0', 10);
+                const orderB = parseInt(b.style.order || '0', 10);
+                return orderA - orderB;
+            });
+
+            const items = [];
+            cards.forEach((card, idx) => {
+                const img = card.querySelector('img.memory-downloadable-img');
+                if (img && img.src) {
+                    const downloadName = img.getAttribute('data-download-name') || `THK17_KiNiem_${idx + 1}.webp`;
+                    let title = downloadName.replace(/\.webp$/i, '').replace(/_/g, ' ');
+                    items.push({
+                        src: img.src,
+                        title: title,
+                        downloadName: downloadName,
+                        element: img
+                    });
+                }
+            });
+            return items;
+        }
+
+        function openImageLightboxByElement(targetImg) {
+            if (!targetImg || !targetImg.src) return;
+            lightboxGalleryItems = getAllMemoryGalleryImages();
+            let foundIdx = lightboxGalleryItems.findIndex(item => item.src === targetImg.src);
+            // Chỉ áp dụng tính năng xem phóng to trong phần Kỉ niệm
+            if (foundIdx === -1) return;
+            openImageLightboxByIndex(foundIdx);
+        }
+
+        function openImageLightboxByIndex(index) {
+            if (!lightboxGalleryItems.length) return;
+            if (index < 0) index = 0;
+            if (index >= lightboxGalleryItems.length) index = lightboxGalleryItems.length - 1;
+
+            currentLightboxIndex = index;
+            const item = lightboxGalleryItems[currentLightboxIndex];
+
+            const modal = document.getElementById('image-lightbox-modal');
+            const currentImg = document.getElementById('lightbox-current-img');
+            const titleEl = document.getElementById('lightbox-image-title');
+            const counterEl = document.getElementById('lightbox-image-counter');
+            const prevBtn = document.getElementById('lightbox-prev-btn');
+            const nextBtn = document.getElementById('lightbox-next-btn');
+
+            if (!modal || !currentImg) return;
+
+            if (titleEl) titleEl.textContent = item.title || 'ẢNH KỈ NIỆM THK17';
+            if (counterEl) {
+                counterEl.textContent = `ẢNH ${String(currentLightboxIndex + 1).padStart(2, '0')} / ${String(lightboxGalleryItems.length).padStart(2, '0')}`;
+            }
+
+            if (lightboxGalleryItems.length <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            } else {
+                if (prevBtn) prevBtn.style.display = 'flex';
+                if (nextBtn) nextBtn.style.display = 'flex';
+            }
+
+            currentImg.src = item.src;
+            currentImg.setAttribute('data-download-name', item.downloadName);
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                currentImg.classList.remove('scale-95');
+                currentImg.classList.add('scale-100');
+            });
+        }
+
+        function navigateLightbox(direction) {
+            if (!lightboxGalleryItems.length || lightboxGalleryItems.length <= 1) return;
+            let nextIndex = (currentLightboxIndex + direction + lightboxGalleryItems.length) % lightboxGalleryItems.length;
+
+            const currentImg = document.getElementById('lightbox-current-img');
+            const titleEl = document.getElementById('lightbox-image-title');
+            const counterEl = document.getElementById('lightbox-image-counter');
+            const loader = document.getElementById('lightbox-loader');
+
+            currentLightboxIndex = nextIndex;
+            const item = lightboxGalleryItems[currentLightboxIndex];
+
+            if (titleEl) titleEl.textContent = item.title || 'ẢNH KỈ NIỆM THK17';
+            if (counterEl) {
+                counterEl.textContent = `ẢNH ${String(currentLightboxIndex + 1).padStart(2, '0')} / ${String(lightboxGalleryItems.length).padStart(2, '0')}`;
+            }
+
+            if (loader) loader.classList.remove('hidden');
+            if (currentImg) {
+                currentImg.style.opacity = '0.3';
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    currentImg.src = item.src;
+                    currentImg.setAttribute('data-download-name', item.downloadName);
+                    currentImg.style.opacity = '1';
+                    if (loader) loader.classList.add('hidden');
+                };
+                tempImg.onerror = () => {
+                    currentImg.src = item.src;
+                    currentImg.style.opacity = '1';
+                    if (loader) loader.classList.add('hidden');
+                };
+                tempImg.src = item.src;
+            }
+        }
+
+        function closeImageLightbox() {
+            const modal = document.getElementById('image-lightbox-modal');
+            const currentImg = document.getElementById('lightbox-current-img');
+            if (!modal || modal.classList.contains('hidden')) return;
+
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            if (currentImg) {
+                currentImg.classList.remove('scale-100');
+                currentImg.classList.add('scale-95');
+            }
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                if (currentImg) currentImg.src = '';
+                currentLightboxIndex = -1;
+            }, 250);
+        }
+
+        function handleLightboxBackdropClick(e) {
+            if (e.target.id === 'image-lightbox-modal' || !e.target.closest('#lightbox-img-container')) {
+                if (!e.target.closest('button') && !e.target.closest('.corner-brackets')) {
+                    closeImageLightbox();
+                }
+            }
+        }
+
+        function downloadCurrentLightboxImage() {
+            const currentImg = document.getElementById('lightbox-current-img');
+            if (!currentImg || !currentImg.src) return;
+            const downloadName = currentImg.getAttribute('data-download-name') || `THK17_KiNiem_${Date.now()}.webp`;
+            downloadMemoryImageAsset(currentImg, downloadName);
+        }
+
+        // Bấm vào bất kỳ ảnh nào trong lưới ảnh Kỷ niệm để phóng to
+        document.getElementById('memory-grid')?.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('#memory-add-card')) return;
+            const card = e.target.closest('.arch-card');
+            if (!card) return;
+            const img = card.querySelector('img.memory-downloadable-img');
+            if (img && img.src) {
+                openImageLightboxByElement(img);
+            }
+        });
+
+        // Vuốt cảm ứng trái/phải trên màn hình điện thoại
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const lightboxModalEl = document.getElementById('image-lightbox-modal');
+        if (lightboxModalEl) {
+            lightboxModalEl.addEventListener('touchstart', (e) => {
+                if (e.touches && e.touches[0]) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            lightboxModalEl.addEventListener('touchend', (e) => {
+                if (e.changedTouches && e.changedTouches[0]) {
+                    const diffX = e.changedTouches[0].clientX - touchStartX;
+                    const diffY = e.changedTouches[0].clientY - touchStartY;
+                    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+                        if (diffX > 0) {
+                            navigateLightbox(-1);
+                        } else {
+                            navigateLightbox(1);
+                        }
+                    }
+                }
+            }, { passive: true });
+        }
 
         /* --------------------------------------------------------------------------
            9. LIÊN KẾT & LIÊN HỆ: CHỈ GỬI CHO MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)
@@ -4492,8 +4888,6 @@
             });
         }
 
-        const nameInput = document.getElementById('sender-name');
-        const emailInput = document.getElementById('sender-email');
         const msgInput = document.getElementById('packet-message');
         const jsonPreview = document.getElementById('json-live-preview');
         const payloadHash = document.getElementById('payload-hash');
@@ -4509,31 +4903,27 @@
         }
 
         function updateLiveJsonPacket() {
-            const sender = nameInput.value.trim() || 'Khách truy cập';
-            const email = emailInput.value.trim() || 'Đang chờ nhập...';
             const recipient = 'Mai Thiên Phú (Người thiết kế)';
-            const body = msgInput.value.trim() || 'Đang chờ nội dung tin nhắn...';
+            const body = msgInput ? msgInput.value.trim() : '';
 
             const packetObj = {
                 lop: "THK17 (2025-2028)",
                 truong: "THPT Chuyên Nguyễn Quang Diêu",
                 dia_chi: "Phường Mỹ Trà, Tỉnh Đồng Tháp",
                 nguoi_nhan: recipient,
-                nguoi_gui: sender,
-                lien_he: email,
-                noi_dung: body,
+                noi_dung: body || 'Đang chờ nội dung tin nhắn...',
                 kich_thuoc_byte: new Blob([body]).size
             };
 
             const rawJson = JSON.stringify(packetObj, null, 2);
-            jsonPreview.textContent = rawJson;
-            payloadHash.textContent = 'CRC32: ' + computePseudoCRC32(rawJson);
-            statusBadge.textContent = 'TRẠNG THÁI: ĐANG ĐÓNG GÓI...';
+            if (jsonPreview) jsonPreview.textContent = rawJson;
+            if (payloadHash) payloadHash.textContent = 'CRC32: ' + computePseudoCRC32(rawJson);
+            if (statusBadge) statusBadge.textContent = 'TRẠNG THÁI: ĐANG ĐÓNG GÓI...';
         }
 
-        [nameInput, emailInput, msgInput].forEach(inp => {
-            if (inp) inp.addEventListener('input', updateLiveJsonPacket);
-        });
+        if (msgInput) {
+            msgInput.addEventListener('input', updateLiveJsonPacket);
+        }
 
         function getHiddenMailEndpoint() {
             const codes = [118,97,110,109,105,110,104,116,101,111,50,107,57,64,103,109,97,105,108,46,99,111,109];
@@ -4546,14 +4936,14 @@
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const senderName = nameInput.value.trim();
-                const senderContact = emailInput.value.trim();
-                const messageBody = msgInput.value.trim();
-                if (!senderName || !senderContact || !messageBody) return;
+                const messageBody = msgInput ? msgInput.value.trim() : '';
+                if (!messageBody) return;
 
                 if (contactSubmitBtn) contactSubmitBtn.disabled = true;
-                statusBadge.textContent = 'TRẠNG THÁI: ĐANG GỬI TỚI MAI THIÊN PHÚ...';
-                statusBadge.className = 'font-mono text-xs text-oceanBright font-bold';
+                if (statusBadge) {
+                    statusBadge.textContent = 'TRẠNG THÁI: ĐANG GỬI TỚI MAI THIÊN PHÚ...';
+                    statusBadge.className = 'font-mono text-xs text-oceanBright font-bold';
+                }
 
                 try {
                     await fetch(getHiddenMailEndpoint(), {
@@ -4563,20 +4953,18 @@
                             'Accept': 'application/json'
                         },
                         body: JSON.stringify({
-                            _subject: `[Web THK17] Tin nhắn từ ${senderName}`,
+                            _subject: `[Web THK17] Tin nhắn ẩn danh gửi Mai Thiên Phú (Người thiết kế)`,
                             Bo_Phan_Tiep_Nhan: 'Mai Thiên Phú (Người thiết kế)',
-                            Ho_Va_Ten_Nguoi_Gui: senderName,
-                            Email_Hoac_SDT: senderContact,
                             Noi_Dung_Tin_Nhan: messageBody
                         })
                     });
                 } catch (_) {}
 
-                statusBadge.textContent = '[✔] ĐÃ GỬI THÀNH CÔNG TỚI MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)';
-                statusBadge.className = 'font-mono text-xs text-aquaTerm font-bold';
-                nameInput.value = '';
-                emailInput.value = '';
-                msgInput.value = '';
+                if (statusBadge) {
+                    statusBadge.textContent = '[✔] ĐÃ GỬI THÀNH CÔNG TỚI MAI THIÊN PHÚ (NGƯỜI THIẾT KẾ)';
+                    statusBadge.className = 'font-mono text-xs text-aquaTerm font-bold';
+                }
+                if (msgInput) msgInput.value = '';
                 updateLiveJsonPacket();
                 if (contactSubmitBtn) contactSubmitBtn.disabled = false;
             });
