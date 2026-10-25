@@ -1,0 +1,47 @@
+================================================================================
+HƯỚNG DẪN VẬN HÀNH HỆ THỐNG WEB KHÔNG TĨNH LỚP CHUYÊN TIN THK17 (2025 - 2028)
+Trường THPT Chuyên Nguyễn Quang Diêu — Phường Mỹ Trà, Tỉnh Đồng Tháp
+Người thiết kế: Mai Thiên Phú
+================================================================================
+
+1. CẤU TRÚC THƯ MỤC TRONG FILE ZIP:
+   ├── index.html                  : Giao diện chính C++23 Ocean Blue (đã nâng cấp từ code gốc)
+   ├── server.js                   : Máy chủ Node.js lưu trữ dữ liệu vĩnh viễn & đếm truy cập thực
+   ├── server.py                   : Máy chủ Python 3 + SQLite lưu trữ dữ liệu vĩnh viễn
+   ├── package.json                : Cấu hình khởi chạy Node.js
+   ├── vercel.json & api/          : Serverless API hỗ trợ khi đẩy lên GitHub / Vercel
+   ├── data/
+   │   ├── thk17_database.sqlite   : Cơ sở dữ liệu SQLite lưu số lượt truy cập & tin nhắn
+   │   └── thk17_state.json        : File dữ liệu JSON đồng bộ vĩnh viễn
+   ├── nen.webp                    : Ảnh bìa trang chủ
+   ├── PD.webp                     : Ảnh chân dung GVCN Thầy Nguyễn Phúc Duy tại mục Thông tin
+   └── 1.webp, 2.webp, 3.webp      : Ảnh mẫu mục Kỉ niệm (tự động nhận từ 1.webp -> 50.webp)
+
+2. CÁCH THÊM / ẨN ẢNH Ở MỤC KỈ NIỆM & GIỚI HẠN TẢI LÊN:
+   - Cách 1 (Ảnh tĩnh trong thư mục): Đặt ảnh .webp từ 1.webp -> 50.webp vào thư mục. Web tự động nhận và hiển thị.
+   - Cách 2 (Tải ảnh trực tiếp trên web lên Đám mây):
+     + Nút [+ ĐĂNG ẢNH KỈ NIỆM (TỐI ĐA 5 ẢNH)]: Đã giới hạn tối đa 5 ảnh mỗi lần chọn để chống lag và bảo vệ đường truyền Cloud.
+     + Cơ chế chống F5: Hệ thống tự động khóa phím F5 / Ctrl+R và cảnh báo khi đang tải ảnh để không bị mất dữ liệu giữa chừng.
+
+3. HỆ THỐNG ĐỒNG BỘ ĐÁM MÂY SIÊU TỐC (FIREBASE REALTIME DATABASE):
+   - Đã tích hợp Google Firebase Realtime Database: Tốc độ phản hồi cực nhanh (< 100ms) qua Server-Sent Events (SSE).
+   - Bất kỳ ai ở bất kỳ thiết bị nào (máy tính, Android, iPhone) đăng ảnh hoặc tạo tài khoản, các thiết bị khác sẽ nhận được ngay lập tức theo thời gian thực mà không cần reload trang.
+   - Dự án Firebase chính thức của lớp:
+     https://thk17nqd-default-rtdb.asia-southeast1.firebasedatabase.app
+     (Đã được nhúng mặc định trong file index.html, tự động đồng bộ 24/24 cho toàn bộ học sinh trên mọi thiết bị).
+
+4. TỐI ƯU HÓA HIỂN THỊ TRÊN ĐIỆN THOẠI (ANDROID / IOS):
+   - Đã loại bỏ hoàn toàn hiện tượng vuốt 1s sau mới hiện nội dung trên Android.
+   - Mọi khối nội dung, chữ, thẻ ban cán sự và ảnh kỉ niệm đều hiển thị 100% rõ nét ngay khi ngón tay vuốt.
+   - Tự động tắt các hiệu ứng canvas và animation nặng trên mobile để tiết kiệm pin và đạt 60-120 FPS mượt mà.
+
+5. CÁCH CHẠY TRANG WEB KHÔNG TĨNH:
+   - Cách 1 (Chạy bằng Node.js):
+       node server.js
+     Sau đó mở trình duyệt tại: http://localhost:5500
+   - Cách 2 (Chạy bằng Python):
+       python server.py
+     Sau đó mở trình duyệt tại: http://localhost:5500
+   - Cách 3 (Triển khai lên Vercel / GitHub hoặc mở bằng VS Code Live Server):
+     Hệ thống tự động kết nối API /api/stats và Cloud Counter vĩnh viễn để không bao giờ mất số lượt truy cập.
+================================================================================
