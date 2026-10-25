@@ -451,12 +451,36 @@
             100% { left: 2%; transform: scaleX(1); }
         }
         @keyframes dinoAutoHop {
-            0%, 18%, 26%, 46%, 54%, 74%, 82%, 100% { transform: translateY(0px); }
-            22%, 50%, 78% { transform: translateY(-18px); }
+            0%, 9%, 14%, 22.5%, 27.5%, 35%, 40.5%, 45%, 50%, 55.5%, 61.5%, 68%, 73.5%, 81.5%, 87.5%, 95%, 100% {
+                transform: translateY(0px);
+            }
+            11.5% {
+                transform: translateY(-18px);
+            }
+            25.1% {
+                transform: translateY(-18px);
+            }
+            37.7% {
+                transform: translateY(-22px) rotate(-3deg);
+            }
+            48% {
+                transform: translateY(-10px) scale(1.04);
+            }
+            58.4% {
+                transform: translateY(-22px) rotate(3deg);
+            }
+            70.9% {
+                transform: translateY(-18px);
+            }
+            84.5% {
+                transform: translateY(-18px);
+            }
         }
         .dino-patrol-runner {
             position: absolute;
-            bottom: 4px;
+            bottom: 8px;
+            z-index: 30;
+            cursor: pointer;
             animation: dinoPatrolRun 18s linear infinite;
         }
         .dino-patrol-hop {
@@ -467,8 +491,45 @@
         }
         @keyframes dinoClickJump {
             0% { transform: translateY(0) scale(1); }
-            45% { transform: translateY(-26px) scale(1.15) rotate(-6deg); }
+            45% { transform: translateY(-22px) scale(1.1) rotate(-4deg); }
             100% { transform: translateY(0) scale(1); }
+        }
+
+        /* Chướng ngại vật Cây Xương Rồng pixel chuẩn 100% */
+        .thk17-cactus-obstacle {
+            position: absolute;
+            bottom: 8px;
+            z-index: 20;
+            display: inline-flex;
+            align-items: flex-end;
+            justify-content: center;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .thk17-cactus-obstacle:hover {
+            filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.9));
+            transform: scale(1.12) translateY(-2px);
+        }
+        .thk17-cactus-wrap {
+            display: inline-flex;
+            align-items: flex-end;
+            justify-content: center;
+            line-height: 0;
+        }
+        .thk17-cactus-svg {
+            overflow: visible;
+            display: block;
+        }
+        @keyframes cactusWobble {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.15) rotate(-8deg); }
+            50% { transform: scale(1.2) rotate(8deg); }
+            75% { transform: scale(1.1) rotate(-4deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .cactus-wobble-burst {
+            animation: cactusWobble 0.5s ease-in-out !important;
         }
 
         /* Scanline Overlay */
@@ -991,6 +1052,32 @@
     </aside>
 
     <!-- ==========================================================================
+         2B. FIXED MOBILE BOTTOM TELEMETRY RAIL (BẢN NẰM NGANG DƯỚI ĐÁY MÀN HÌNH CHO ĐIỆN THOẠI - MÀU ĐỤC 100% NHƯ MENU)
+         ========================================================================== -->
+    <aside class="flex lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#020814] border-t border-aquaTerm/35 shadow-[0_-8px_32px_rgba(0,12,32,0.95)] px-3 sm:px-4 py-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] items-center justify-between select-none font-mono text-[9px] sm:text-[10px]">
+        <!-- Bên trái: Niên khóa & Trường -->
+        <div class="text-iceWhite/85 tracking-wider truncate flex items-center gap-1.5 max-w-[35%]">
+            <span class="w-1.5 h-1.5 bg-aquaTerm rounded-full animate-pulse shrink-0"></span>
+            <span class="truncate">THK17 // 25-28 // CHUYÊN NGUYỄN QUANG DIÊU</span>
+        </div>
+
+        <!-- Ở giữa: Thanh tiến trình cuộn trang & phần trăm -->
+        <div class="flex items-center gap-1.5 text-aquaTerm shrink-0 px-1">
+            <span class="text-[8px] opacity-75">+</span>
+            <div class="w-10 sm:w-16 h-[3px] bg-white/20 relative overflow-hidden rounded-full">
+                <div id="scroll-progress-bar-mobile" class="h-full bg-aquaTerm transition-none shadow-[0_0_8px_#00d4ff]" style="width: 0%"></div>
+            </div>
+            <span id="scroll-pct-label-mobile" class="font-bold min-w-[26px] text-center text-[9px] sm:text-[10px] text-aquaTerm">00%</span>
+            <span class="text-[8px] opacity-75">+</span>
+        </div>
+
+        <!-- Bên phải: Chuẩn C++23 & Binary Ocean -->
+        <div class="text-oceanBright tracking-wider truncate text-right max-w-[35%] font-medium">
+            <span class="truncate">STD::C++23 // BINARY_OCEAN</span>
+        </div>
+    </aside>
+
+    <!-- ==========================================================================
          3. PERSISTENT FIXED TOP NAVIGATION BAR (GỌN GÀNG, BỐ TRÍ HỢP LÝ,
             CÓ NÚT ẨN/HIỆN MENU TRÊN ĐIỆN THOẠI & MENU TỰ CHIA 2 HÀNG NẾU HẸP)
          ========================================================================== -->
@@ -1099,23 +1186,23 @@
             <!-- Hàng 2: 5 Thẻ Menu (Đủ chỗ thì 1 hàng, thiếu chỗ như iPhone 8 thì tự chia 2 hàng mỏng khít 100%) -->
             <div id="navbar-collapsible-body" class="flex flex-col lg:flex-row lg:items-stretch flex-1 justify-between">
                 <nav aria-label="Menu thẻ chính" class="flex flex-wrap sm:flex-nowrap items-stretch border-t lg:border-t-0 border-aquaTerm/25 w-full lg:w-auto">
-                    <a href="#trang-chu" onclick="autoCollapseOnMobileClick()" data-section="trang-chu" class="nav-item active flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                    <a href="#trang-chu" data-section="trang-chu" class="nav-item active flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
                         <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">01//</span>
                         <span>Trang chủ</span>
                     </a>
-                    <a href="#thong-tin" onclick="autoCollapseOnMobileClick()" data-section="thong-tin" class="nav-item flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                    <a href="#thong-tin" data-section="thong-tin" class="nav-item flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
                         <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">02//</span>
                         <span>Thông tin</span>
                     </a>
-                    <a href="#ki-niem" onclick="autoCollapseOnMobileClick()" data-section="ki-niem" class="nav-item flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                    <a href="#ki-niem" data-section="ki-niem" class="nav-item flex-1 basis-[32%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-b sm:border-b-0 border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
                         <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">03//</span>
                         <span>Kỉ niệm</span>
                     </a>
-                    <a href="#mang-xa-hoi" onclick="autoCollapseOnMobileClick()" data-section="mang-xa-hoi" class="nav-item flex-1 basis-[48%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                    <a href="#mang-xa-hoi" data-section="mang-xa-hoi" class="nav-item flex-1 basis-[48%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
                         <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">04//</span>
                         <span>Liên kết</span>
                     </a>
-                    <a href="#lien-he" onclick="autoCollapseOnMobileClick()" data-section="lien-he" class="nav-item flex-1 basis-[48%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
+                    <a href="#lien-he" data-section="lien-he" class="nav-item flex-1 basis-[48%] sm:basis-auto flex items-center justify-center gap-1 px-1.5 sm:px-3 xl:px-4 py-1.5 lg:py-3.5 border-r border-aquaTerm/20 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slateBlue hover:text-iceWhite whitespace-nowrap">
                         <span class="nav-hex text-[9px] sm:text-[10px] text-aquaTerm font-bold">05//</span>
                         <span>Liên hệ</span>
                     </a>
@@ -1288,16 +1375,39 @@
                         </div>
                     </div>
 
-                    <!-- ĐƯỜNG CHẠY TUẦN TRA CỦA DINO PIXEL XANH VƯƠNG MIỆN VÀNG -->
-                    <div class="relative h-12 bg-[#020916] hairline-t overflow-hidden flex items-end px-4 select-none">
-                        <div class="w-full border-b border-dashed border-aquaTerm/35 pb-1 flex justify-between items-center font-mono text-[10px] text-slateBlue/50">
-                            <span>01000011 00101011 00101011</span>
-                            <span class="px-1.5 py-0.5 border border-aquaTerm/30 text-aquaTerm/70 bg-oceanDeep/80">[C++23_OBSTACLE]</span>
-                            <span class="hidden sm:inline">std::vector&lt;THK17_Dino&gt;</span>
-                            <span class="px-1.5 py-0.5 border border-aquaTerm/30 text-aquaTerm/70 bg-oceanDeep/80">[AC_100/100]</span>
-                            <span>THPT_CHUYEN_NQD</span>
+                    <!-- DẢI THÔNG SỐ TRẠNG THÁI (TIER 1 - CỐ ĐỊNH, KHÔNG BỊ ĐÈ CHỮ) -->
+                    <div class="px-4 py-2 bg-[#020b18] hairline-t hairline-b flex justify-between items-center font-mono text-[10px] text-slateBlue/70 select-none">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-aquaTerm/80 rounded-full animate-pulse"></span>
+                            <span class="text-aquaTerm/75 tracking-wider font-semibold">01000011 00101011 00101011</span>
+                            <span class="hidden sm:inline px-1.5 py-0.5 border border-aquaTerm/35 text-aquaTerm bg-oceanDeep/90 font-bold">[C++23_OBSTACLE]</span>
                         </div>
-                        <div class="dino-patrol-runner">
+                        <div class="flex items-center gap-2 font-mono">
+                            <span class="text-aquaTerm/80">std::vector&lt;THK17_Dino&gt;</span>
+                            <span class="px-1.5 py-0.5 border border-aquaTerm/35 text-aquaTerm bg-oceanDeep/90 font-bold">[AC_100/100]</span>
+                            <span class="hidden md:inline text-slateBlue/60">THPT_CHUYEN_NQD</span>
+                        </div>
+                    </div>
+
+                    <!-- KHÔNG GIAN RIÊNG BIỆT DÀNH CHO KHỦNG LONG VÀ XƯƠNG RỒNG (TIER 2 - KHÔNG GIAN RIÊNG, KHÔNG BỊ ĐÈ CHỮ) -->
+                    <div class="relative h-16 sm:h-20 bg-[#020916] select-none z-30 overflow-x-clip overflow-y-visible">
+                        <!-- Vạch đường chạy tuần tra (sạch sẽ, không chữ, không lo bị đè) -->
+                        <div class="absolute inset-x-4 bottom-2 border-b-2 border-dashed border-aquaTerm/35 pointer-events-none"></div>
+
+                        <!-- Cây xương rồng đơn #1 (Vị trí 24%) -->
+                        <div class="thk17-cactus-obstacle" style="left: 24%;" title="Cây xương rồng THK17 // C++23 Obstacle #1 (Bấm để lắc!)">
+                            <span class="thk17-cactus-slot w-6 h-7" data-cactus-type="single"></span>
+                        </div>
+                        <!-- Cây xương rồng đơn #2 (Vị trí 50%) -->
+                        <div class="thk17-cactus-obstacle" style="left: 50%;" title="Cây xương rồng THK17 // C++23 Obstacle #2 (Bấm để lắc!)">
+                            <span class="thk17-cactus-slot w-6 h-7" data-cactus-type="single"></span>
+                        </div>
+                        <!-- Bụi 3 cây xương rồng #3 (Vị trí 74%) -->
+                        <div class="thk17-cactus-obstacle" style="left: 74%;" title="Bụi 3 cây xương rồng THK17 // C++23 Obstacle #3 (Bấm để lắc!)">
+                            <span class="thk17-cactus-slot w-12 h-8" data-cactus-type="cluster"></span>
+                        </div>
+                        <!-- Khủng long tuần tra chạy & nhảy qua cây xương rồng -->
+                        <div class="dino-patrol-runner" title="Khủng long THK17 Tuần Tra (Bấm để nhảy!)">
                             <div class="dino-patrol-hop">
                                 <span class="thk17-dino-slot w-9 h-9" data-dino-size="w-9 h-9"></span>
                             </div>
@@ -2250,7 +2360,7 @@
          ARCHITECTURAL FOOTER (ĐẾM TỔNG LƯỢT TRUY CẬP TOÀN CẦU MỌI THIẾT BỊ)
          ========================================================================== -->
     <footer class="relative z-10 hairline-t bg-oceanDeep/95 max-w-[1440px] mx-auto lg:px-11">
-        <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-8 flex flex-col gap-5 font-mono text-xs text-slateBlue">
+        <div class="hairline-l hairline-r px-4 sm:px-8 lg:px-12 py-8 pb-16 lg:pb-8 flex flex-col gap-5 font-mono text-xs text-slateBlue">
             
             <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 <div class="flex items-center gap-3">
@@ -2340,9 +2450,7 @@
         }
 
         function autoCollapseOnMobileClick() {
-            if (window.innerWidth < 1024 && !isMobileMenuCollapsed) {
-                toggleMobileMenu();
-            }
+            /* Giữ menu luôn mở khi bấm thẻ chuyển trang. Menu chỉ ẩn khi người dùng tự bấm nút [ ẨN MENU ] */
         }
 
         document.addEventListener('contextmenu', (e) => {
@@ -2543,11 +2651,278 @@
         function mountAllThk17Dinos() {
             document.querySelectorAll('.thk17-dino-slot').forEach(slot => {
                 const sizeCls = slot.getAttribute('data-dino-size') || 'w-8 h-8';
-                slot.className = `thk17-dino-wrap ${sizeCls} shrink-0`;
+                if (!slot.classList.contains('thk17-dino-wrap')) {
+                    slot.classList.add('thk17-dino-wrap', 'shrink-0');
+                    sizeCls.split(' ').forEach(c => c && slot.classList.add(c));
+                }
                 slot.title = 'Linh vật THK17 Dino C++ (Bấm để nhảy!)';
                 slot.innerHTML = DINO_PIXEL_SVG_TEMPLATE;
                 slot.onclick = function () { triggerDinoJump(slot); };
             });
+        }
+
+        /* ==========================================================================
+           PIXEL CYBER CACTUS (XƯƠNG RỒNG THK17) - 100% EXACT DESIGN LIKE PHOTO
+           ========================================================================== */
+        const CACTUS_SINGLE_SVG_TEMPLATE = `
+            <svg class="thk17-cactus-svg" viewBox="0 0 18 22" width="100%" height="100%" shape-rendering="crispEdges">
+                <g class="cactus-body">
+                    <!-- VIỀN TRẮNG & GAI XƯƠNG RỒNG PIXEL -->
+                    <rect x="7" y="1" width="4" height="1" fill="#FFFFFF"/>
+                    <rect x="7" y="0" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="9" y="0" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="10" y="0" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="6" y="2" width="1" height="7" fill="#FFFFFF"/>
+                    <rect x="5" y="3" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="6" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="11" y="2" width="1" height="5" fill="#FFFFFF"/>
+                    <rect x="12" y="3" width="1" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh trái -->
+                    <rect x="2" y="6" width="3" height="1" fill="#FFFFFF"/>
+                    <rect x="2" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="4" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="1" y="7" width="1" height="5" fill="#FFFFFF"/>
+                    <rect x="0" y="8" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="0" y="10" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="2" y="12" width="5" height="1" fill="#FFFFFF"/>
+                    <rect x="3" y="13" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="4" y="7" width="1" height="3" fill="#FFFFFF"/>
+                    <rect x="5" y="7" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="9" width="2" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh phải -->
+                    <rect x="13" y="3" width="3" height="1" fill="#FFFFFF"/>
+                    <rect x="13" y="2" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="15" y="2" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="16" y="4" width="1" height="7" fill="#FFFFFF"/>
+                    <rect x="17" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="17" y="8" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="11" y="11" width="6" height="1" fill="#FFFFFF"/>
+                    <rect x="14" y="12" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="4" width="1" height="5" fill="#FFFFFF"/>
+                    <rect x="13" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="11" y="8" width="2" height="1" fill="#FFFFFF"/>
+
+                    <!-- Thân dưới -->
+                    <rect x="6" y="12" width="1" height="10" fill="#FFFFFF"/>
+                    <rect x="5" y="14" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="17" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="20" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="11" y="12" width="1" height="10" fill="#FFFFFF"/>
+                    <rect x="12" y="14" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="17" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="20" width="1" height="1" fill="#FFFFFF"/>
+
+                    <!-- MÀU THÂN: CYAN / BLUE (#00A3FF) -->
+                    <rect x="7" y="2" width="4" height="20" fill="#00A3FF"/>
+                    <rect x="2" y="7" width="2" height="5" fill="#00A3FF"/>
+                    <rect x="2" y="11" width="5" height="1" fill="#00A3FF"/>
+                    <rect x="13" y="4" width="3" height="7" fill="#00A3FF"/>
+                    <rect x="11" y="9" width="3" height="2" fill="#00A3FF"/>
+
+                    <!-- ĐƯỜNG BÓNG TỐI SẪM (#062663) -->
+                    <rect x="7" y="3" width="1" height="19" fill="#062663"/>
+                    <rect x="2" y="8" width="1" height="4" fill="#062663"/>
+                    <rect x="13" y="5" width="1" height="6" fill="#062663"/>
+
+                    <!-- VẠCH ÁNH SÁNG XANH NGỌC (#5AE0FF) -->
+                    <rect x="10" y="2" width="1" height="7" fill="#5AE0FF"/>
+                    <rect x="10" y="11" width="1" height="11" fill="#5AE0FF"/>
+                    <rect x="3" y="7" width="1" height="4" fill="#5AE0FF"/>
+                    <rect x="15" y="4" width="1" height="6" fill="#5AE0FF"/>
+                </g>
+            </svg>
+        `;
+
+        const CACTUS_CLUSTER_SVG_TEMPLATE = `
+            <svg class="thk17-cactus-svg" viewBox="0 0 38 24" width="100%" height="100%" shape-rendering="crispEdges">
+                <!-- CÂY CAO (BÊN TRÁI) -->
+                <g class="cactus-tall" transform="translate(0, 0)">
+                    <rect x="7" y="1" width="4" height="1" fill="#FFFFFF"/>
+                    <rect x="7" y="0" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="9" y="0" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="10" y="0" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="6" y="2" width="1" height="7" fill="#FFFFFF"/>
+                    <rect x="5" y="3" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="6" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="11" y="2" width="1" height="4" fill="#FFFFFF"/>
+                    <rect x="12" y="3" width="1" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh trái -->
+                    <rect x="2" y="6" width="3" height="1" fill="#FFFFFF"/>
+                    <rect x="2" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="4" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="1" y="7" width="1" height="6" fill="#FFFFFF"/>
+                    <rect x="0" y="8" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="0" y="11" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="2" y="13" width="5" height="1" fill="#FFFFFF"/>
+                    <rect x="3" y="14" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="4" y="7" width="1" height="4" fill="#FFFFFF"/>
+                    <rect x="5" y="7" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="10" width="2" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh phải -->
+                    <rect x="13" y="2" width="3" height="1" fill="#FFFFFF"/>
+                    <rect x="13" y="1" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="15" y="1" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="16" y="3" width="1" height="8" fill="#FFFFFF"/>
+                    <rect x="17" y="4" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="17" y="7" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="17" y="9" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="11" y="11" width="6" height="1" fill="#FFFFFF"/>
+                    <rect x="14" y="12" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="3" width="1" height="6" fill="#FFFFFF"/>
+                    <rect x="13" y="4" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="11" y="8" width="2" height="1" fill="#FFFFFF"/>
+
+                    <!-- Thân dưới -->
+                    <rect x="6" y="13" width="1" height="11" fill="#FFFFFF"/>
+                    <rect x="5" y="15" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="18" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="21" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="11" y="12" width="1" height="12" fill="#FFFFFF"/>
+                    <rect x="12" y="15" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="18" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="21" width="1" height="1" fill="#FFFFFF"/>
+
+                    <!-- Màu Cyan/Blue -->
+                    <rect x="7" y="2" width="4" height="22" fill="#00A3FF"/>
+                    <rect x="2" y="7" width="2" height="6" fill="#00A3FF"/>
+                    <rect x="2" y="12" width="5" height="1" fill="#00A3FF"/>
+                    <rect x="13" y="3" width="3" height="8" fill="#00A3FF"/>
+                    <rect x="11" y="9" width="3" height="2" fill="#00A3FF"/>
+
+                    <!-- Shadow -->
+                    <rect x="7" y="3" width="1" height="21" fill="#062663"/>
+                    <rect x="2" y="8" width="1" height="5" fill="#062663"/>
+                    <rect x="13" y="4" width="1" height="7" fill="#062663"/>
+
+                    <!-- Highlights -->
+                    <rect x="10" y="2" width="1" height="7" fill="#5AE0FF"/>
+                    <rect x="10" y="12" width="1" height="12" fill="#5AE0FF"/>
+                    <rect x="3" y="7" width="1" height="5" fill="#5AE0FF"/>
+                    <rect x="15" y="3" width="1" height="7" fill="#5AE0FF"/>
+                </g>
+
+                <!-- CÂY NHỎ (Ở GIỮA) -->
+                <g class="cactus-small" transform="translate(18, 10)">
+                    <rect x="3" y="1" width="3" height="1" fill="#FFFFFF"/>
+                    <rect x="3" y="0" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="5" y="0" width="1" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh trái -->
+                    <rect x="0" y="4" width="2" height="1" fill="#FFFFFF"/>
+                    <rect x="0" y="5" width="1" height="3" fill="#FFFFFF"/>
+                    <rect x="0" y="8" width="3" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh phải -->
+                    <rect x="6" y="3" width="2" height="1" fill="#FFFFFF"/>
+                    <rect x="7" y="4" width="1" height="4" fill="#FFFFFF"/>
+                    <rect x="5" y="7" width="3" height="1" fill="#FFFFFF"/>
+
+                    <!-- Thân -->
+                    <rect x="2" y="2" width="1" height="4" fill="#FFFFFF"/>
+                    <rect x="2" y="8" width="1" height="6" fill="#FFFFFF"/>
+                    <rect x="1" y="10" width="1" height="1" fill="#FFFFFF"/>
+                    
+                    <rect x="5" y="2" width="1" height="3" fill="#FFFFFF"/>
+                    <rect x="5" y="7" width="1" height="7" fill="#FFFFFF"/>
+                    <rect x="6" y="10" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="3" y="2" width="2" height="12" fill="#00A3FF"/>
+                    <rect x="1" y="5" width="1" height="3" fill="#00A3FF"/>
+                    <rect x="6" y="4" width="1" height="3" fill="#00A3FF"/>
+
+                    <rect x="3" y="2" width="1" height="12" fill="#062663"/>
+                    <rect x="4" y="2" width="1" height="12" fill="#5AE0FF"/>
+                </g>
+
+                <!-- CÂY VỪA (BÊN PHẢI) -->
+                <g class="cactus-medium" transform="translate(25, 4)">
+                    <rect x="6" y="1" width="3" height="1" fill="#FFFFFF"/>
+                    <rect x="6" y="0" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="8" y="0" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="5" y="2" width="1" height="5" fill="#FFFFFF"/>
+                    <rect x="4" y="3" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="9" y="2" width="1" height="4" fill="#FFFFFF"/>
+                    <rect x="10" y="3" width="1" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh trái -->
+                    <rect x="2" y="5" width="2" height="1" fill="#FFFFFF"/>
+                    <rect x="1" y="6" width="1" height="4" fill="#FFFFFF"/>
+                    <rect x="0" y="7" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="2" y="10" width="4" height="1" fill="#FFFFFF"/>
+                    <rect x="3" y="6" width="1" height="2" fill="#FFFFFF"/>
+                    <rect x="4" y="8" width="2" height="1" fill="#FFFFFF"/>
+
+                    <!-- Nhánh phải -->
+                    <rect x="11" y="3" width="2" height="1" fill="#FFFFFF"/>
+                    <rect x="12" y="4" width="1" height="5" fill="#FFFFFF"/>
+                    <rect x="13" y="5" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="9" y="9" width="4" height="1" fill="#FFFFFF"/>
+                    <rect x="10" y="4" width="1" height="3" fill="#FFFFFF"/>
+                    <rect x="9" y="7" width="2" height="1" fill="#FFFFFF"/>
+
+                    <!-- Thân dưới -->
+                    <rect x="5" y="10" width="1" height="10" fill="#FFFFFF"/>
+                    <rect x="4" y="12" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="4" y="15" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="4" y="18" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="9" y="10" width="1" height="10" fill="#FFFFFF"/>
+                    <rect x="10" y="13" width="1" height="1" fill="#FFFFFF"/>
+                    <rect x="10" y="16" width="1" height="1" fill="#FFFFFF"/>
+
+                    <rect x="6" y="2" width="3" height="18" fill="#00A3FF"/>
+                    <rect x="2" y="6" width="1" height="4" fill="#00A3FF"/>
+                    <rect x="2" y="9" width="4" height="1" fill="#00A3FF"/>
+                    <rect x="11" y="4" width="1" height="5" fill="#00A3FF"/>
+                    <rect x="9" y="8" width="2" height="1" fill="#00A3FF"/>
+
+                    <rect x="6" y="3" width="1" height="17" fill="#062663"/>
+                    <rect x="2" y="7" width="1" height="3" fill="#062663"/>
+                    <rect x="11" y="5" width="1" height="4" fill="#062663"/>
+
+                    <rect x="8" y="2" width="1" height="18" fill="#5AE0FF"/>
+                </g>
+            </svg>
+        `;
+
+        function triggerCactusWobble(el) {
+            if (!el) return;
+            el.classList.remove('cactus-wobble-burst');
+            void el.offsetWidth;
+            el.classList.add('cactus-wobble-burst');
+            setTimeout(() => el.classList.remove('cactus-wobble-burst'), 600);
+        }
+
+        function mountAllThk17Cacti() {
+            document.querySelectorAll('.thk17-cactus-slot').forEach(slot => {
+                const type = slot.getAttribute('data-cactus-type') || 'single';
+                if (!slot.classList.contains('thk17-cactus-wrap')) {
+                    slot.classList.add('thk17-cactus-wrap', 'shrink-0');
+                }
+                slot.title = type === 'cluster' ? 'Bụi 3 cây xương rồng THK17 C++23 (Bấm để lắc!)' : 'Cây xương rồng THK17 C++23 (Bấm để lắc!)';
+                slot.innerHTML = (type === 'cluster') ? CACTUS_CLUSTER_SVG_TEMPLATE : CACTUS_SINGLE_SVG_TEMPLATE;
+                slot.onclick = function (ev) {
+                    ev.stopPropagation();
+                    triggerCactusWobble(slot.closest('.thk17-cactus-obstacle') || slot);
+                };
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', mountAllThk17Cacti);
+        } else {
+            mountAllThk17Cacti();
         }
 
         /* --------------------------------------------------------------------------
@@ -3861,6 +4236,10 @@
             if (pctBar) pctBar.style.height = scrollPct + '%';
             const pctLabel = document.getElementById('scroll-pct-label');
             if (pctLabel) pctLabel.textContent = String(scrollPct).padStart(2, '0') + '%';
+            const pctBarMobile = document.getElementById('scroll-progress-bar-mobile');
+            if (pctBarMobile) pctBarMobile.style.width = scrollPct + '%';
+            const pctLabelMobile = document.getElementById('scroll-pct-label-mobile');
+            if (pctLabelMobile) pctLabelMobile.textContent = String(scrollPct).padStart(2, '0') + '%';
 
             /* ĐIỆN THOẠI (ANDROID / IOS): Bỏ hoàn toàn việc tính toán vị trí từng thẻ mỗi khung hình.
                Toàn bộ nội dung hiển thị ngay 100%, vuốt mượt mà không bị delay 1s! */
@@ -5124,6 +5503,7 @@
            -------------------------------------------------------------------------- */
         window.onload = async function () {
             mountAllThk17Dinos();
+            mountAllThk17Cacti();
             renderRosterGrid('all');
             initMemoryGallery1To50();
             updateAuthHeaderUI();
