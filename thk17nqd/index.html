@@ -598,9 +598,33 @@
             overflow-y: auto !important;
             overscroll-behavior-y: contain !important;
             scroll-behavior: smooth !important;
+            scrollbar-gutter: stable;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(6, 182, 212, 0.4) rgba(2, 7, 19, 0.6);
             transform: translateZ(0) !important;
             will-change: scroll-position !important;
             -webkit-overflow-scrolling: touch !important;
+        }
+        #memory-folder-scroll-area::-webkit-scrollbar {
+            width: 8px;
+        }
+        #memory-folder-scroll-area::-webkit-scrollbar-track {
+            background: rgba(2, 7, 19, 0.5);
+            border-radius: 9999px;
+            margin: 8px 0;
+        }
+        #memory-folder-scroll-area::-webkit-scrollbar-thumb {
+            background: rgba(6, 182, 212, 0.35);
+            border-radius: 9999px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        #memory-folder-scroll-area::-webkit-scrollbar-thumb:hover {
+            background: rgba(6, 182, 212, 0.75);
+        }
+
+        #memory-folder-scroll-area .scroll-card,
+        #memory-folder-scroll-area .scroll-node {
+            opacity: 1 !important;
         }
 
         #memory-grid .arch-card {
@@ -1557,7 +1581,7 @@
     <!-- ==========================================================================
          0E. MODAL BUNG MỞ THƯ MỤC ALBUM (EXPANDED FOLDER MODAL - BUNG RA TỪ WIDGET)
          ========================================================================== -->
-    <div id="memory-folder-modal" style="display: none;" class="hidden fixed inset-0 z-[10010] bg-[#020713] flex flex-col p-3 sm:p-6 lg:p-8 overflow-hidden select-none opacity-0" role="dialog" aria-modal="true" aria-label="Thư mục ảnh kỉ niệm THK17">
+    <div id="memory-folder-modal" style="display: none;" class="hidden fixed inset-0 z-[10010] bg-[#020713] flex flex-col p-3 sm:p-6 lg:p-8 overflow-hidden select-none" role="dialog" aria-modal="true" aria-label="Thư mục ảnh kỉ niệm THK17">
         
         <!-- Thanh Header Thư mục khi bung ra -->
         <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10 shrink-0">
@@ -1613,9 +1637,9 @@
         </div>
 
         <!-- Vùng cuộn chứa lưới ảnh đầy đủ của thư mục (Tối ưu hóa cuộn siêu mượt 60fps trên PC & Mobile) -->
-        <div id="memory-folder-scroll-area" class="flex-1 overflow-y-auto pt-6 pb-12 pr-1 space-y-6 scrollbar-thin" style="overscroll-behavior-y: contain; scroll-behavior: smooth; transform: translateZ(0); will-change: scroll-position; -webkit-overflow-scrolling: touch;">
+        <div id="memory-folder-scroll-area" class="flex-1 overflow-y-auto pt-4 pb-12 px-2 sm:px-4 lg:px-6 space-y-6 scrollbar-thin" style="overscroll-behavior-y: contain; scroll-behavior: smooth; scrollbar-gutter: stable; transform: translateZ(0); will-change: scroll-position; -webkit-overflow-scrolling: touch;">
             <!-- Lưới ảnh: Ô thêm ảnh mờ có dấu cộng luôn ở vị trí đầu tiên + ảnh kỷ niệm -->
-            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 p-1">
                 <!-- Nút Thêm ảnh dạng ô chữ nhật mờ có dấu cộng ở giữa, luôn hiển thị đầu tiên -->
                 <div 
                     id="memory-add-card" 
@@ -2141,8 +2165,8 @@
                             src="nen.webp" 
                             alt="Ảnh bìa lớp Chuyên Tin THK17 (25-28) - THPT Chuyên Nguyễn Quang Diêu" 
                             class="relative z-10 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
-                            onload="handleCoverLoaded()"
-                            onerror="handleCoverFallback()"
+                            onload="if(window.handleCoverLoaded)handleCoverLoaded()"
+                            onerror="if(window.handleCoverFallback)handleCoverFallback()"
                         >
 
                         <div class="absolute inset-0 z-20 bg-gradient-to-t from-abyss via-abyss/35 to-transparent pointer-events-none"></div>
@@ -2858,8 +2882,8 @@
 
             <!-- Thanh Lọc Thứ trong tuần (Rất tiện cho mobile & xem theo ngày) -->
             <div class="scroll-node mb-6 flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
-                <button type="button" data-tkb-day="all" onclick="filterTkbDay('all')" class="tkb-day-tab active px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all whitespace-nowrap cursor-pointer bg-cyan-400 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-                    CẢ TUẦN
+                <button type="button" data-tkb-day="all" onclick="filterTkbDay('all')" class="tkb-day-tab px-3 py-1.5 rounded-xl font-mono text-xs font-semibold transition-all whitespace-nowrap cursor-pointer bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white border border-white/[0.08]">
+                    CẢ TUẦN (ĐẦY ĐỦ)
                 </button>
                 <button type="button" data-tkb-day="T2" onclick="filterTkbDay('T2')" class="tkb-day-tab px-3 py-1.5 rounded-xl font-mono text-xs font-semibold transition-all whitespace-nowrap cursor-pointer bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white border border-white/[0.08]">
                     THỨ 2
@@ -4196,134 +4220,64 @@
         });
 
         /* ==========================================================================
-           HỆ THỐNG HIỆU ỨNG POWERPOINT MORPH TRANSITION (FLIP SHARED ELEMENT ENGINE)
-           Hiệu ứng morph mượt mà từ ô vuông nhỏ phóng to thành ô vuông lớn & ngược lại
+           HỆ THỐNG HIỆU ỨNG MODAL CƠ BẢN (BASIC MODAL ENGINE - SIÊU NHẸ, 0% CPU LAG)
+           Thay thế hoàn toàn PowerPoint Morph bằng hiệu ứng Fade & Scale nhẹ nhàng
            ========================================================================== */
         const MorphEngine = {
-            morphOpen({ sourceEl, modalEl, dialogEl, duration = 400, onStart, onComplete }) {
-                if (!modalEl || !dialogEl) return;
-
-                let startRect = null;
-                if (sourceEl && typeof sourceEl.getBoundingClientRect === 'function') {
-                    const r = sourceEl.getBoundingClientRect();
-                    if (r.width > 0 && r.height > 0) {
-                        startRect = r;
-                    }
-                }
-
-                modalEl._morphSourceEl = sourceEl || null;
-                modalEl._morphStartRect = startRect;
+            morphOpen({ sourceEl, modalEl, dialogEl, duration = 150, onStart, onComplete }) {
+                if (!modalEl) return;
+                const targetDialog = dialogEl || modalEl.firstElementChild || modalEl;
 
                 modalEl.style.display = 'flex';
-                modalEl.classList.remove('hidden');
-                modalEl.classList.add('morph-active');
+                modalEl.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+                modalEl.classList.add('morph-active', 'flex');
                 modalEl.style.visibility = 'visible';
                 modalEl.style.pointerEvents = 'auto';
-                modalEl.style.opacity = '0';
-                modalEl.style.transition = `opacity ${duration * 0.8}ms cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+                modalEl.style.opacity = '1';
+
+                if (targetDialog && targetDialog !== modalEl) {
+                    targetDialog.style.transformOrigin = 'center center';
+                    targetDialog.style.transform = 'scale(0.97)';
+                    targetDialog.style.opacity = '0';
+                    targetDialog.style.transition = `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+                    requestAnimationFrame(() => {
+                        targetDialog.style.transform = 'scale(1)';
+                        targetDialog.style.opacity = '1';
+                    });
+                }
 
                 if (typeof onStart === 'function') onStart();
-
-                if (!startRect) {
-                    dialogEl.style.transformOrigin = 'center center';
-                    dialogEl.style.transform = 'scale(0.88)';
-                    dialogEl.style.opacity = '0';
-                    void dialogEl.offsetWidth;
-                    dialogEl.style.transition = `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${duration * 0.75}ms ease`;
-                    requestAnimationFrame(() => {
-                        modalEl.style.opacity = '1';
-                        dialogEl.style.transform = 'scale(1) translate(0, 0)';
-                        dialogEl.style.opacity = '1';
-                        setTimeout(() => { if (onComplete) onComplete(); }, duration);
-                    });
-                    return;
+                if (typeof onComplete === 'function') {
+                    setTimeout(onComplete, duration);
                 }
-
-                const destRect = dialogEl.getBoundingClientRect();
-                const scaleX = startRect.width / Math.max(1, destRect.width);
-                const scaleY = startRect.height / Math.max(1, destRect.height);
-                const translateX = startRect.left - destRect.left;
-                const translateY = startRect.top - destRect.top;
-
-                const computedSource = window.getComputedStyle(sourceEl);
-                const origRadius = computedSource.borderRadius || '16px';
-
-                dialogEl.style.transformOrigin = '0 0';
-                dialogEl.style.transition = 'none';
-                dialogEl.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY})`;
-                dialogEl.style.borderRadius = origRadius;
-                dialogEl.style.opacity = '0.9';
-                dialogEl.style.willChange = 'transform, border-radius, opacity';
-
-                void dialogEl.offsetWidth; // Force synchronous reflow
-
-                requestAnimationFrame(() => {
-                    modalEl.style.opacity = '1';
-                    dialogEl.style.transition = `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), border-radius ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${duration * 0.75}ms ease, box-shadow ${duration}ms ease`;
-                    dialogEl.style.transform = 'translate3d(0px, 0px, 0) scale(1, 1)';
-                    dialogEl.style.borderRadius = '';
-                    dialogEl.style.opacity = '1';
-
-                    setTimeout(() => {
-                        dialogEl.style.willChange = '';
-                        dialogEl.style.transition = '';
-                        dialogEl.style.transform = '';
-                        if (typeof onComplete === 'function') onComplete();
-                    }, duration);
-                });
             },
 
-            morphClose({ modalEl, dialogEl, duration = 320, onComplete }) {
-                if (!modalEl || !dialogEl || modalEl.classList.contains('hidden')) return;
+            morphClose({ modalEl, dialogEl, duration = 120, onComplete }) {
+                if (!modalEl || modalEl.classList.contains('hidden')) return;
+                const targetDialog = dialogEl || modalEl.firstElementChild || modalEl;
 
-                let sourceEl = modalEl._morphSourceEl;
-                let startRect = modalEl._morphStartRect;
-
-                if (sourceEl && sourceEl.isConnected && typeof sourceEl.getBoundingClientRect === 'function') {
-                    const r = sourceEl.getBoundingClientRect();
-                    if (r.width > 0 && r.height > 0) {
-                        startRect = r;
-                    }
-                }
-
-                modalEl.style.transition = `opacity ${duration}ms cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter ${duration}ms ease`;
-                modalEl.style.opacity = '0';
                 modalEl.style.pointerEvents = 'none';
 
-                if (!startRect) {
-                    dialogEl.style.transition = `transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${duration * 0.8}ms ease`;
-                    dialogEl.style.transform = 'scale(0.88)';
-                    dialogEl.style.opacity = '0';
-                } else {
-                    const destRect = dialogEl.getBoundingClientRect();
-                    const scaleX = startRect.width / Math.max(1, destRect.width);
-                    const scaleY = startRect.height / Math.max(1, destRect.height);
-                    const translateX = startRect.left - destRect.left;
-                    const translateY = startRect.top - destRect.top;
-
-                    dialogEl.style.transformOrigin = '0 0';
-                    dialogEl.style.transition = `transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1), border-radius ${duration}ms ease, opacity ${duration * 0.75}ms ease`;
-                    dialogEl.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY})`;
-                    dialogEl.style.opacity = '0';
-                    if (sourceEl) {
-                        dialogEl.style.borderRadius = window.getComputedStyle(sourceEl).borderRadius || '16px';
-                    }
+                if (targetDialog && targetDialog !== modalEl) {
+                    targetDialog.style.transition = `transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${duration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+                    targetDialog.style.transform = 'scale(0.97)';
+                    targetDialog.style.opacity = '0';
                 }
 
                 setTimeout(() => {
-                    modalEl.classList.add('hidden');
-                    modalEl.classList.remove('morph-active');
+                    modalEl.classList.add('hidden', 'opacity-0');
+                    modalEl.classList.remove('morph-active', 'flex');
                     modalEl.style.display = 'none';
                     modalEl.style.visibility = '';
                     modalEl.style.opacity = '';
                     modalEl.style.transition = '';
                     modalEl.style.pointerEvents = '';
-                    dialogEl.style.transform = '';
-                    dialogEl.style.transformOrigin = '';
-                    dialogEl.style.transition = '';
-                    dialogEl.style.borderRadius = '';
-                    dialogEl.style.opacity = '';
-                    dialogEl.style.willChange = '';
+                    if (targetDialog && targetDialog !== modalEl) {
+                        targetDialog.style.transform = '';
+                        targetDialog.style.transformOrigin = '';
+                        targetDialog.style.transition = '';
+                        targetDialog.style.opacity = '';
+                    }
                     modalEl._morphSourceEl = null;
                     modalEl._morphStartRect = null;
                     if (typeof onComplete === 'function') onComplete();
@@ -4344,7 +4298,7 @@
         function isLegacyDuplicateDefaultPhoto(item) {
             if (!item || !item.id) return false;
             const id = String(item.id);
-            if (id.startsWith('mock_') || id.startsWith('photo_def_') || id.startsWith('photo_dim_')) {
+            if (id.startsWith('mock_') || id.startsWith('photo_def_')) {
                 return true;
             }
             return false;
@@ -4483,15 +4437,17 @@
             updateMemoryWidgetUI();
         }
 
-        function switchActiveAlbum(albumId, shouldRerenderOutside = false) {
+        function switchActiveAlbum(albumId, shouldRerenderOutside = false, skipFolderUpdate = false) {
             const albums = getAllAlbums();
             const target = albums.find(a => a && a.id === albumId);
             if (!target) return;
             setActiveAlbumId(target.id);
-            filterMemoryGridByActiveAlbum();
-            updateMemoryWidgetUI();
-            if (typeof renderExpandedAlbumBar === 'function') {
-                renderExpandedAlbumBar();
+            if (!skipFolderUpdate) {
+                filterMemoryGridByActiveAlbum();
+                updateMemoryWidgetUI();
+                if (typeof renderExpandedAlbumBar === 'function') {
+                    renderExpandedAlbumBar();
+                }
             }
             if (typeof updateActiveOutsideAlbumCard === 'function') {
                 updateActiveOutsideAlbumCard(target.id);
@@ -4537,7 +4493,7 @@
             // Ảnh do người dùng đăng lên Cloud
             grid.querySelectorAll('.uploaded-memory-card').forEach(el => {
                 const elId = el.id || '';
-                if (elId.includes('mock_') || elId.includes('photo_def_') || elId.includes('photo_dim_')) {
+                if (elId.includes('mock_') || elId.includes('photo_def_')) {
                     el.remove();
                     return;
                 }
@@ -5062,7 +5018,8 @@
         // Các hàm xử lý sự kiện cho từng album
         function handleAlbumCardClick(albumId, cardEl) {
             const card = (cardEl && cardEl.isConnected) ? cardEl : document.getElementById(`album-card-${albumId}`);
-            switchActiveAlbum(albumId, false);
+            // Bỏ duplicate DOM calculations: switchActiveAlbum cập nhật ID và viền, sau đó expandMemoryFolderModal mở modal
+            switchActiveAlbum(albumId, false, true);
             expandMemoryFolderModal(card);
         }
 
@@ -5352,10 +5309,13 @@
         }
 
         function updateWidgetPreview() {
+            const track = document.getElementById('widget-preview-track');
+            const previewCheck = document.getElementById('widget-preview-more-text') || document.getElementById('widget-preview-img-0');
+            if (!track && !previewCheck) return;
+
             const allImgs = getAllCurrentAlbumImages();
             const count = allImgs.length;
             const dotsBar = document.getElementById('widget-dots-bar');
-            const track = document.getElementById('widget-preview-track');
 
             // Số trang: Mỗi trang gồm 4 ô (3 ô ảnh + 1 thẻ tổng kết). Tối đa 4 trang
             const numPages = count > 3 ? Math.min(4, Math.ceil(count / 3)) : 1;
@@ -5658,7 +5618,7 @@
             grid.addEventListener('mouseleave', () => startWidgetAutoAdvance());
         }
 
-        /* Bung mở thư mục từ Tiện ích với hiệu ứng PowerPoint Morph */
+        /* Bung mở thư mục từ Tiện ích với hiệu ứng cơ bản nhẹ nhàng, 0% CPU lag */
         function expandMemoryFolderModal(triggerEl = null) {
             const modal = document.getElementById('memory-folder-modal');
             if (!modal) return;
@@ -5670,129 +5630,36 @@
                 renderExpandedAlbumBar();
             }
 
-            // Đảm bảo các phần tử bên trong luôn hiển thị 100% rõ nét
-            const innerElements = modal.children;
-            for (let i = 0; i < innerElements.length; i++) {
-                innerElements[i].style.transition = '';
-                innerElements[i].style.opacity = '';
-            }
-
-            const activeId = getActiveAlbumId();
-            const activeCard = document.getElementById(`album-card-${activeId}`);
-
-            const sourceEl = (triggerEl && triggerEl.isConnected) ? triggerEl 
-                : (activeCard && activeCard.isConnected) ? activeCard
-                : (window.event && window.event.currentTarget && window.event.currentTarget.isConnected) ? window.event.currentTarget
-                : (window.event && window.event.target && window.event.target.closest && window.event.target.closest('.memory-widget-card'))
-                || activeCard
-                || document.querySelector('.memory-widget-card')
-                || document.getElementById('ki-niem');
-
             document.body.classList.add('overflow-hidden');
+            document.body.style.overflow = 'hidden';
             modal.style.display = 'flex';
             MorphEngine.morphOpen({
-                sourceEl: sourceEl,
                 modalEl: modal,
                 dialogEl: modal,
-                duration: 420
+                duration: 150
             });
         }
 
-        /* Thu nhỏ ô vuông về mục album mượt mà, nội dung tan biến không bị chồng lớp, gần tới album thì mờ dần và biến mất */
+        /* Đóng thư mục ảnh với hiệu ứng cơ bản mượt mà, siêu nhẹ */
         function collapseMemoryFolderModal() {
             const modal = document.getElementById('memory-folder-modal');
             if (!modal || modal.classList.contains('hidden')) return;
 
-            // 1. Xác định vị trí mục album đích (thẻ album đang chọn hoặc thẻ nguồn đã mở)
-            let targetEl = null;
-            const currentCard = document.getElementById(`album-card-${getActiveAlbumId()}`);
-            if (currentCard && currentCard.isConnected) {
-                targetEl = currentCard;
-            } else if (modal._morphSourceEl && modal._morphSourceEl.isConnected) {
-                targetEl = modal._morphSourceEl;
-            } else {
-                targetEl = document.getElementById('create-new-album-card')
-                        || document.querySelector('.memory-widget-card')
-                        || document.getElementById('ki-niem');
-            }
-
-            let startRect = null;
-            if (targetEl && typeof targetEl.getBoundingClientRect === 'function') {
-                const r = targetEl.getBoundingClientRect();
-                if (r.width > 0 && r.height > 0) {
-                    startRect = r;
+            MorphEngine.morphClose({
+                modalEl: modal,
+                dialogEl: modal,
+                duration: 120,
+                onComplete: () => {
+                    document.body.classList.remove('overflow-hidden');
+                    document.body.style.overflow = '';
+                    if (typeof startWidgetAutoAdvance === 'function') {
+                        startWidgetAutoAdvance();
+                    }
+                    if (typeof startAllAlbumCardsAutoAdvance === 'function') {
+                        startAllAlbumCardsAutoAdvance();
+                    }
                 }
-            }
-            if (!startRect && modal._morphStartRect) {
-                startRect = modal._morphStartRect;
-            }
-
-            // 2. KHÔNG BỊ CHỒNG LỚP: Làm mờ ngay toàn bộ chữ, nút bấm và ảnh bên trong trong 80ms
-            const innerElements = modal.children;
-            for (let i = 0; i < innerElements.length; i++) {
-                innerElements[i].style.transition = 'opacity 80ms ease-out';
-                innerElements[i].style.opacity = '0';
-            }
-
-            modal.style.pointerEvents = 'none';
-            modal.classList.remove('morph-active');
-
-            const animDuration = 300; // ms
-            const fadeDuration = 200; // ms (mờ dần và biến mất trước khi chạm tới album)
-
-            if (!startRect) {
-                modal.style.transition = `transform ${animDuration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${fadeDuration}ms ease-in`;
-                modal.style.transform = 'scale(0.85)';
-                modal.style.opacity = '0';
-            } else {
-                const destRect = modal.getBoundingClientRect();
-                // Đảm bảo kích thước tối thiểu để ô vuông thu nhỏ hài hòa đẹp mắt
-                const targetW = Math.max(startRect.width, 180);
-                const targetH = Math.max(startRect.height, 140);
-                const scaleX = targetW / Math.max(1, destRect.width);
-                const scaleY = targetH / Math.max(1, destRect.height);
-                const translateX = (startRect.left + (startRect.width - targetW) / 2) - destRect.left;
-                const translateY = (startRect.top + (startRect.height - targetH) / 2) - destRect.top;
-
-                const origRadius = (targetEl && window.getComputedStyle(targetEl).borderRadius) || '2rem';
-
-                modal.style.transformOrigin = '0 0';
-                modal.style.willChange = 'transform, opacity, border-radius';
-                modal.style.transition = `transform ${animDuration}ms cubic-bezier(0.16, 1, 0.3, 1), opacity ${fadeDuration}ms cubic-bezier(0.4, 0, 1, 1), border-radius ${animDuration}ms ease`;
-                modal.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY})`;
-                modal.style.borderRadius = origRadius;
-                modal.style.opacity = '0';
-            }
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.style.display = 'none';
-                modal.style.visibility = '';
-                modal.style.opacity = '';
-                modal.style.transition = '';
-                modal.style.transform = '';
-                modal.style.transformOrigin = '';
-                modal.style.borderRadius = '';
-                modal.style.pointerEvents = '';
-                modal.style.willChange = '';
-                modal._morphSourceEl = null;
-                modal._morphStartRect = null;
-
-                // Khôi phục lại opacity cho các phần tử con bên trong để sẵn sàng cho lần mở tiếp theo
-                for (let i = 0; i < innerElements.length; i++) {
-                    innerElements[i].style.transition = '';
-                    innerElements[i].style.opacity = '';
-                }
-
-                document.body.classList.remove('overflow-hidden');
-                document.body.style.overflow = '';
-                if (typeof startWidgetAutoAdvance === 'function') {
-                    startWidgetAutoAdvance();
-                }
-                if (typeof startAllAlbumCardsAutoAdvance === 'function') {
-                    startAllAlbumCardsAutoAdvance();
-                }
-            }, animDuration);
+            });
         }
 
         /* Đổi tên thư mục/album: Người tạo đổi tên lần 1, từ lần 2 do admin đổi */
@@ -8669,8 +8536,8 @@
         };
 
         function collectScrollElements() {
-            scrollState.nodes = Array.from(document.querySelectorAll('main .scroll-node'));
-            scrollState.cards = Array.from(document.querySelectorAll('main .scroll-card'));
+            scrollState.nodes = Array.from(document.querySelectorAll('main > section .scroll-node'));
+            scrollState.cards = Array.from(document.querySelectorAll('main > section .scroll-card:not(#memory-folder-modal *)'));
         }
 
         function smoothStep(edge0, edge1, x) {
@@ -8707,9 +8574,8 @@
             const pctLabelMobile = document.getElementById('scroll-pct-label-mobile');
             if (pctLabelMobile) pctLabelMobile.textContent = String(scrollPct).padStart(2, '0') + '%';
 
-            /* THIẾT BỊ DI ĐỘNG: Bỏ hoàn toàn việc tính toán vị trí từng thẻ mỗi khung hình.
-               Toàn bộ nội dung hiển thị ngay 100%, vuốt mượt mà không bị delay 1s! */
-            if (isMobileDevice) {
+            /* THIẾT BỊ DI ĐỘNG HOẶC KHI MODAL ĐANG MỞ: Tạm dừng hoàn toàn tính toán vị trí, 0% CPU lag! */
+            if (isMobileDevice || document.body.classList.contains('overflow-hidden')) {
                 updateActiveSectionSpy();
                 mobileScrollTicking = false;
                 return;
@@ -8721,11 +8587,24 @@
             const btmEmergeEnd   = viewportCalibration.btmEmergeEndPx;
             const isNearTopOfPage = scrollY <= 25;
 
+            // PHA 1: BATCH READ TẤT CẢ VỊ TRÍ (Không ghi đè CSS style giữa chừng, triệt tiêu hoàn toàn Layout Thrashing)
+            const nodeUpdates = [];
             for (let i = 0; i < scrollState.nodes.length; i++) {
                 const el = scrollState.nodes[i];
                 if (el.offsetParent === null) continue;
+                nodeUpdates.push({ el, rect: el.getBoundingClientRect() });
+            }
 
-                const rect = el.getBoundingClientRect();
+            const cardUpdates = [];
+            for (let j = 0; j < scrollState.cards.length; j++) {
+                const card = scrollState.cards[j];
+                if (card.offsetParent === null) continue;
+                cardUpdates.push({ card, rect: card.getBoundingClientRect() });
+            }
+
+            // PHA 2: BATCH WRITE CHO NODES
+            for (let i = 0; i < nodeUpdates.length; i++) {
+                const { el, rect } = nodeUpdates[i];
                 const topCheckY = rect.bottom;
                 const btmCheckY = rect.top + Math.min(rect.height * 0.18, 20);
 
@@ -8760,11 +8639,9 @@
                 }
             }
 
-            for (let j = 0; j < scrollState.cards.length; j++) {
-                const card = scrollState.cards[j];
-                if (card.offsetParent === null) continue;
-
-                const rect = card.getBoundingClientRect();
+            // PHA 3: BATCH WRITE CHO CARDS
+            for (let j = 0; j < cardUpdates.length; j++) {
+                const { card, rect } = cardUpdates[j];
                 let cardOpacity = 1;
                 let cardY = 0;
 
@@ -10090,9 +9967,11 @@
             }
         });
 
-        // Bấm vào bất kỳ đâu trong section Kỉ niệm nếu có ảnh
+        // Bấm vào ảnh trong mục Kỷ niệm nếu có (loại trừ các ảnh xem trước ở thẻ album ngoài trang chủ)
         document.getElementById('ki-niem')?.addEventListener('click', (e) => {
             if (e.target.closest('button') || e.target.closest('#memory-add-card') || e.target.closest('input')) return;
+            // Không can thiệp nếu bấm vào hoặc xung quanh các thẻ album ngoài trang chủ
+            if (e.target.closest('.outside-album-card') || e.target.closest('.memory-widget-card') || e.target.closest('#memory-albums-grid')) return;
             if (e.target.tagName === 'IMG' && !e.target.closest('#memory-add-card')) {
                 openImageLightboxByElement(e.target);
             }
@@ -11267,6 +11146,13 @@
         function initTkbModule() {
             loadCustomScheduleFromStorage();
             syncAllTkbTableCells();
+
+            // Mặc định luôn hiển thị Thời khóa biểu của HÔM NAY (T2 -> T7), người dùng có thể tự chọn "CẢ TUẦN" bất kỳ lúc nào
+            const dayIndex = new Date().getDay();
+            const dayMap = { 1: 'T2', 2: 'T3', 3: 'T4', 4: 'T5', 5: 'T6', 6: 'T7' };
+            const defaultTkbDay = dayMap[dayIndex] || 'T2';
+            filterTkbDay(defaultTkbDay);
+
             updateTkbLiveStatusTicker();
             setInterval(updateTkbLiveStatusTicker, 15000);
             autoScaleTkbForMobile();
@@ -11303,9 +11189,33 @@
         }
 
         /* --------------------------------------------------------------------------
-           11. INITIALIZATION ON WINDOW LOAD
+           11. KHỞI TẠO SIÊU TỐC TỨC THÌ (IMMEDIATE FIRST-PAINT INITIALIZATION)
+           Không đợi tải 50+ ảnh ngoài, vẽ toàn bộ UI ngay trong 50ms đầu tiên
+           Đồng bộ đám mây Cloud & IndexedDB chạy ngầm không gây đơ hoặc trễ giao diện
            -------------------------------------------------------------------------- */
-        window.onload = async function () {
+        let presenceIntervalId = null;
+        let visitsIntervalId = null;
+        let cloudPollIntervalId = null;
+
+        function startLifecycleIntervals() {
+            stopLifecycleIntervals();
+            presenceIntervalId = setInterval(sendLivePresenceHeartbeat, 6000);
+            visitsIntervalId = setInterval(() => syncLiveTotalVisits(false), 15000);
+            cloudPollIntervalId = setInterval(() => pullGlobalCloudState(), 4500);
+        }
+
+        function stopLifecycleIntervals() {
+            if (presenceIntervalId) { clearInterval(presenceIntervalId); presenceIntervalId = null; }
+            if (visitsIntervalId) { clearInterval(visitsIntervalId); visitsIntervalId = null; }
+            if (cloudPollIntervalId) { clearInterval(cloudPollIntervalId); cloudPollIntervalId = null; }
+        }
+
+        let isThk17AppInitialized = false;
+        function initThk17App() {
+            if (isThk17AppInitialized) return;
+            isThk17AppInitialized = true;
+
+            // 1. Cập nhật và render giao diện NGAY LẬP TỨC từ bộ nhớ cục bộ (0ms delay)
             initTkbModule();
             mountAllThk17Dinos();
             mountAllThk17Cacti();
@@ -11317,82 +11227,93 @@
             updateMemoryWidgetUI();
             renderAlbumBars();
             updateAuthHeaderUI();
-            await loadLocalCacheFromIndexedDB();
-            await pullGlobalCloudState();
-            startRealtimeCloudStream();
-            sendLivePresenceHeartbeat();
+            calibrateScreenAndBoundaries();
+            resizeCanvas();
+            collectScrollElements();
 
-            // Quản lý bộ đếm chu kỳ đám mây: Tự động tạm ngưng khi chuyển tab để tiết kiệm tối đa pin & CPU cả PC và điện thoại
-            let presenceIntervalId = null;
-            let visitsIntervalId = null;
-            let cloudPollIntervalId = null;
+            // 2. Chạy đồng bộ IndexedDB và Cloud ở chế độ ngầm (Background) không chặn luồng vẽ giao diện
+            (async () => {
+                try {
+                    await loadLocalCacheFromIndexedDB();
+                } catch (e) {
+                    console.warn('Local cache load non-fatal error:', e);
+                }
+                try {
+                    await pullGlobalCloudState();
+                } catch (e) {
+                    console.warn('Initial cloud pull non-fatal error:', e);
+                }
+                startRealtimeCloudStream();
+                sendLivePresenceHeartbeat();
+            })();
 
-            function startLifecycleIntervals() {
-                stopLifecycleIntervals();
-                presenceIntervalId = setInterval(sendLivePresenceHeartbeat, 6000);
-                visitsIntervalId = setInterval(() => syncLiveTotalVisits(false), 15000);
-                cloudPollIntervalId = setInterval(() => pullGlobalCloudState(), 4500);
-            }
-
-            function stopLifecycleIntervals() {
-                if (presenceIntervalId) { clearInterval(presenceIntervalId); presenceIntervalId = null; }
-                if (visitsIntervalId) { clearInterval(visitsIntervalId); visitsIntervalId = null; }
-                if (cloudPollIntervalId) { clearInterval(cloudPollIntervalId); cloudPollIntervalId = null; }
-            }
-
-            // Tự động tăng tổng lượt truy cập mỗi khi mở tab hoặc F5 tải lại trang
+            // 3. Khởi động bộ đếm chu kỳ đám mây và lượt truy cập
             incrementGlobalTotalVisits();
             startLifecycleIntervals();
 
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    sendLivePresenceHeartbeat();
-                    pullGlobalCloudState();
-                    syncLiveTotalVisits(false);
-                    startLifecycleIntervals();
-                    if (typeof isBinaryOceanRunning !== 'undefined' && !isBinaryOceanRunning) {
-                        isBinaryOceanRunning = true;
-                        requestAnimationFrame(animateBinaryOcean);
-                    }
-                    if (typeof isAlbumGridInViewport !== 'undefined' && isAlbumGridInViewport) {
-                        if (typeof startAllAlbumCardsAutoAdvance === 'function') startAllAlbumCardsAutoAdvance();
-                    }
-                } else {
-                    stopLifecycleIntervals();
-                    if (typeof isBinaryOceanRunning !== 'undefined') isBinaryOceanRunning = false;
-                    if (typeof stopAllAlbumCardsAutoAdvance === 'function') stopAllAlbumCardsAutoAdvance();
-                    if (typeof stopWidgetAutoAdvance === 'function') stopWidgetAutoAdvance();
-                }
-            });
-            window.addEventListener('focus', () => {
+            /* Chạy khởi tạo ban đầu 1 lần cho cuộn trang và mưa nhị phân */
+            requestAnimationFrame(updateScrollDecayEngine);
+            requestAnimationFrame(animateBinaryOcean);
+        }
+
+        // Tự động gắn các bộ lắng nghe sự kiện toàn cục
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
                 sendLivePresenceHeartbeat();
                 pullGlobalCloudState();
-            });
+                syncLiveTotalVisits(false);
+                startLifecycleIntervals();
+                if (typeof isBinaryOceanRunning !== 'undefined' && !isBinaryOceanRunning) {
+                    isBinaryOceanRunning = true;
+                    requestAnimationFrame(animateBinaryOcean);
+                }
+                if (typeof isAlbumGridInViewport !== 'undefined' && isAlbumGridInViewport) {
+                    if (typeof startAllAlbumCardsAutoAdvance === 'function') startAllAlbumCardsAutoAdvance();
+                }
+            } else {
+                stopLifecycleIntervals();
+                if (typeof isBinaryOceanRunning !== 'undefined') isBinaryOceanRunning = false;
+                if (typeof stopAllAlbumCardsAutoAdvance === 'function') stopAllAlbumCardsAutoAdvance();
+                if (typeof stopWidgetAutoAdvance === 'function') stopWidgetAutoAdvance();
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            sendLivePresenceHeartbeat();
+            pullGlobalCloudState();
+        });
+
+        window.addEventListener('resize', () => {
             calibrateScreenAndBoundaries();
             resizeCanvas();
-            window.addEventListener('resize', () => {
-                calibrateScreenAndBoundaries();
-                resizeCanvas();
-                collectScrollElements();
-            });
             collectScrollElements();
-            /* Tối ưu hóa hiệu năng: Chỉ cập nhật khi cuộn trang với requestAnimationFrame ticking, không chạy vòng lặp vô hạn khi trang đứng yên */
-            let globalScrollTicking = false;
-            window.addEventListener('scroll', function () {
-                if (!globalScrollTicking) {
-                    globalScrollTicking = true;
-                    requestAnimationFrame((now) => {
-                        updateScrollDecayEngine(now);
-                        globalScrollTicking = false;
-                    });
-                }
-            }, { passive: true });
-            /* Chạy khởi tạo ban đầu 1 lần */
-            requestAnimationFrame(updateScrollDecayEngine);
+        });
 
-            /* Nền mưa nhị phân 0 / 1 / C++ chạy trên tất cả thiết bị (Mobile & Desktop) */
-            requestAnimationFrame(animateBinaryOcean);
-        };
+        /* Tối ưu hóa hiệu năng: Chỉ cập nhật khi cuộn trang với requestAnimationFrame ticking, không chạy vòng lặp vô hạn khi trang đứng yên */
+        let globalScrollTicking = false;
+        window.addEventListener('scroll', function () {
+            if (!globalScrollTicking) {
+                globalScrollTicking = true;
+                requestAnimationFrame((now) => {
+                    updateScrollDecayEngine(now);
+                    globalScrollTicking = false;
+                });
+            }
+        }, { passive: true });
+
+        // Kích hoạt ngay khi DOM sẵn sàng (không chờ tải hết 50+ ảnh ngoài)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initThk17App);
+        } else {
+            initThk17App();
+        }
+
+        window.addEventListener('load', () => {
+            initThk17App();
+            calibrateScreenAndBoundaries();
+            resizeCanvas();
+            collectScrollElements();
+        });
     </script>
 </body>
 </html>
