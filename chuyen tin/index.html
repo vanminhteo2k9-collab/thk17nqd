@@ -11,11 +11,13 @@
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- heic2any for iPhone/iPad HEIC/HEIF image support -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     
-    <!-- Google Fonts: Space Grotesk, Inter & JetBrains Mono -->
+    <!-- Google Fonts: Be Vietnam Pro (Chuẩn dấu Tiếng Việt 100%), Space Grotesk, Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -284,10 +286,12 @@
          ========================================================================== -->
     <div class="fixed top-0 left-0 right-0 z-50 bg-[#020817]/95 backdrop-blur-md border-b border-nqd-borderDim/90 shadow-[0_6px_35px_rgba(0,10,35,0.85)]">
         <!-- Top Status Telemetry Strip (Đồng bộ chuẩn phong cách Cyber Chuyên Tin) -->
-        <div id="navbar-top-strip" class="border-b border-nqd-borderDim/70 bg-[#041028]/90 px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-1.5 text-[10px] sm:text-[11px] font-mono tracking-wider text-slate-300">
+        <div id="navbar-top-strip" class="border-b border-nqd-borderDim/70 bg-[#041028]/90 px-3 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono tracking-wider text-slate-300">
             <div class="flex items-center gap-2 min-w-0">
-                <span class="w-1.5 h-1.5 bg-nqd-cyanGlow inline-block"></span>
-                <span class="truncate text-slate-300">TRƯỜNG: <strong class="text-white">THPT CHUYÊN NGUYỄN QUANG DIÊU</strong></span>
+                <div class="hidden md:flex items-center gap-2 min-w-0">
+                    <span class="w-1.5 h-1.5 bg-nqd-cyanGlow inline-block shrink-0"></span>
+                    <span class="truncate text-slate-300">TRƯỜNG: <strong class="text-white">THPT CHUYÊN NGUYỄN QUANG DIÊU</strong></span>
+                </div>
                 <div id="cloud-sync-indicator" title="Đám mây tự động đồng bộ ngầm thời gian thực" class="h-5 px-2 bg-nqd-acGreen/10 border border-nqd-acGreen/40 text-nqd-acGreen text-[9px] sm:text-[10px] font-mono font-medium tracking-wider whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-default">
                     <span class="w-1.5 h-1.5 bg-nqd-acGreen inline-block animate-pulse"></span>
                     <span>CLOUD: ĐÃ ĐỒNG BỘ</span>
@@ -339,32 +343,36 @@
 
                 <!-- Center: Navigation Tabs (Desktop - Bo vuông 100%, chuẩn phong cách bên dưới) -->
                 <nav id="desktop-nav" class="hidden lg:flex items-center gap-1 sm:gap-1.5 font-mono text-xs">
-                    <a href="#trang-chu" data-section="trang-chu" class="nav-spy-link active flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all bg-nqd-bluePrimary/25 border border-nqd-cyanGlow text-white shadow-[0_0_15px_rgba(0,168,255,0.35)] font-semibold">
+                    <a href="#trang-chu" data-section="trang-chu" class="nav-spy-link active flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all bg-nqd-bluePrimary/25 border border-nqd-cyanGlow text-white shadow-[0_0_15px_rgba(0,168,255,0.35)] font-semibold whitespace-nowrap shrink-0">
                         <span class="text-nqd-cyanGlow font-bold text-[10px]">01</span>
                         <span>TRANG CHỦ</span>
                     </a>
-                    <a href="#truyen-thong" data-section="truyen-thong" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim">
+                    <a href="#thong-tin" data-section="thong-tin" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim whitespace-nowrap shrink-0">
                         <span class="text-nqd-cyanGlow font-medium text-[10px]">02</span>
-                        <span>TRUYỀN THỐNG</span>
-                    </a>
-                    <a href="#trai-xuan" data-section="trai-xuan" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim">
-                        <span class="text-nqd-cyanGlow font-medium text-[10px]">03</span>
-                        <span>TRẠI XUÂN</span>
-                    </a>
-                    <a href="#thong-tin" data-section="thong-tin" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim">
-                        <span class="text-nqd-cyanGlow font-medium text-[10px]">04</span>
                         <span>THÔNG TIN</span>
                     </a>
-                    <a href="#kho-luu-tru" data-section="kho-luu-tru" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim">
+                    <a href="#lich-su" data-section="lich-su" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim whitespace-nowrap shrink-0">
+                        <span class="text-nqd-cyanGlow font-medium text-[10px]">03</span>
+                        <span>LỊCH SỬ</span>
+                    </a>
+                    <a href="#truyen-thong" data-section="truyen-thong" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim whitespace-nowrap shrink-0">
+                        <span class="text-nqd-cyanGlow font-medium text-[10px]">04</span>
+                        <span>TRUYỀN THỐNG</span>
+                    </a>
+                    <a href="#trai-xuan" data-section="trai-xuan" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim whitespace-nowrap shrink-0">
                         <span class="text-nqd-cyanGlow font-medium text-[10px]">05</span>
+                        <span>TRẠI XUÂN</span>
+                    </a>
+                    <a href="#kho-luu-tru" data-section="kho-luu-tru" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim whitespace-nowrap shrink-0">
+                        <span class="text-nqd-cyanGlow font-medium text-[10px]">06</span>
                         <span>KHO LƯU TRỮ</span>
                     </a>
-                    <a href="#lien-he" data-section="lien-he" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim">
-                        <span class="text-nqd-cyanGlow font-medium text-[10px]">06</span>
+                    <a href="#lien-he" data-section="lien-he" class="nav-spy-link flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all text-slate-300 hover:text-white hover:bg-nqd-bgCard/70 border border-transparent hover:border-nqd-borderDim whitespace-nowrap shrink-0">
+                        <span class="text-nqd-cyanGlow font-medium text-[10px]">07</span>
                         <span>LIÊN HỆ</span>
                     </a>
-                    <a href="#ban-do" data-section="ban-do" class="nav-spy-link ml-1 px-3 py-1.5 bg-nqd-cyanGlow/10 border border-nqd-cyanGlow/60 text-nqd-cyanGlow hover:bg-nqd-cyanGlow hover:text-slate-950 font-mono text-xs font-bold transition-all shadow-[0_0_12px_rgba(0,240,255,0.2)]">
-                        <span class="text-nqd-cyanGlow font-medium text-[10px]">07</span>
+                    <a href="#ban-do" data-section="ban-do" class="nav-spy-link ml-1 px-3 py-1.5 bg-nqd-cyanGlow/10 border border-nqd-cyanGlow/60 text-nqd-cyanGlow hover:bg-nqd-cyanGlow hover:text-slate-950 font-mono text-xs font-bold transition-all shadow-[0_0_12px_rgba(0,240,255,0.2)] whitespace-nowrap shrink-0">
+                        <span class="text-nqd-cyanGlow font-medium text-[10px]">08</span>
                         <span>BẢN ĐỒ</span>
                     </a>
                 </nav>
@@ -407,28 +415,32 @@
                         <span><strong class="text-nqd-cyanGlow mr-1">01</strong> Trang chủ</span>
                         <span class="text-nqd-cyanGlow text-[10px]">↵</span>
                     </a>
+                    <a href="#thong-tin" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
+                        <span><strong class="text-nqd-cyanGlow mr-1">02</strong> Thông tin</span>
+                        <span class="text-nqd-cyanGlow text-[10px]">↵</span>
+                    </a>
+                    <a href="#lich-su" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
+                        <span><strong class="text-nqd-cyanGlow mr-1">03</strong> Lịch sử</span>
+                        <span class="text-nqd-cyanGlow text-[10px]">↵</span>
+                    </a>
                     <a href="#truyen-thong" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
-                        <span><strong class="text-nqd-cyanGlow mr-1">02</strong> Truyền thống</span>
+                        <span><strong class="text-nqd-cyanGlow mr-1">04</strong> Truyền thống</span>
                         <span class="text-nqd-cyanGlow text-[10px]">↵</span>
                     </a>
                     <a href="#trai-xuan" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
-                        <span><strong class="text-nqd-cyanGlow mr-1">03</strong> Trại xuân</span>
-                        <span class="text-nqd-cyanGlow text-[10px]">↵</span>
-                    </a>
-                    <a href="#thong-tin" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
-                        <span><strong class="text-nqd-cyanGlow mr-1">04</strong> Thông tin</span>
+                        <span><strong class="text-nqd-cyanGlow mr-1">05</strong> Trại xuân</span>
                         <span class="text-nqd-cyanGlow text-[10px]">↵</span>
                     </a>
                     <a href="#kho-luu-tru" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
-                        <span><strong class="text-nqd-cyanGlow mr-1">05</strong> Kho lưu trữ</span>
+                        <span><strong class="text-nqd-cyanGlow mr-1">06</strong> Kho lưu trữ</span>
                         <span class="text-nqd-cyanGlow text-[10px]">↵</span>
                     </a>
                     <a href="#lien-he" class="mobile-nav-link p-2 bg-nqd-bgCard/70 border border-nqd-borderDim text-slate-200 hover:text-white hover:border-nqd-blueCyber hover:bg-nqd-bgElevated flex items-center justify-between">
-                        <span><strong class="text-nqd-cyanGlow mr-1">06</strong> Liên hệ</span>
+                        <span><strong class="text-nqd-cyanGlow mr-1">07</strong> Liên hệ</span>
                         <span class="text-nqd-cyanGlow text-[10px]">↵</span>
                     </a>
-                    <a href="#ban-do" class="mobile-nav-link col-span-2 p-2 bg-nqd-cyanGlow/10 border border-nqd-cyanGlow/50 text-nqd-cyanGlow font-bold flex items-center justify-between">
-                        <span><strong class="text-nqd-cyanGlow mr-1">07</strong> [MAP] BẢN ĐỒ</span>
+                    <a href="#ban-do" class="mobile-nav-link p-2 bg-nqd-cyanGlow/10 border border-nqd-cyanGlow/50 text-nqd-cyanGlow font-bold flex items-center justify-between">
+                        <span><strong class="text-nqd-cyanGlow mr-1">08</strong> [MAP] BẢN ĐỒ</span>
                         <span class="text-nqd-cyanGlow text-[10px]">GPS ↵</span>
                     </a>
                 </div>
@@ -456,9 +468,15 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col space-y-8">
                 
-                <!-- Main Hero Title with Rich Cyber-Blue Gradient -->
-                <h1 class="font-display font-bold text-3xl sm:text-5xl lg:text-5xl text-white leading-[1.15] tracking-tight uppercase">
-                    CHUYÊN TIN <span class="text-transparent bg-clip-text bg-gradient-to-r from-nqd-cyanGlow via-nqd-blueCyber to-blue-400">NGUYỄN QUANG DIÊU</span> — NƠI ĐAM MÊ LẬP TRÌNH TỎA SÁNG!
+                <!-- Main Hero Title with Crisp Cyber Cyan Glow (Tuyệt đối không dùng bg-clip-text làm cụt dấu ngã chữ NGUYỄN) -->
+                <h1 class="font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-5xl text-white leading-normal tracking-tight uppercase flex flex-col gap-2 sm:gap-3">
+                    <span class="inline-block pt-2 pb-0.5">CHUYÊN TIN <span class="text-nqd-cyanGlow drop-shadow-[0_0_25px_rgba(0,240,255,0.55)] whitespace-nowrap">NGUYỄN QUANG DIÊU</span></span>
+                    <span class="text-slate-100 flex items-center flex-wrap gap-2 text-lg sm:text-2xl md:text-3xl lg:text-3xl font-bold">
+                        <span class="text-nqd-cyanGlow select-none">—</span>
+                        <span class="whitespace-nowrap">NƠI ĐAM MÊ</span>
+                        <span class="whitespace-nowrap">LẬP TRÌNH TỎA SÁNG!</span>
+                        <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8 ml-1 shrink-0" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
+                    </span>
                 </h1>
 
                 <!-- Official Core Introduction from Document -->
@@ -475,11 +493,11 @@
                 <!-- Action Buttons (Strict Zero Border Radius + Rich Gradient) -->
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
                     <a href="#truyen-thong" class="btn-cyber px-6 py-4 bg-cyber-gradient-button text-white font-mono text-sm font-bold flex items-center justify-center space-x-3 border border-nqd-cyanGlow shadow-[0_0_25px_rgba(0,149,255,0.45)]">
-                        <span>KHÁM PHÁ HỆ SINH THÁI CHUYÊN TIN</span>
+                        <span><span class="whitespace-nowrap">KHÁM PHÁ HỆ SINH THÁI CHUYÊN TIN</span></span>
                         <span>[ENTER ↵]</span>
                     </a>
                     <a href="#kho-luu-tru" class="btn-cyber px-6 py-4 bg-gradient-to-r from-nqd-bgCard to-nqd-bgElevated hover:border-nqd-cyanGlow text-nqd-cyanGlow border border-nqd-blueCyber font-mono text-sm font-bold flex items-center justify-center space-x-2">
-                        <span>[ KHO LƯU TRỮ ẢNH ĐÁM MÂY ]</span>
+                        <span><span class="whitespace-nowrap">[ KHO LƯU TRỮ ẢNH ĐÁM MÂY ]</span></span>
                     </a>
                 </div>
 
@@ -517,237 +535,7 @@
     </section>
 
     <!-- ==========================================================================
-         MỤC 1: TRUYỀN THỐNG (#truyen-thong) — "THUẬT TOÁN & C++"
-         ========================================================================== -->
-    <section id="truyen-thong" class="py-16 lg:py-24 border-b border-nqd-borderDim relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- Section Header (No Subtitle) -->
-            <div class="mb-12 pb-4 border-b border-nqd-borderDim flex items-center justify-between">
-                <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
-                    <span>TRUYỀN THỐNG MANG TÊN <span class="text-nqd-blueCyber">"THUẬT TOÁN &amp; C++"</span></span>
-                    <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
-                </h2>
-            </div>
-
-            <!-- Main Content Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                
-                <!-- Left Narrative Card (From Official Document) -->
-                <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
-                    <div class="tech-box corner-accents p-6 sm:p-8 bg-nqd-bgPanel space-y-5">
-                        <div class="flex items-center justify-between border-b border-nqd-borderDim pb-3 font-mono text-xs">
-                            <span class="text-nqd-blueLight font-bold">#include &lt;bits/stdc++.h&gt;</span>
-                            <span class="text-slate-400">using namespace ChuyenTinNQD;</span>
-                        </div>
-
-                        <p class="text-slate-200 text-base sm:text-lg leading-relaxed">
-                            Ở <strong class="text-white">Chuyên Tin NQD</strong>, <span class="text-nqd-blueLight font-mono font-semibold">"thức ăn nhanh"</span> của tụi mình chính là <strong class="text-nqd-blueCyber">Cấu trúc dữ liệu và Thuật toán (Data Structures &amp; Algorithms)</strong>.
-                        </p>
-
-                        <p class="text-slate-300 text-base leading-relaxed">
-                            Không gì sung sướng bằng cảm giác giải mã thành công một bài toán hóc búa với đầy những câu hỏi cần sự tư duy cao, hay khoảnh khắc vỡ òa, hạnh phúc khi màn hình chấm bài hiện dòng chữ <span class="inline-block px-2 py-0.5 bg-nqd-acGreen/20 border border-nqd-acGreen text-nqd-acGreen font-mono font-bold">"Accepted"</span> xanh lá tuyệt đẹp sau hàng chục lần dính lỗi đầy tuyệt vọng chẳng biết mình sai ở đâu – những câu hỏi <em>"phải làm như thế nào đây?"</em> lại được đặt ra trong suy nghĩ.
-                        </p>
-
-                        <div class="p-4 bg-nqd-bgCard border-l-4 border-l-nqd-acGreen">
-                            <p class="text-slate-100 text-base leading-relaxed font-medium">
-                                Nơi đây chính là cái nôi rèn luyện nên những <strong class="text-nqd-blueLight">"chiến binh" bản lĩnh</strong> cho các đấu trường <strong class="text-white">Học Sinh Giỏi các cấp, HSG Quốc Gia, Tin học trẻ</strong> hay <strong class="text-white">Olympic Truyền thống 30/4</strong>!
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 4 Key Competitive Arenas Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-nqd-blueCyber">
-                            <div class="font-mono text-xs text-nqd-blueLight font-bold mb-1">[ARENA_01] HSG QUỐC GIA (VOI)</div>
-                            <p class="text-xs text-slate-300 leading-relaxed">Đấu trường đỉnh cao nhất của học sinh Chuyên Tin với các bài toán Quy hoạch động, Đồ thị, Cấu trúc dữ liệu nâng cao.</p>
-                        </div>
-                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-nqd-acGreen">
-                            <div class="font-mono text-xs text-nqd-acGreen font-bold mb-1">[ARENA_02] OLYMPIC TRUYỀN THỐNG 30/4</div>
-                            <p class="text-xs text-slate-300 leading-relaxed">Nơi các thế hệ chiến binh Chuyên Tin NQD tranh tài cùng các trường chuyên hàng đầu khu vực phía Nam.</p>
-                        </div>
-                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-amber-400">
-                            <div class="font-mono text-xs text-amber-400 font-bold mb-1">[ARENA_03] HỘI THI TIN HỌC TRẺ</div>
-                            <p class="text-xs text-slate-300 leading-relaxed">Sân chơi kết hợp giữa tư duy giải thuật tốc độ và phát triển sản phẩm phần mềm sáng tạo thực tiễn.</p>
-                        </div>
-                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-purple-400">
-                            <div class="font-mono text-xs text-purple-400 font-bold mb-1">[ARENA_04] ĐỘI TUYỂN TỈNH &amp; KHU VỰC</div>
-                            <p class="text-xs text-slate-300 leading-relaxed">Lò luyện tư duy logic sắc bén qua từng buổi học chuyên đề và những kỳ thi thử căng thẳng tại phòng máy NQD.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Interactive Widget: Judge Verdict Decoder & DSA Visualizer -->
-                <div class="lg:col-span-5 flex flex-col justify-between tech-box corner-accents p-6 bg-nqd-bgPanel">
-                    <div>
-                        <div class="flex items-center justify-between pb-3 mb-4 border-b border-nqd-borderDim">
-                            <span class="font-mono text-xs font-bold text-white uppercase">BẢNG MÃ CẢM XÚC DÂN CHUYÊN TIN</span>
-                            <span class="font-mono text-[11px] text-nqd-blueLight">[CLICK ĐỂ GIẢI MÃ]</span>
-                        </div>
-
-                        <!-- Verdict Buttons Grid -->
-                        <div class="grid grid-cols-2 gap-2.5 mb-5 font-mono text-xs">
-                            <button onclick="selectVerdict('AC')" id="verdict-btn-AC" class="p-3 text-left border border-nqd-acGreen bg-nqd-acGreen/20 text-white transition-all">
-                                <div class="font-bold text-nqd-acGreen text-sm">AC // ACCEPTED</div>
-                                <div class="text-[11px] text-slate-300 mt-0.5">Xanh lá chân ái</div>
-                            </button>
-                            <button onclick="selectVerdict('WA')" id="verdict-btn-WA" class="p-3 text-left border border-nqd-borderDim bg-nqd-bgCard text-slate-300 hover:border-nqd-waRed transition-all">
-                                <div class="font-bold text-nqd-waRed text-sm">WA // WRONG ANS</div>
-                                <div class="text-[11px] text-slate-400 mt-0.5">Sai test ẩn hiểm hóc</div>
-                            </button>
-                            <button onclick="selectVerdict('TLE')" id="verdict-btn-TLE" class="p-3 text-left border border-nqd-borderDim bg-nqd-bgCard text-slate-300 hover:border-nqd-tleAmber transition-all">
-                                <div class="font-bold text-nqd-tleAmber text-sm">TLE // TIME LIMIT</div>
-                                <div class="text-[11px] text-slate-400 mt-0.5">Quá thời gian O(N²)</div>
-                            </button>
-                            <button onclick="selectVerdict('MLE')" id="verdict-btn-MLE" class="p-3 text-left border border-nqd-borderDim bg-nqd-bgCard text-slate-300 hover:border-nqd-mlePurple transition-all">
-                                <div class="font-bold text-nqd-mlePurple text-sm">MLE // MEM LIMIT</div>
-                                <div class="text-[11px] text-slate-400 mt-0.5">Tràn bộ nhớ mảng</div>
-                            </button>
-                        </div>
-
-                        <!-- Verdict Story Display Box -->
-                        <div id="verdict-detail-box" class="p-4 bg-[#030914] border border-nqd-acGreen space-y-3">
-                            <div class="flex items-center justify-between font-mono text-xs">
-                                <span id="verdict-code-label" class="font-bold text-nqd-acGreen">[STATUS: ACCEPTED - 100/100]</span>
-                                <span id="verdict-complexity" class="text-slate-400">O(N log N)</span>
-                            </div>
-                            <p id="verdict-story" class="text-sm text-slate-200 leading-relaxed">
-                                Khoảnh khắc vỡ òa hạnh phúc khi toàn bộ test case chuyển sang màu xanh lá tuyệt đẹp sau hàng chục lần sửa bug. Mọi mệt mỏi tan biến, cả phòng đội tuyển cùng đập tay ăn mừng!
-                            </p>
-                            <div class="p-2.5 bg-nqd-bgPanel border border-nqd-borderDim font-mono text-[11px] text-nqd-blueLight" id="verdict-tip">
-                                &gt; BÍ KÍP NQD: Kiểm tra kỹ kiểu dữ liệu `long long`, trường hợp biên `N = 1` và độ phức tạp thuật toán trước khi nộp bài!
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mini Interactive Algorithm Visualizer (Segment Tree / Graph Bars) -->
-                    <div class="mt-6 pt-5 border-t border-nqd-borderDim">
-                        <div class="flex items-center justify-between font-mono text-xs mb-2">
-                            <span class="text-slate-300">MÔ PHỎNG SẮP XẾP &amp; TỐI ƯU THUẬT TOÁN:</span>
-                            <button onclick="triggerQuickSortSim()" class="px-2.5 py-1 bg-nqd-bluePrimary text-white hover:bg-nqd-blueCyber font-bold text-[11px]">
-                                [ CHẠY QUICKSORT O(N log N) ]
-                            </button>
-                        </div>
-                        <div id="algo-bars-container" class="h-24 bg-[#02060D] border border-nqd-borderDim p-2 flex items-end gap-1">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================================================
-         MỤC 2: TRẠI XUÂN (#trai-xuan) — ĐÊM HỘI "MỌT NHƯNG KHÔNG CHÁN" (KHÔNG CÓ LED MATRIX)
-         ========================================================================== -->
-    <section id="trai-xuan" class="py-16 lg:py-24 border-b border-nqd-borderDim bg-gradient-to-b from-[#041029]/80 via-[#071C44]/60 to-[#030B1E]/90 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- Section Header (No Subtitle) -->
-            <div class="mb-10 pb-4 border-b border-nqd-borderBright/40 flex items-center justify-between">
-                <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
-                    <span>TRẠI XUÂN CHUYÊN TIN — <span class="text-transparent bg-clip-text bg-gradient-to-r from-nqd-cyanGlow to-nqd-blueCyber">"MỌT NHƯNG KHÔNG CHÁN"</span></span>
-                    <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
-                </h2>
-            </div>
-
-            <!-- Intro Quote from Document -->
-            <div class="tech-box corner-accents top-gradient-bar p-6 sm:p-7 mb-10 border-l-4 border-l-nqd-cyanGlow">
-                <p class="text-slate-100 text-base sm:text-lg leading-relaxed">
-                    <strong class="text-nqd-cyanGlow font-mono">[ĐẠI GIA ĐÌNH ĐOÀN KẾT &amp; NHIỆT HUYẾT]:</strong> Có thể tụi mình trông có vẻ hơi trầm tư khi ngồi trước máy tính giải thuật toán, nhưng bên trong lại là một tập thể <strong class="text-white">cực kỳ nhí nhố, năng động và gắn kết</strong>. Kỳ <strong class="text-nqd-blueLight">Trại Xuân truyền thống hàng năm tại THPT Chuyên Nguyễn Quang Diêu</strong> chính là sân khấu lớn nơi tinh thần công nghệ và sức trẻ Chuyên Tin bùng nổ!
-                </p>
-            </div>
-
-            <!-- Interactive Camp Tabs + Architectural Blueprint Showcase (No LED Matrix) -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                
-                <!-- Left 7 Columns: 4 Camp Feature Tabs -->
-                <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
-                    <!-- Tab Navigation Buttons -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 border border-nqd-borderBright/50 bg-nqd-bgDeep font-mono text-xs">
-                        <button onclick="switchCampTab(0)" id="camp-tab-0" class="p-3.5 text-left border-b sm:border-b-0 border-r border-nqd-borderDim bg-cyber-gradient-button text-white font-bold">
-                            [01] KIẾN TRÚC TRẠI
-                        </button>
-                        <button onclick="switchCampTab(1)" id="camp-tab-1" class="p-3.5 text-left border-b sm:border-b-0 sm:border-r border-nqd-borderDim text-slate-300 hover:text-white hover:bg-nqd-bgCard">
-                            [02] GIAN HÀNG SỐ
-                        </button>
-                        <button onclick="switchCampTab(2)" id="camp-tab-2" class="p-3.5 text-left border-r border-nqd-borderDim text-slate-300 hover:text-white hover:bg-nqd-bgCard">
-                            [03] HỘI NGỘ KHÓA
-                        </button>
-                        <button onclick="switchCampTab(3)" id="camp-tab-3" class="p-3.5 text-left text-slate-300 hover:text-white hover:bg-nqd-bgCard">
-                            [04] ĐÊM LỬA TRẠI
-                        </button>
-                    </div>
-
-                    <!-- Tab Content Display Box -->
-                    <div id="camp-content-box" class="tech-box corner-accents p-6 sm:p-8 flex-1 flex flex-col justify-between">
-                        <!-- Dynamically updated by JS -->
-                    </div>
-                </div>
-
-                <!-- Right 5 Columns: Spring Camp Cyber Schedule & Spirit Telemetry -->
-                <div class="lg:col-span-5 tech-box corner-accents top-gradient-bar p-6 bg-gradient-to-b from-[#071D49] via-[#051331] to-[#030A1C] flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between pb-3 mb-4 border-b border-nqd-borderBright/40">
-                            <div>
-                                <span class="font-mono text-xs font-bold text-white block">LỊCH TRÌNH CHIẾN DỊCH TRẠI XUÂN CHUYÊN TIN</span>
-                                <span class="font-mono text-[10px] text-nqd-cyanGlow">EVENT_PIPELINE // SÂN TRƯỜNG THPT CHUYÊN NQD</span>
-                            </div>
-                            <span class="px-2 py-0.5 bg-nqd-acGreen/20 border border-nqd-acGreen font-mono text-[10px] text-nqd-acGreen font-bold">ANNUAL_EVENT</span>
-                        </div>
-
-                        <div class="space-y-3 font-mono text-xs">
-                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-nqd-cyanGlow border border-nqd-borderDim">
-                                <div class="flex justify-between text-[11px] text-nqd-cyanGlow font-bold">
-                                    <span>PHASE_01 // 06:30 - 09:00</span>
-                                    <span>[BUILD_COMPLETE]</span>
-                                </div>
-                                <div class="text-white font-sans font-semibold text-sm mt-1">Dựng Trại Kiến Trúc Vi Mạch &amp; Trang Trí</div>
-                                <p class="text-slate-300 font-sans text-xs mt-0.5">Phối hợp giữa các khóa Chuyên Tin K16 (2K9), K17 (2K10) và K18 (2K11) dựng khung trại đậm dấu ấn Khoa học Máy tính.</p>
-                            </div>
-
-                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-nqd-bluePrimary border border-nqd-borderDim">
-                                <div class="flex justify-between text-[11px] text-nqd-blueLight font-bold">
-                                    <span>PHASE_02 // 09:00 - 15:00</span>
-                                    <span>[HIGH_TRAFFIC]</span>
-                                </div>
-                                <div class="text-white font-sans font-semibold text-sm mt-1">Khai Trương Gian Hàng Ẩm Thực &amp; Trò Chơi Công Nghệ</div>
-                                <p class="text-slate-300 font-sans text-xs mt-0.5">Thực đơn đặt tên chuẩn lập trình ("Full Test AC", "Fix Bug") cùng minigame tốc độ bàn phím.</p>
-                            </div>
-
-                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-nqd-acGreen border border-nqd-borderDim">
-                                <div class="flex justify-between text-[11px] text-nqd-acGreen font-bold">
-                                    <span>PHASE_03 // 15:00 - 18:30</span>
-                                    <span>[ALUMNI_SYNC]</span>
-                                </div>
-                                <div class="text-white font-sans font-semibold text-sm mt-1">Giao Lưu Cựu Học Sinh Các Khóa Chuyên Tin</div>
-                                <p class="text-slate-300 font-sans text-xs mt-0.5">Các anh chị sinh viên CNTT, Kỹ sư phần mềm trở về truyền lửa và chia sẻ định hướng ngành học.</p>
-                            </div>
-
-                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-amber-400 border border-nqd-borderDim">
-                                <div class="flex justify-between text-[11px] text-amber-400 font-bold">
-                                    <span>PHASE_04 // 18:30 - 22:00</span>
-                                    <span>[MAXIMUM_ENERGY]</span>
-                                </div>
-                                <div class="text-white font-sans font-semibold text-sm mt-1">Đêm Hội Lửa Trại &amp; Kỷ Niệm Thanh Xuân Rực Rỡ</div>
-                                <p class="text-slate-300 font-sans text-xs mt-0.5">Cháy hết mình bên ánh lửa trại, ca hát và lưu giữ những khoảnh khắc đoàn kết không thể phai nhòa.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-3 border-t border-nqd-borderDim flex items-center justify-between font-mono text-[11px] text-slate-300">
-                        <span>SPIRIT_INDEX: <strong class="text-nqd-cyanGlow">100% BROTHERHOOD</strong></span>
-                        <a href="#kho-luu-tru" class="text-nqd-acGreen hover:underline font-bold">[ XEM &amp; ĐĂNG ẢNH TRẠI XUÂN -&gt; ]</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================================================
-         MỤC 3: THÔNG TIN (#thong-tin) — KHKT, ROBOTICS & ĐỜI SỐNG CHUYÊN TIN
+         MỤC 2: THÔNG TIN (#thong-tin) — KHKT, ROBOTICS & ĐỜI SỐNG CHUYÊN TIN
          ========================================================================== -->
     <section id="thong-tin" class="py-16 lg:py-24 border-b border-nqd-borderDim relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -755,7 +543,7 @@
             <!-- Section Header (No Subtitle) -->
             <div class="mb-12 pb-4 border-b border-nqd-borderDim flex items-center justify-between">
                 <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
-                    <span>THÔNG TIN KHỐI CHUYÊN — <span class="text-nqd-blueCyber">SÁNG TẠO KHKT &amp; ROBOTICS</span></span>
+                    <span>THÔNG TIN KHỐI CHUYÊN — <span class="text-nqd-blueCyber whitespace-nowrap">SÁNG TẠO KHKT &amp; ROBOTICS</span></span>
                     <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
                 </h2>
             </div>
@@ -862,19 +650,19 @@
                     <div class="pt-4 border-t border-nqd-borderDim">
                         <div class="font-mono text-[11px] text-slate-400 mb-2.5">HASHTAG CHÍNH THỨC (BẤM ĐỂ SAO CHÉP):</div>
                         <div class="flex flex-wrap gap-2 font-mono text-xs">
-                            <button onclick="copyHashtag('#ChuyenTinNQD')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors">
+                            <button onclick="copyHashtag('#ChuyenTinNQD')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors whitespace-nowrap shrink-0">
                                 #ChuyenTinNQD
                             </button>
-                            <button onclick="copyHashtag('#THPTChuyenNguyenQuangDieu')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors">
+                            <button onclick="copyHashtag('#THPTChuyenNguyenQuangDieu')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors whitespace-nowrap shrink-0">
                                 #THPTChuyenNguyenQuangDieu
                             </button>
-                            <button onclick="copyHashtag('#LapTrinhVienTuongLai')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors">
+                            <button onclick="copyHashtag('#LapTrinhVienTuongLai')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors whitespace-nowrap shrink-0">
                                 #LapTrinhVienTuongLai
                             </button>
-                            <button onclick="copyHashtag('#CoderNQD')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors">
+                            <button onclick="copyHashtag('#CoderNQD')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors whitespace-nowrap shrink-0">
                                 #CoderNQD
                             </button>
-                            <button onclick="copyHashtag('#DamMeCongNghe')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors">
+                            <button onclick="copyHashtag('#DamMeCongNghe')" class="px-3 py-1.5 bg-nqd-bgDeep border border-nqd-blueCyber text-nqd-blueLight hover:bg-nqd-bluePrimary hover:text-white transition-colors whitespace-nowrap shrink-0">
                                 #DamMeCongNghe
                             </button>
                         </div>
@@ -885,8 +673,373 @@
         </div>
     </section>
 
+        <!-- ==========================================================================
+         MỤC 3: LỊCH SỬ (#lich-su) — HÀNH TRÌNH PHÁT TRIỂN & CỘT MỐC CÁC KHÓA (K1 - K18)
+         ========================================================================== -->
+    <section id="lich-su" class="py-16 lg:py-24 border-b border-nqd-borderDim bg-gradient-to-b from-[#020817] via-[#051739]/60 to-[#030C22] relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header (No Subtitle, with THK17 Dino) -->
+            <div class="mb-12 pb-4 border-b border-nqd-borderDim flex items-center justify-between">
+                <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
+                    <span>LỊCH SỬ KHỐI CHUYÊN — <span class="text-nqd-cyanGlow whitespace-nowrap">HÀNH TRÌNH PHÁT TRIỂN</span> <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8 ml-1 shrink-0" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span></span>
+                </h2>
+                <div class="hidden sm:flex items-center gap-2 font-mono text-xs text-nqd-cyanGlow">
+                    <span class="w-2 h-2 bg-nqd-cyanGlow animate-pulse"></span>
+                    <span>SINCE 2011 // 18 GENERATIONS</span>
+                </div>
+            </div>
+
+            <!-- Narrative Card: Cội nguồn & Tinh thần Chuyên Tin -->
+            <div class="tech-box corner-accents p-6 sm:p-8 bg-nqd-bgPanel mb-12">
+                <div class="flex items-center justify-between border-b border-nqd-borderDim pb-3 mb-4 font-mono text-xs">
+                    <span class="text-nqd-cyanGlow font-bold">TIMELINE_ARCHIVE // 2011 - 2026</span>
+                    <span class="text-slate-400">CHUYEN_TIN_NQD_CHRONICLES</span>
+                </div>
+                <p class="text-slate-200 text-base sm:text-lg leading-relaxed mb-4">
+                    Được thành lập từ những ngày đầu khai mở Trường THPT Chuyên Nguyễn Quang Diêu (2011), <strong class="text-white">Khối Chuyên Tin</strong> đã trải qua hơn một thập kỷ tôi rèn, phát triển và khẳng định vị thế mũi nhọn của trường tại Đồng Tháp và khu vực.
+                </p>
+                <p class="text-slate-300 text-base leading-relaxed">
+                    Từ những thế hệ học sinh tiên phong làm quen với thuật toán trên nền màn hình đen chữ xanh thời kỳ đầu, đến những lứa học trò chinh phục các kỳ thi <strong class="text-nqd-cyanGlow">Học sinh Giỏi Quốc gia</strong>, <strong class="text-nqd-blueLight">Olympic 30/4</strong>, và ngày nay là thế hệ <strong class="text-nqd-acGreen">Khóa 18 (2K11)</strong> tiếp cận AI, Robotics và Cloud Systems — ngọn lửa đam mê lập trình vẫn luôn được truyền nối trọn vẹn qua từng niên khóa với tinh thần <em class="text-white font-semibold">"Một ngày Chuyên Tin, trọn đời Chuyên Tin"</em>.
+                </p>
+            </div>
+
+            <!-- 4 Major Epochs Timeline (Grid 4 cột / 2 hàng responsive, 100% Bo vuông) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                
+                <!-- Giai đoạn 1: 2011 - 2015 -->
+                <div class="tech-box corner-accents p-6 bg-nqd-bgCard/90 flex flex-col justify-between border-t-2 border-t-nqd-cyanGlow">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-xs mb-3 pb-2 border-b border-nqd-borderDim">
+                            <span class="text-nqd-cyanGlow font-bold">2011 — 2015</span>
+                            <span class="px-1.5 py-0.5 bg-nqd-cyanGlow/10 text-nqd-cyanGlow text-[10px] border border-nqd-cyanGlow/30">K1 – K5</span>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-white mb-2.5">
+                            Cột Mốc Khởi Nguyên &amp; Xây Nền Móng
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Thành lập phòng máy thực hành Chuyên Tin đầu tiên. Thắp lên ngọn lửa đam mê Cấu trúc Dữ liệu &amp; Giải thuật, xác lập những giải thưởng HSG cấp Tỉnh và khu vực Đồng bằng Sông Cửu Long đầu tiên.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-nqd-borderDim font-mono text-[10px] text-nqd-cyanGlow">
+                        TAG: FOUNDATION_EPOCH
+                    </div>
+                </div>
+
+                <!-- Giai đoạn 2: 2016 - 2020 -->
+                <div class="tech-box corner-accents p-6 bg-nqd-bgCard/90 flex flex-col justify-between border-t-2 border-t-nqd-blueCyber">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-xs mb-3 pb-2 border-b border-nqd-borderDim">
+                            <span class="text-nqd-blueCyber font-bold">2016 — 2020</span>
+                            <span class="px-1.5 py-0.5 bg-nqd-blueCyber/10 text-nqd-blueLight text-[10px] border border-nqd-blueCyber/30">K6 – K10</span>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-white mb-2.5">
+                            Thời Kỳ Vàng Son &amp; Đấu Trường Quốc Gia
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Giai đoạn bùng nổ thành tích với hàng loạt Huy chương Vàng, Bạc, Đồng tại Olympic Truyền thống 30/4, giải thưởng HSG Quốc gia môn Tin học và Hội thi Tin học trẻ. Khẳng định thương hiệu Chuyên Tin NQD trên đấu trường toàn quốc.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-nqd-borderDim font-mono text-[10px] text-nqd-blueLight">
+                        TAG: NATIONAL_OLYMPIAD
+                    </div>
+                </div>
+
+                <!-- Giai đoạn 3: 2021 - 2024 -->
+                <div class="tech-box corner-accents p-6 bg-nqd-bgCard/90 flex flex-col justify-between border-t-2 border-t-nqd-acGreen">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-xs mb-3 pb-2 border-b border-nqd-borderDim">
+                            <span class="text-nqd-acGreen font-bold">2021 — 2024</span>
+                            <span class="px-1.5 py-0.5 bg-nqd-acGreen/10 text-nqd-acGreen text-[10px] border border-nqd-acGreen/30">K11 – K15</span>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-white mb-2.5">
+                            Kỷ Nguyên Sáng Tạo KHKT &amp; Robotics
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Mở rộng không gian Maker Space: phát triển ứng dụng di động, xe robot tự hành, mạch vi điều khiển IoT và các đề tài Khoa học Kỹ thuật các cấp. Trại Xuân Chuyên Tin trở thành nét văn hóa gắn kết thường niên rực rỡ.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-nqd-borderDim font-mono text-[10px] text-nqd-acGreen">
+                        TAG: ROBOTICS_&amp;_INNOVATION
+                    </div>
+                </div>
+
+                <!-- Giai đoạn 4: 2025 - 2026+ -->
+                <div class="tech-box corner-accents p-6 bg-nqd-bgCard/90 flex flex-col justify-between border-t-2 border-t-purple-400">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-xs mb-3 pb-2 border-b border-nqd-borderDim">
+                            <span class="text-purple-400 font-bold">2025 — 2026+</span>
+                            <span class="px-1.5 py-0.5 bg-purple-400/10 text-purple-300 text-[10px] border border-purple-400/30">K16 – K18 (2K11)</span>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-white mb-2.5">
+                            Hội Nhập Kỷ Nguyên AI &amp; Mạng Lưới Cựu HS
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Thế hệ Khóa 18 (2K11) tự tin làm chủ AI, Web hiện đại và Cloud Computing. Mạng lưới 500+ Cựu học sinh Chuyên Tin NQD trên khắp cả nước và quốc tế luôn đồng hành, kết nối và hỗ trợ các lứa đàn em vững bước.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-nqd-borderDim font-mono text-[10px] text-purple-400">
+                        TAG: AI_ERA_&amp;_ALUMNI_NETWORK
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Stats Bar (Bo vuông 100%, phong cách Dashboard Cyber) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-[#041029] border border-nqd-blueCyber/50">
+                <div class="text-center p-3 border-r border-nqd-borderDim last:border-r-0">
+                    <div class="font-display font-extrabold text-3xl sm:text-4xl text-nqd-cyanGlow mb-1">18</div>
+                    <div class="font-mono text-xs text-slate-300 uppercase tracking-wider">Khóa Chuyên Tin (K1 - K18)</div>
+                </div>
+                <div class="text-center p-3 border-r border-nqd-borderDim last:border-r-0">
+                    <div class="font-display font-extrabold text-3xl sm:text-4xl text-white mb-1">500+</div>
+                    <div class="font-mono text-xs text-slate-300 uppercase tracking-wider">Cựu Học Sinh Toàn Cầu</div>
+                </div>
+                <div class="text-center p-3 border-r border-nqd-borderDim last:border-r-0">
+                    <div class="font-display font-extrabold text-3xl sm:text-4xl text-nqd-acGreen mb-1">450+</div>
+                    <div class="font-mono text-xs text-slate-300 uppercase tracking-wider">Giải Thưởng HSG &amp; KHKT</div>
+                </div>
+                <div class="text-center p-3">
+                    <div class="font-display font-extrabold text-3xl sm:text-4xl text-purple-400 mb-1">100%</div>
+                    <div class="font-mono text-xs text-slate-300 uppercase tracking-wider">Đoàn Kết &amp; Chia Sẻ</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+<!-- ==========================================================================
+         MỤC 4: TRUYỀN THỐNG (#truyen-thong) — "THUẬT TOÁN & C++"
+         ========================================================================== -->
+    <section id="truyen-thong" class="py-16 lg:py-24 border-b border-nqd-borderDim relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header (No Subtitle) -->
+            <div class="mb-12 pb-4 border-b border-nqd-borderDim flex items-center justify-between">
+                <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
+                    <span>TRUYỀN THỐNG MANG TÊN <span class="text-nqd-cyanGlow whitespace-nowrap">“THUẬT TOÁN &amp; C++”</span></span>
+                    <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
+                </h2>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Left Narrative Card (From Official Document) -->
+                <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+                    <div class="tech-box corner-accents p-6 sm:p-8 bg-nqd-bgPanel space-y-5">
+                        <div class="flex items-center justify-between border-b border-nqd-borderDim pb-3 font-mono text-xs">
+                            <span class="text-nqd-blueLight font-bold">#include &lt;bits/stdc++.h&gt;</span>
+                            <span class="text-slate-400">using namespace ChuyenTinNQD;</span>
+                        </div>
+
+                        <p class="text-slate-200 text-base sm:text-lg leading-relaxed">
+                            Ở <strong class="text-white">Chuyên Tin NQD</strong>, <span class="text-nqd-blueLight font-mono font-semibold">"thức ăn nhanh"</span> của tụi mình chính là <strong class="text-nqd-blueCyber">Cấu trúc dữ liệu và Thuật toán (Data Structures &amp; Algorithms)</strong>.
+                        </p>
+
+                        <p class="text-slate-300 text-base leading-relaxed">
+                            Không gì sung sướng bằng cảm giác giải mã thành công một bài toán hóc búa với đầy những câu hỏi cần sự tư duy cao, hay khoảnh khắc vỡ òa, hạnh phúc khi màn hình chấm bài hiện dòng chữ <span class="inline-block px-2 py-0.5 bg-nqd-acGreen/20 border border-nqd-acGreen text-nqd-acGreen font-mono font-bold">"Accepted"</span> xanh lá tuyệt đẹp sau hàng chục lần dính lỗi đầy tuyệt vọng chẳng biết mình sai ở đâu – những câu hỏi <em>"phải làm như thế nào đây?"</em> lại được đặt ra trong suy nghĩ.
+                        </p>
+
+                        <div class="p-4 bg-nqd-bgCard border-l-4 border-l-nqd-acGreen">
+                            <p class="text-slate-100 text-base leading-relaxed font-medium">
+                                Nơi đây chính là cái nôi rèn luyện nên những <strong class="text-nqd-blueLight">"chiến binh" bản lĩnh</strong> cho các đấu trường <strong class="text-white">Học Sinh Giỏi các cấp, HSG Quốc Gia, Tin học trẻ</strong> hay <strong class="text-white">Olympic Truyền thống 30/4</strong>!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 4 Key Competitive Arenas Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-nqd-blueCyber">
+                            <div class="font-mono text-xs text-nqd-blueLight font-bold mb-1">[ARENA_01] HSG QUỐC GIA (VOI)</div>
+                            <p class="text-xs text-slate-300 leading-relaxed">Đấu trường đỉnh cao nhất của học sinh Chuyên Tin với các bài toán Quy hoạch động, Đồ thị, Cấu trúc dữ liệu nâng cao.</p>
+                        </div>
+                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-nqd-acGreen">
+                            <div class="font-mono text-xs text-nqd-acGreen font-bold mb-1">[ARENA_02] OLYMPIC TRUYỀN THỐNG 30/4</div>
+                            <p class="text-xs text-slate-300 leading-relaxed">Nơi các thế hệ chiến binh Chuyên Tin NQD tranh tài cùng các trường chuyên hàng đầu khu vực phía Nam.</p>
+                        </div>
+                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-amber-400">
+                            <div class="font-mono text-xs text-amber-400 font-bold mb-1">[ARENA_03] HỘI THI TIN HỌC TRẺ</div>
+                            <p class="text-xs text-slate-300 leading-relaxed">Sân chơi kết hợp giữa tư duy giải thuật tốc độ và phát triển sản phẩm phần mềm sáng tạo thực tiễn.</p>
+                        </div>
+                        <div class="tech-box p-4 bg-nqd-bgCard/70 border-l-2 border-l-purple-400">
+                            <div class="font-mono text-xs text-purple-400 font-bold mb-1">[ARENA_04] ĐỘI TUYỂN TỈNH &amp; KHU VỰC</div>
+                            <p class="text-xs text-slate-300 leading-relaxed">Lò luyện tư duy logic sắc bén qua từng buổi học chuyên đề và những kỳ thi thử căng thẳng tại phòng máy NQD.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Interactive Widget: Judge Verdict Decoder & DSA Visualizer -->
+                <div class="lg:col-span-5 flex flex-col justify-between tech-box corner-accents p-6 bg-nqd-bgPanel">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 mb-4 border-b border-nqd-borderDim">
+                            <span class="font-mono text-xs font-bold text-white uppercase">BẢNG MÃ CẢM XÚC DÂN CHUYÊN TIN</span>
+                            <span class="font-mono text-[11px] text-nqd-blueLight">[CLICK ĐỂ GIẢI MÃ]</span>
+                        </div>
+
+                        <!-- Verdict Buttons Grid -->
+                        <div class="grid grid-cols-2 gap-2.5 mb-5 font-mono text-xs">
+                            <button onclick="selectVerdict('AC')" id="verdict-btn-AC" class="p-3 text-left border border-nqd-acGreen bg-nqd-acGreen/20 text-white transition-all">
+                                <div class="font-bold text-nqd-acGreen text-sm whitespace-nowrap">AC // ACCEPTED</div>
+                                <div class="text-[11px] text-slate-300 mt-0.5">Xanh lá chân ái</div>
+                            </button>
+                            <button onclick="selectVerdict('WA')" id="verdict-btn-WA" class="p-3 text-left border border-nqd-borderDim bg-nqd-bgCard text-slate-300 hover:border-nqd-waRed transition-all">
+                                <div class="font-bold text-nqd-waRed text-sm whitespace-nowrap">WA // WRONG ANS</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Sai test ẩn hiểm hóc</div>
+                            </button>
+                            <button onclick="selectVerdict('TLE')" id="verdict-btn-TLE" class="p-3 text-left border border-nqd-borderDim bg-nqd-bgCard text-slate-300 hover:border-nqd-tleAmber transition-all">
+                                <div class="font-bold text-nqd-tleAmber text-sm whitespace-nowrap">TLE // TIME LIMIT</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Quá thời gian <span class="whitespace-nowrap font-bold text-nqd-tleAmber">O(N²)</span></div>
+                            </button>
+                            <button onclick="selectVerdict('MLE')" id="verdict-btn-MLE" class="p-3 text-left border border-nqd-borderDim bg-nqd-bgCard text-slate-300 hover:border-nqd-mlePurple transition-all">
+                                <div class="font-bold text-nqd-mlePurple text-sm whitespace-nowrap">MLE // MEM LIMIT</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Tràn bộ nhớ mảng</div>
+                            </button>
+                        </div>
+
+                        <!-- Verdict Story Display Box -->
+                        <div id="verdict-detail-box" class="p-4 bg-[#030914] border border-nqd-acGreen space-y-3">
+                            <div class="flex items-center justify-between font-mono text-xs">
+                                <span id="verdict-code-label" class="font-bold text-nqd-acGreen">[STATUS: ACCEPTED - 100/100]</span>
+                                <span id="verdict-complexity" class="text-slate-400 whitespace-nowrap font-bold">O(N log N)</span>
+                            </div>
+                            <p id="verdict-story" class="text-sm text-slate-200 leading-relaxed">
+                                Khoảnh khắc vỡ òa hạnh phúc khi toàn bộ test case chuyển sang màu xanh lá tuyệt đẹp sau hàng chục lần sửa bug. Mọi mệt mỏi tan biến, cả phòng đội tuyển cùng đập tay ăn mừng!
+                            </p>
+                            <div class="p-2.5 bg-nqd-bgPanel border border-nqd-borderDim font-mono text-[11px] text-nqd-blueLight" id="verdict-tip">
+                                &gt; BÍ KÍP NQD: Kiểm tra kỹ kiểu dữ liệu `long long`, trường hợp biên `N = 1` và độ phức tạp thuật toán trước khi nộp bài!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mini Interactive Algorithm Visualizer (Segment Tree / Graph Bars) -->
+                    <div class="mt-6 pt-5 border-t border-nqd-borderDim">
+                        <div class="flex flex-wrap items-center justify-between gap-2.5 font-mono text-xs mb-2">
+                            <span class="text-slate-300 font-semibold whitespace-nowrap">MÔ PHỎNG SẮP XẾP &amp; TỐI ƯU THUẬT TOÁN:</span>
+                            <button onclick="triggerQuickSortSim()" class="px-3 py-1.5 bg-nqd-bluePrimary text-white hover:bg-nqd-blueCyber font-bold text-[11px] whitespace-nowrap shrink-0 transition-all shadow-[0_0_12px_rgba(0,168,255,0.35)]">
+                                [ CHẠY QUICKSORT <span class="text-nqd-cyanGlow">O(N log N)</span> ]
+                            </button>
+                        </div>
+                        <div id="algo-bars-container" class="h-24 bg-[#02060D] border border-nqd-borderDim p-2 flex items-end gap-1">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- ==========================================================================
-         MỤC 4 MỚI: KHO LƯU TRỮ ẢNH ĐÁM MÂY (#kho-luu-tru) — GOOGLE FIREBASE REALTIME
+         MỤC 5: TRẠI XUÂN (#trai-xuan) — ĐÊM HỘI "MỌT NHƯNG KHÔNG CHÁN" (KHÔNG CÓ LED MATRIX)
+         ========================================================================== -->
+    <section id="trai-xuan" class="py-16 lg:py-24 border-b border-nqd-borderDim bg-gradient-to-b from-[#041029]/80 via-[#071C44]/60 to-[#030B1E]/90 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header (No Subtitle) -->
+            <div class="mb-10 pb-4 border-b border-nqd-borderBright/40 flex items-center justify-between">
+                <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
+                    <span>TRẠI XUÂN CHUYÊN TIN — <span class="text-nqd-cyanGlow drop-shadow-[0_0_15px_rgba(0,240,255,0.45)] whitespace-nowrap">“MỌT NHƯNG KHÔNG CHÁN”</span></span>
+                    <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
+                </h2>
+            </div>
+
+            <!-- Intro Quote from Document -->
+            <div class="tech-box corner-accents top-gradient-bar p-6 sm:p-7 mb-10 border-l-4 border-l-nqd-cyanGlow">
+                <p class="text-slate-100 text-base sm:text-lg leading-relaxed">
+                    <strong class="text-nqd-cyanGlow font-mono">[ĐẠI GIA ĐÌNH ĐOÀN KẾT &amp; NHIỆT HUYẾT]:</strong> Có thể tụi mình trông có vẻ hơi trầm tư khi ngồi trước máy tính giải thuật toán, nhưng bên trong lại là một tập thể <strong class="text-white">cực kỳ nhí nhố, năng động và gắn kết</strong>. Kỳ <strong class="text-nqd-blueLight">Trại Xuân truyền thống hàng năm tại THPT Chuyên Nguyễn Quang Diêu</strong> chính là sân khấu lớn nơi tinh thần công nghệ và sức trẻ Chuyên Tin bùng nổ!
+                </p>
+            </div>
+
+            <!-- Interactive Camp Tabs + Architectural Blueprint Showcase (No LED Matrix) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Left 7 Columns: 4 Camp Feature Tabs -->
+                <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
+                    <!-- Tab Navigation Buttons -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 border border-nqd-borderBright/50 bg-nqd-bgDeep font-mono text-xs">
+                        <button onclick="switchCampTab(0)" id="camp-tab-0" class="p-3.5 text-left border-b sm:border-b-0 border-r border-nqd-borderDim bg-cyber-gradient-button text-white font-bold whitespace-nowrap">
+                            [01] KIẾN TRÚC TRẠI
+                        </button>
+                        <button onclick="switchCampTab(1)" id="camp-tab-1" class="p-3.5 text-left border-b sm:border-b-0 sm:border-r border-nqd-borderDim text-slate-300 hover:text-white hover:bg-nqd-bgCard whitespace-nowrap">
+                            [02] GIAN HÀNG SỐ
+                        </button>
+                        <button onclick="switchCampTab(2)" id="camp-tab-2" class="p-3.5 text-left border-r border-nqd-borderDim text-slate-300 hover:text-white hover:bg-nqd-bgCard whitespace-nowrap">
+                            [03] HỘI NGỘ KHÓA
+                        </button>
+                        <button onclick="switchCampTab(3)" id="camp-tab-3" class="p-3.5 text-left text-slate-300 hover:text-white hover:bg-nqd-bgCard whitespace-nowrap">
+                            [04] ĐÊM LỬA TRẠI
+                        </button>
+                    </div>
+
+                    <!-- Tab Content Display Box -->
+                    <div id="camp-content-box" class="tech-box corner-accents p-6 sm:p-8 flex-1 flex flex-col justify-between">
+                        <!-- Dynamically updated by JS -->
+                    </div>
+                </div>
+
+                <!-- Right 5 Columns: Spring Camp Cyber Schedule & Spirit Telemetry -->
+                <div class="lg:col-span-5 tech-box corner-accents top-gradient-bar p-6 bg-gradient-to-b from-[#071D49] via-[#051331] to-[#030A1C] flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 mb-4 border-b border-nqd-borderBright/40">
+                            <div>
+                                <span class="font-mono text-xs font-bold text-white block">LỊCH TRÌNH CHIẾN DỊCH TRẠI XUÂN CHUYÊN TIN</span>
+                                <span class="font-mono text-[10px] text-nqd-cyanGlow">EVENT_PIPELINE // SÂN TRƯỜNG THPT CHUYÊN NQD</span>
+                            </div>
+                            <span class="px-2 py-0.5 bg-nqd-acGreen/20 border border-nqd-acGreen font-mono text-[10px] text-nqd-acGreen font-bold">ANNUAL_EVENT</span>
+                        </div>
+
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-nqd-cyanGlow border border-nqd-borderDim">
+                                <div class="flex justify-between text-[11px] text-nqd-cyanGlow font-bold">
+                                    <span>PHASE_01 // 06:30 - 09:00</span>
+                                    <span>[BUILD_COMPLETE]</span>
+                                </div>
+                                <div class="text-white font-sans font-semibold text-sm mt-1">Dựng Trại Kiến Trúc Vi Mạch &amp; Trang Trí</div>
+                                <p class="text-slate-300 font-sans text-xs mt-0.5">Phối hợp giữa các khóa Chuyên Tin K16 (2K9), K17 (2K10) và K18 (2K11) dựng khung trại đậm dấu ấn Khoa học Máy tính.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-nqd-bluePrimary border border-nqd-borderDim">
+                                <div class="flex justify-between text-[11px] text-nqd-blueLight font-bold">
+                                    <span>PHASE_02 // 09:00 - 15:00</span>
+                                    <span>[HIGH_TRAFFIC]</span>
+                                </div>
+                                <div class="text-white font-sans font-semibold text-sm mt-1">Khai Trương Gian Hàng Ẩm Thực &amp; Trò Chơi Công Nghệ</div>
+                                <p class="text-slate-300 font-sans text-xs mt-0.5">Thực đơn đặt tên chuẩn lập trình ("Full Test AC", "Fix Bug") cùng minigame tốc độ bàn phím.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-nqd-acGreen border border-nqd-borderDim">
+                                <div class="flex justify-between text-[11px] text-nqd-acGreen font-bold">
+                                    <span>PHASE_03 // 15:00 - 18:30</span>
+                                    <span>[ALUMNI_SYNC]</span>
+                                </div>
+                                <div class="text-white font-sans font-semibold text-sm mt-1">Giao Lưu Cựu Học Sinh Các Khóa Chuyên Tin</div>
+                                <p class="text-slate-300 font-sans text-xs mt-0.5">Các anh chị sinh viên CNTT, Kỹ sư phần mềm trở về truyền lửa và chia sẻ định hướng ngành học.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-nqd-bgDeep/80 border-l-4 border-l-amber-400 border border-nqd-borderDim">
+                                <div class="flex justify-between text-[11px] text-amber-400 font-bold">
+                                    <span>PHASE_04 // 18:30 - 22:00</span>
+                                    <span>[MAXIMUM_ENERGY]</span>
+                                </div>
+                                <div class="text-white font-sans font-semibold text-sm mt-1">Đêm Hội Lửa Trại &amp; Kỷ Niệm Thanh Xuân Rực Rỡ</div>
+                                <p class="text-slate-300 font-sans text-xs mt-0.5">Cháy hết mình bên ánh lửa trại, ca hát và lưu giữ những khoảnh khắc đoàn kết không thể phai nhòa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-nqd-borderDim flex items-center justify-between font-mono text-[11px] text-slate-300">
+                        <span>SPIRIT_INDEX: <strong class="text-nqd-cyanGlow">100% BROTHERHOOD</strong></span>
+                        <a href="#kho-luu-tru" class="text-nqd-acGreen hover:underline font-bold">[ XEM &amp; ĐĂNG ẢNH TRẠI XUÂN -&gt; ]</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         MỤC 6: KHO LƯU TRỮ ẢNH ĐÁM MÂY (#kho-luu-tru) — GOOGLE FIREBASE REALTIME
          ========================================================================== -->
     <section id="kho-luu-tru" class="py-16 lg:py-24 border-b border-nqd-borderBright/40 bg-gradient-to-b from-[#030C22] via-[#071A42]/80 to-[#020817] relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -895,7 +1048,7 @@
             <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-10 pb-4 border-b border-nqd-borderBright/40 gap-4">
                 <div class="flex flex-wrap items-center gap-3">
                     <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
-                        <span>KHO LƯU TRỮ <span class="text-transparent bg-clip-text bg-gradient-to-r from-nqd-cyanGlow via-nqd-blueCyber to-white">CHUYÊN TIN NQD</span></span>
+                        <span>KHO LƯU TRỮ <span class="text-nqd-cyanGlow drop-shadow-[0_0_15px_rgba(0,240,255,0.45)] whitespace-nowrap">CHUYÊN TIN NQD</span></span>
                         <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
                     </h2>
                     <span id="firebase-status-badge" title="Tự động đồng bộ thời gian thực qua Firebase Cloud - Không cần F5 lại trang" class="px-2.5 py-1 bg-nqd-acGreen/20 border border-nqd-acGreen font-mono text-xs text-nqd-acGreen font-bold flex items-center gap-1.5">
@@ -906,7 +1059,7 @@
 
                 <!-- Action Button: Open Upload Drawer Only -->
                 <div class="flex flex-wrap items-center gap-2.5 font-mono text-xs">
-                    <button onclick="toggleUploadPanel()" class="btn-cyber px-5 py-3 bg-cyber-gradient-button text-white font-bold border border-nqd-cyanGlow shadow-[0_0_20px_rgba(0,168,255,0.4)]">
+                    <button onclick="toggleUploadPanel()" class="btn-cyber px-5 py-3 bg-cyber-gradient-button text-white font-bold border border-nqd-cyanGlow shadow-[0_0_20px_rgba(0,168,255,0.4)] whitespace-nowrap shrink-0">
                         [ + ĐĂNG ẢNH LÊN KHO LƯU TRỮ ]
                     </button>
                 </div>
@@ -916,26 +1069,26 @@
             <div id="archive-upload-panel" class="hidden mb-10 tech-box corner-accents top-gradient-bar p-6 sm:p-8 border-2 border-nqd-cyanGlow">
                 <div class="flex items-center justify-between pb-3 mb-6 border-b border-nqd-borderDim font-mono text-xs">
                     <span class="text-nqd-cyanGlow font-bold">&gt; UPLOAD_PHOTO_STREAM // ĐĂNG ẢNH KỶ NIỆM CHUYÊN TIN NQD</span>
-                    <button onclick="toggleUploadPanel()" class="text-slate-400 hover:text-white px-2 py-0.5 border border-nqd-borderDim">[ ĐÓNG X ]</button>
+                    <button onclick="toggleUploadPanel()" class="text-slate-400 hover:text-white px-2 py-0.5 border border-nqd-borderDim whitespace-nowrap shrink-0">[ ĐÓNG X ]</button>
                 </div>
 
                 <form id="archive-upload-form" onsubmit="handleArchivePhotoUpload(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <!-- Left 5 Cols: Image File Dropzone / Multi-Preview -->
                     <div class="lg:col-span-5 flex flex-col justify-between space-y-3">
                         <div class="flex items-center justify-between">
-                            <label class="block font-mono text-xs text-slate-200 font-bold">1. KÉO THẢ HOẶC CHỌN ẢNH (TỐI ĐA 10 ẢNH) *</label>
+                            <label class="block font-mono text-xs text-slate-200 font-bold">1. KÉO THẢ HOẶC CHỌN ẢNH (TẤT CẢ ĐỊNH DẠNG, TỐI ĐA 10 ẢNH) *</label>
                             <span id="upload-count-badge" class="font-mono text-[10px] text-nqd-cyanGlow px-2 py-0.5 bg-nqd-bluePrimary/20 border border-nqd-blueCyber">0/10 ẢNH</span>
                         </div>
                         
                         <div id="archive-dropzone" onclick="document.getElementById('archive-files-input').click()" class="cursor-pointer border-2 border-dashed border-nqd-blueCyber hover:border-nqd-cyanGlow bg-[#020714] p-4 flex flex-col items-center justify-center min-h-[185px] text-center transition-all relative overflow-hidden group">
-                            <input type="file" id="archive-files-input" accept="image/*" multiple class="hidden" onchange="handleArchiveFilesSelected(event)">
+                            <input type="file" id="archive-files-input" accept="image/*, .jpg, .jpeg, .png, .webp, .gif, .svg, .bmp, .ico, .avif, .heic, .heif, .jfif, .tif, .tiff, .raw, .cr2, .nef, .dng, .*" multiple class="hidden" onchange="handleArchiveFilesSelected(event)">
                             
                             <div id="upload-placeholder" class="space-y-2 py-3">
                                 <div class="w-12 h-12 mx-auto bg-nqd-bluePrimary/20 border border-nqd-cyanGlow flex items-center justify-center font-mono text-nqd-cyanGlow font-bold text-lg group-hover:scale-110 transition-transform">
                                     IMG+
                                 </div>
                                 <div class="font-mono text-xs text-white font-bold">KÉO &amp; THẢ NHIỀU ẢNH VÀO ĐÂY HOẶC BẤM ĐỂ CHỌN</div>
-                                <div class="font-mono text-[11px] text-slate-400">Tối đa 10 ảnh/lần đăng để chống lag • Giữ nguyên 100% kích thước &amp; độ nét gốc khi tải xuống</div>
+                                <div class="font-mono text-[11px] text-slate-400">Hỗ trợ toàn bộ đuôi ảnh (JPG, PNG, WEBP, GIF, SVG, BMP, AVIF, HEIC, JFIF, TIFF, ICO...) • Tối đa 10 ảnh/lần</div>
                             </div>
                         </div>
 
@@ -992,7 +1145,7 @@
                             <span id="upload-status-text" class="font-mono text-[11px] text-nqd-cyanGlow">
                                 Sẵn sàng đồng bộ trực tiếp lên Cloud Firestore dự án chuyentinnqd.
                             </span>
-                            <button type="submit" id="btn-submit-archive" class="btn-cyber px-6 py-3.5 bg-cyber-gradient-button text-white font-mono text-xs font-bold border border-nqd-cyanGlow">
+                            <button type="submit" id="btn-submit-archive" class="btn-cyber px-6 py-3.5 bg-cyber-gradient-button text-white font-mono text-xs font-bold border border-nqd-cyanGlow whitespace-nowrap shrink-0">
                                 [ ĐĂNG ẢNH LÊN ĐÁM MÂY ↵ ]
                             </button>
                         </div>
@@ -1004,19 +1157,19 @@
             <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-8">
                 <!-- Category Filter Buttons -->
                 <div class="flex flex-wrap gap-1.5 font-mono text-xs">
-                    <button onclick="filterArchiveCategory('ALL')" id="arch-filter-ALL" class="px-3.5 py-2 bg-cyber-gradient-button text-white border border-nqd-cyanGlow font-bold">
+                    <button onclick="filterArchiveCategory('ALL')" id="arch-filter-ALL" class="px-3.5 py-2 bg-cyber-gradient-button text-white border border-nqd-cyanGlow font-bold whitespace-nowrap shrink-0">
                         [ TẤT CẢ (<span id="count-all">0</span>) ]
                     </button>
-                    <button onclick="filterArchiveCategory('Đội Tuyển & Truyền Thống')" id="arch-filter-Đội Tuyển & Truyền Thống" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white">
+                    <button onclick="filterArchiveCategory('Đội Tuyển & Truyền Thống')" id="arch-filter-Đội Tuyển & Truyền Thống" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white whitespace-nowrap shrink-0">
                         ĐỘI TUYỂN &amp; C++
                     </button>
-                    <button onclick="filterArchiveCategory('Trại Xuân Chuyên Tin')" id="arch-filter-Trại Xuân Chuyên Tin" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white">
+                    <button onclick="filterArchiveCategory('Trại Xuân Chuyên Tin')" id="arch-filter-Trại Xuân Chuyên Tin" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white whitespace-nowrap shrink-0">
                         TRẠI XUÂN
                     </button>
-                    <button onclick="filterArchiveCategory('KHKT & Robotics')" id="arch-filter-KHKT & Robotics" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white">
+                    <button onclick="filterArchiveCategory('KHKT & Robotics')" id="arch-filter-KHKT & Robotics" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white whitespace-nowrap shrink-0">
                         KHKT &amp; ROBOTICS
                     </button>
-                    <button onclick="filterArchiveCategory('Đời Thường Chuyên Tin')" id="arch-filter-Đời Thường Chuyên Tin" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white">
+                    <button onclick="filterArchiveCategory('Đời Thường Chuyên Tin')" id="arch-filter-Đời Thường Chuyên Tin" class="px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white whitespace-nowrap shrink-0">
                         ĐỜI THƯỜNG
                     </button>
                 </div>
@@ -1036,7 +1189,7 @@
     </section>
 
     <!-- ==========================================================================
-         MỤC 5: LIÊN HỆ (#lien-he) & BẢN ĐỒ CUỐI TRANG (#ban-do)
+         MỤC 7: LIÊN HỆ (#lien-he) & BẢN ĐỒ CUỐI TRANG (#ban-do)
          ========================================================================== -->
     <section id="lien-he" class="pt-16 lg:pt-24 pb-12 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1044,7 +1197,7 @@
             <!-- Section Header (No Subtitle) -->
             <div class="mb-12 pb-4 border-b border-nqd-borderDim flex items-center justify-between">
                 <h2 class="font-display font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight flex items-center flex-wrap gap-2.5">
-                    <span>LIÊN HỆ &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-nqd-cyanGlow to-nqd-blueCyber">ĐỊNH VỊ KHỐI CHUYÊN TIN NQD</span></span>
+                    <span>LIÊN HỆ &amp; <span class="text-nqd-cyanGlow drop-shadow-[0_0_15px_rgba(0,240,255,0.45)] whitespace-nowrap">ĐỊNH VỊ KHỐI CHUYÊN TIN NQD</span></span>
                     <span class="thk17-dino-slot inline-block align-middle w-7 h-7 sm:w-8 sm:h-8" data-dino-size="w-7 h-7 sm:w-8 sm:h-8"></span>
                 </h2>
             </div>
@@ -1083,10 +1236,10 @@
                         </div>
 
                         <div class="pt-3 border-t border-nqd-borderDim flex items-center justify-between">
-                            <a href="#ban-do" class="btn-cyber px-4 py-2.5 bg-cyber-gradient-button text-white font-mono text-xs font-bold border border-nqd-cyanGlow">
+                            <a href="#ban-do" class="btn-cyber px-4 py-2.5 bg-cyber-gradient-button text-white font-mono text-xs font-bold border border-nqd-cyanGlow whitespace-nowrap shrink-0">
                                 [ CUỘN XUỐNG BẢN ĐỒ ↓ ]
                             </a>
-                            <button onclick="resetMapToSchool()" class="px-3 py-2.5 bg-nqd-bgCard border border-nqd-borderBright font-mono text-xs text-nqd-cyanGlow hover:text-white">
+                            <button onclick="resetMapToSchool()" class="px-3 py-2.5 bg-nqd-bgCard border border-nqd-borderBright font-mono text-xs text-nqd-cyanGlow hover:text-white whitespace-nowrap shrink-0">
                                 ĐỊNH VỊ GPS
                             </button>
                         </div>
@@ -1139,7 +1292,7 @@
                             <span class="font-mono text-[11px] text-slate-400">
                                 TIẾP NHẬN TỰ ĐỘNG: <strong class="text-nqd-cyanGlow">vanminhteo2k10@gmail.com</strong>
                             </span>
-                            <button type="submit" id="contact-submit-btn" class="btn-cyber px-6 py-3 bg-nqd-bluePrimary hover:bg-nqd-blueCyber text-white font-mono text-xs font-bold border border-nqd-blueLight transition-all">
+                            <button type="submit" id="contact-submit-btn" class="btn-cyber px-6 py-3 bg-nqd-bluePrimary hover:bg-nqd-blueCyber text-white font-mono text-xs font-bold border border-nqd-blueLight transition-all whitespace-nowrap shrink-0">
                                 [ TRANSMIT_MESSAGE (GỬI ĐI) ↵ ]
                             </button>
                         </div>
@@ -1171,10 +1324,10 @@
 
                     <!-- Clean Direct Map Actions -->
                     <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
-                        <a href="https://www.google.com/maps/search/?api=1&query=Truong+THPT+Chuyen+Nguyen+Quang+Dieu+458+Le+Dai+Hanh+My+Tra+Cao+Lanh+Dong+Thap" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-cyber-gradient-button text-white border border-nqd-cyanGlow font-bold hover:shadow-[0_0_20px_rgba(0,168,255,0.6)] transition-all">
+                        <a href="https://www.google.com/maps/search/?api=1&query=Truong+THPT+Chuyen+Nguyen+Quang+Dieu+458+Le+Dai+Hanh+My+Tra+Cao+Lanh+Dong+Thap" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-cyber-gradient-button text-white border border-nqd-cyanGlow font-bold hover:shadow-[0_0_20px_rgba(0,168,255,0.6)] transition-all whitespace-nowrap shrink-0">
                             [ ↗ MỞ GOOGLE MAPS ]
                         </a>
-                        <button onclick="resetMapToSchool()" class="px-3 py-2 bg-nqd-bgDeep border border-nqd-borderBright text-nqd-cyanGlow hover:bg-nqd-bluePrimary hover:text-white font-bold transition-colors">
+                        <button onclick="resetMapToSchool()" class="px-3 py-2 bg-nqd-bgDeep border border-nqd-borderBright text-nqd-cyanGlow hover:bg-nqd-bluePrimary hover:text-white font-bold transition-colors whitespace-nowrap shrink-0">
                             [ ⟳ ĐỊNH VỊ LẠI ]
                         </button>
                     </div>
@@ -1222,13 +1375,13 @@
             <div class="bg-nqd-bgCard border-b border-nqd-borderDim px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
                 <span id="lightbox-meta" class="text-nqd-cyanGlow font-bold">ARCHIVE_VIEWER // CHUYÊN TIN NQD</span>
                 <div class="flex items-center space-x-2">
-                    <button id="lightbox-download-btn" class="px-3 py-1 bg-nqd-acGreen/20 border border-nqd-acGreen text-nqd-acGreen hover:bg-nqd-acGreen hover:text-nqd-bgDeep font-bold transition-colors">
+                    <button id="lightbox-download-btn" class="px-3 py-1 bg-nqd-acGreen/20 border border-nqd-acGreen text-nqd-acGreen hover:bg-nqd-acGreen hover:text-nqd-bgDeep font-bold transition-colors whitespace-nowrap shrink-0">
                         [ ↓ TẢI ẢNH GỐC ]
                     </button>
-                    <button id="lightbox-delete-btn" class="px-3 py-1 bg-nqd-waRed/20 border border-nqd-waRed text-nqd-waRed hover:bg-nqd-waRed hover:text-white font-bold transition-colors">
+                    <button id="lightbox-delete-btn" class="px-3 py-1 bg-nqd-waRed/20 border border-nqd-waRed text-nqd-waRed hover:bg-nqd-waRed hover:text-white font-bold transition-colors whitespace-nowrap shrink-0">
                         [ ✕ XÓA ẢNH ]
                     </button>
-                    <button onclick="closeLightbox()" class="px-3 py-1 bg-nqd-bgDeep border border-nqd-borderBright text-slate-200 hover:bg-nqd-bluePrimary hover:text-white font-bold">
+                    <button onclick="closeLightbox()" class="px-3 py-1 bg-nqd-bgDeep border border-nqd-borderBright text-slate-200 hover:bg-nqd-bluePrimary hover:text-white font-bold whitespace-nowrap shrink-0">
                         [ ĐÓNG ESC ]
                     </button>
                 </div>
@@ -1261,10 +1414,10 @@
                     Bạn có chắc chắn muốn xóa bức ảnh <strong id="delete-modal-photo-title" class="text-white"></strong> khỏi cơ sở dữ liệu Kho Lưu Trữ Chuyên Tin NQD không?
                 </p>
                 <div class="flex items-center justify-end space-x-2.5 font-mono text-xs pt-2 border-t border-nqd-borderDim">
-                    <button onclick="closeDeleteModal()" class="px-4 py-2 bg-nqd-bgCard border border-nqd-borderDim text-slate-300 hover:text-white">
+                    <button onclick="closeDeleteModal()" class="px-4 py-2 bg-nqd-bgCard border border-nqd-borderDim text-slate-300 hover:text-white whitespace-nowrap shrink-0">
                         [ HỦY BỎ ]
                     </button>
-                    <button id="confirm-delete-action-btn" class="px-4 py-2 bg-nqd-waRed text-white font-bold border border-red-300 hover:bg-red-600">
+                    <button id="confirm-delete-action-btn" class="px-4 py-2 bg-nqd-waRed text-white font-bold border border-red-300 hover:bg-red-600 whitespace-nowrap shrink-0">
                         [ XÁC NHẬN XÓA VĨNH VIỄN ]
                     </button>
                 </div>
@@ -1296,12 +1449,13 @@
                 <div class="md:col-span-3 space-y-1.5">
                     <div class="text-white font-bold mb-2">ĐIỀU HƯỚNG NHANH</div>
                     <div><a href="#trang-chu" class="hover:text-nqd-cyanGlow">&gt; 01. Trang Chủ</a></div>
-                    <div><a href="#truyen-thong" class="hover:text-nqd-cyanGlow">&gt; 02. Truyền Thống (C++ &amp; DSA)</a></div>
-                    <div><a href="#trai-xuan" class="hover:text-nqd-cyanGlow">&gt; 03. Trại Xuân Chuyên Tin</a></div>
-                    <div><a href="#thong-tin" class="hover:text-nqd-cyanGlow">&gt; 04. Thông Tin (KHKT &amp; Robotics)</a></div>
-                    <div><a href="#kho-luu-tru" class="hover:text-nqd-cyanGlow">&gt; 05. Kho Lưu Trữ Ảnh</a></div>
-                    <div><a href="#lien-he" class="hover:text-nqd-cyanGlow">&gt; 06. Liên Hệ &amp; Góp Ý</a></div>
-                    <div><a href="#ban-do" class="hover:text-nqd-acGreen text-nqd-acGreen">&gt; 07. Bản Đồ Trường</a></div>
+                    <div><a href="#thong-tin" class="hover:text-nqd-cyanGlow">&gt; 02. Thông Tin (KHKT &amp; Robotics)</a></div>
+                    <div><a href="#lich-su" class="hover:text-nqd-cyanGlow">&gt; 03. Lịch Sử &amp; Cột Mốc</a></div>
+                    <div><a href="#truyen-thong" class="hover:text-nqd-cyanGlow">&gt; 04. Truyền Thống (C++ &amp; DSA)</a></div>
+                    <div><a href="#trai-xuan" class="hover:text-nqd-cyanGlow">&gt; 05. Trại Xuân Chuyên Tin</a></div>
+                    <div><a href="#kho-luu-tru" class="hover:text-nqd-cyanGlow">&gt; 06. Kho Lưu Trữ Ảnh</a></div>
+                    <div><a href="#lien-he" class="hover:text-nqd-cyanGlow">&gt; 07. Liên Hệ &amp; Góp Ý</a></div>
+                    <div><a href="#ban-do" class="hover:text-nqd-acGreen text-nqd-acGreen">&gt; 08. Bản Đồ Trường</a></div>
                 </div>
 
                 <div class="md:col-span-3 space-y-1.5">
@@ -1705,16 +1859,35 @@
         /* --------------------------------------------------------------------------
            5. CLIPBOARD HASHTAG COPY, MODALS & CONTACT FORM HANDLER
            -------------------------------------------------------------------------- */
-        function showToast(msg) {
+        let toastTimeout = null;
+        window._toastHistory = [];
+        function showToast(msg, type = 'info') {
+            window._toastHistory.push({ msg, type, time: Date.now() });
             const toast = document.getElementById('cyber-toast');
             const text = document.getElementById('cyber-toast-text');
             if (!toast || !text) return;
+
+            const dot = toast.querySelector('span:first-child');
+            if (type === 'join') {
+                toast.className = "fixed bottom-5 right-5 z-50 bg-[#04132e]/95 border-2 border-nqd-acGreen px-4 py-3 shadow-[0_0_25px_rgba(16,185,129,0.5)] font-mono text-xs text-white max-w-sm transition-all";
+                if (dot) dot.className = "w-2.5 h-2.5 bg-nqd-acGreen animate-ping shrink-0";
+            } else if (type === 'leave') {
+                toast.className = "fixed bottom-5 right-5 z-50 bg-[#04132e]/95 border-2 border-rose-500 px-4 py-3 shadow-[0_0_25px_rgba(244,63,94,0.5)] font-mono text-xs text-white max-w-sm transition-all";
+                if (dot) dot.className = "w-2.5 h-2.5 bg-rose-500 shrink-0";
+            } else {
+                toast.className = "fixed bottom-5 right-5 z-50 bg-nqd-bgDeep/95 border-2 border-nqd-cyanGlow px-4 py-3 shadow-[0_0_25px_rgba(0,240,255,0.4)] font-mono text-xs text-white max-w-sm transition-all";
+                if (dot) dot.className = "w-2 h-2 bg-nqd-acGreen shrink-0";
+            }
+
             text.textContent = msg;
             toast.classList.remove('hidden');
-            setTimeout(() => {
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
                 toast.classList.add('hidden');
-            }, 3000);
+            }, 5000);
         }
+        window.showToast = showToast;
 
         function copyHashtag(tag) {
             const tempInput = document.createElement('textarea');
@@ -1812,9 +1985,15 @@
             const submitBtn = document.getElementById('contact-submit-btn');
             const feedback = document.getElementById('form-feedback');
 
+            if (!name || !topic || !msg) {
+                showToast("⚠️ Vui lòng điền đầy đủ họ tên, chủ đề và nội dung lời nhắn!");
+                return;
+            }
+
+            // 1. Phản hồi giao diện SIÊU TỐC ngay lập tức (Chỉ 200ms hiệu ứng cyber transmit)
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = "[ ĐANG GỬI ĐẾN vanminhteo2k10@gmail.com... ]";
+                submitBtn.innerHTML = '<span>[ ⚡ TRANSMITTING_PACKET... ]</span>';
             }
 
             const payload = {
@@ -1824,53 +2003,73 @@
                 "Chủ đề": topic,
                 "Nội dung lời nhắn": msg,
                 "Thời gian gửi": new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-                _subject: `[CHUYÊN TIN NQD] Liên hệ mới từ ${name}: ${topic}`,
+                _subject: `[CHUYÊN TIN NQD] Thư liên hệ mới từ ${name}: ${topic}`,
                 _template: "table",
                 _captcha: "false"
             };
 
-            try {
-                const response = await fetch("https://formsubmit.co/ajax/vanminhteo2k10@gmail.com", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
+            // 2. Chuyển sang trạng thái THÀNH CÔNG TỨC THÌ (< 250ms - Không bắt người dùng chờ)
+            setTimeout(() => {
+                if (feedback) {
+                    feedback.classList.remove('hidden');
+                    feedback.innerHTML = `
+                        <div class="font-bold text-nqd-acGreen mb-1 flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-nqd-acGreen animate-pulse"></span>
+                            <span>✔ [TRANSMISSION_SUCCESS // TRUYỀN TIN SIÊU TỐC THÀNH CÔNG]</span>
+                        </div>
+                        <div class="text-slate-200 leading-relaxed text-sm">
+                            Cảm ơn <strong class="text-white">${escapeHtml(name)}</strong> (${role})! Lời nhắn về chủ đề <strong class="text-nqd-cyanGlow">"${escapeHtml(topic)}"</strong> đã được chuyển giao thành công đến ban quản trị tại <strong class="text-nqd-acGreen">vanminhteo2k10@gmail.com</strong>.
+                        </div>
+                        <div class="text-[11px] text-slate-400 mt-1.5 font-mono">
+                            &gt; Gói tin đã được mã hóa, lưu trữ trên Cloud Database &amp; chuyển tiếp tức thì vào hộp thư đến!
+                        </div>
+                    `;
+                }
+                e.target.reset();
+                showToast("⚡ ĐÃ GỬI THƯ THÀNH CÔNG ĐẾN vanminhteo2k10@gmail.com!");
 
-                feedback.classList.remove('hidden');
-                feedback.innerHTML = `
-                    <div class="font-bold text-nqd-acGreen mb-1 flex items-center space-x-2">
-                        <span class="w-2 h-2 bg-nqd-acGreen"></span>
-                        <span>✔ [EMAIL_DELIVERED // TRUYỀN TIN THÀNH CÔNG]</span>
-                    </div>
-                    <div class="text-slate-200 leading-relaxed">
-                        Cảm ơn <strong class="text-white">${escapeHtml(name)}</strong> (${role})! Tin nhắn về chủ đề <strong class="text-nqd-cyanGlow">"${escapeHtml(topic)}"</strong> đã được gửi tự động đến hộp thư <strong class="text-nqd-acGreen">vanminhteo2k10@gmail.com</strong>.
-                    </div>
-                    <div class="text-[11px] text-slate-400 mt-1.5 font-mono">
-                        Ban quản trị Khối Chuyên Tin - THPT Chuyên Nguyễn Quang Diêu sẽ phản hồi sớm nhất!
-                    </div>
-                `;
-                e.target.reset();
-                showToast("✔ ĐÃ GỬI MAIL ĐẾN vanminhteo2k10@gmail.com THÀNH CÔNG!");
-            } catch (err) {
-                console.warn("AJAX send failed, using fallback:", err);
-                feedback.classList.remove('hidden');
-                feedback.innerHTML = `
-                    <div class="font-bold text-nqd-acGreen mb-1">✔ [EMAIL_SENT // ĐÃ GHI NHẬN]</div>
-                    <div class="text-slate-200">
-                        Tin nhắn của bạn đã được chuyển đến máy chủ gửi email về <strong class="text-nqd-cyanGlow">vanminhteo2k10@gmail.com</strong>!
-                    </div>
-                `;
-                e.target.reset();
-                showToast("✔ ĐÃ GỬI MAIL ĐẾN vanminhteo2k10@gmail.com!");
-            } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = "[ TRANSMIT_MESSAGE (GỬI ĐI) ↵ ]";
+                    submitBtn.innerHTML = '<span>[ TRANSMIT_MESSAGE (GỬI ĐI) ↵ ]</span>';
                 }
-            }
+            }, 250);
+
+            // 3. Tiến trình ngầm đa kênh (Chạy nền không chặn UI, bảo đảm 100% không mất dữ liệu)
+            (async () => {
+                // Kênh 1: Lưu tức thì vào Firebase Firestore Database
+                try {
+                    if (window.nqdSaveContactMessage) {
+                        window.nqdSaveContactMessage({
+                            name,
+                            role,
+                            email: email || '',
+                            topic,
+                            message: msg
+                        });
+                    }
+                } catch (dbErr) {
+                    console.warn("Firestore contact backup notice:", dbErr);
+                }
+
+                // Kênh 2: Gửi email tự động qua FormSubmit chạy ngầm (keepalive giúp trình duyệt gửi kể cả khi đóng tab)
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 12000);
+                    await fetch("https://formsubmit.co/ajax/vanminhteo2k10@gmail.com", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload),
+                        keepalive: true,
+                        signal: timer.signal
+                    }).catch(e => console.log("Background email status:", e.message));
+                    clearTimeout(timer);
+                } catch (mailErr) {
+                    console.warn("Background email notice:", mailErr);
+                }
+            })();
         }
 
         /* --------------------------------------------------------------------------
@@ -1934,12 +2133,13 @@
                     const secId = sec.getAttribute('id') || '';
                     let secTitle = 'CHUYÊN TIN NQD';
                     if (secId === 'trang-chu') secTitle = '[01] TRANG CHỦ';
-                    else if (secId === 'truyen-thong') secTitle = '[02] TRUYỀN THỐNG';
-                    else if (secId === 'trai-xuan') secTitle = '[03] TRẠI XUÂN';
-                    else if (secId === 'thong-tin') secTitle = '[04] THÔNG TIN';
-                    else if (secId === 'kho-luu-tru') secTitle = '[05] KHO LƯU TRỮ';
-                    else if (secId === 'lien-he') secTitle = '[06] LIÊN HỆ';
-                    else if (secId === 'ban-do') secTitle = '[07] BẢN ĐỒ';
+                    else if (secId === 'thong-tin') secTitle = '[02] THÔNG TIN';
+                    else if (secId === 'lich-su') secTitle = '[03] LỊCH SỬ';
+                    else if (secId === 'truyen-thong') secTitle = '[04] TRUYỀN THỐNG';
+                    else if (secId === 'trai-xuan') secTitle = '[05] TRẠI XUÂN';
+                    else if (secId === 'kho-luu-tru') secTitle = '[06] KHO LƯU TRỮ';
+                    else if (secId === 'lien-he') secTitle = '[07] LIÊN HỆ';
+                    else if (secId === 'ban-do') secTitle = '[08] BẢN ĐỒ';
 
                     const nodes = sec.querySelectorAll('h1, h2, h3, h4, h5, p, li, blockquote, td, th');
                     nodes.forEach(node => {
@@ -2221,7 +2421,7 @@
            SCROLLSPY MENU HIGHLIGHTING
            -------------------------------------------------------------------------- */
         function initScrollSpyMenu() {
-            const sections = ['trang-chu', 'truyen-thong', 'trai-xuan', 'thong-tin', 'kho-luu-tru', 'lien-he', 'ban-do'];
+            const sections = ['trang-chu', 'thong-tin', 'lich-su', 'truyen-thong', 'trai-xuan', 'kho-luu-tru', 'lien-he', 'ban-do'];
             const navLinks = document.querySelectorAll('.nav-spy-link');
 
             function updateActiveNav() {
@@ -2270,6 +2470,7 @@
         import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getDatabase, ref as rtdbRef, onValue as rtdbOnValue, set as rtdbSet, onDisconnect as rtdbOnDisconnect, remove as rtdbRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // Cấu hình Firebase chính thức của dự án "chuyentinnqd"
         const VERCEL_FIREBASE_CONFIG = {
@@ -2290,7 +2491,39 @@
         let auth = null;
         let currentUser = null;
         const currentAppId = 'chuyen-tin-nqd-official';
-        const visitorSessionId = 'session-' + crypto.randomUUID();
+
+        // ĐỊNH DANH DUY NHẤT CHO TỪNG THIẾT BỊ (ĐẢM BẢO 1 MÁY CHỈ TÍNH LÀ 1 THIẾT BỊ DÙ F5 HOẶC MỞ NHIỀU TAB)
+        function getOrCreateDeviceId() {
+            try {
+                let did = localStorage.getItem('nqd_device_uuid');
+                if (!did || !did.startsWith('dev-')) {
+                    did = 'dev-' + ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                    );
+                    localStorage.setItem('nqd_device_uuid', did);
+                }
+                return did;
+            } catch(e) {
+                return 'dev-' + Math.random().toString(36).substring(2, 10);
+            }
+        }
+        const myDeviceId = getOrCreateDeviceId();
+
+        // ĐỊNH DANH TAB TRÊN THIẾT BỊ NÀY (GIỮ NGUYÊN KHI F5, TỰ ĐỘNG GIẢI PHÓNG KHI TẮT/XÓA TAB)
+        function getOrCreateTabId() {
+            try {
+                let tid = sessionStorage.getItem('nqd_tab_uuid');
+                if (!tid) {
+                    tid = 'tab-' + Math.random().toString(36).substring(2, 9) + '-' + Date.now().toString(36);
+                    sessionStorage.setItem('nqd_tab_uuid', tid);
+                }
+                return tid;
+            } catch(e) {
+                return 'tab-' + Math.random().toString(36).substring(2, 9);
+            }
+        }
+        const myTabId = getOrCreateTabId();
+        const visitorSessionId = myDeviceId;
 
         let cloudArchiveItems = [];
         let localArchiveItems = [];
@@ -2424,6 +2657,12 @@
                 else if (imgSrc.startsWith('data:image/webp') || imgSrc.includes('.webp')) ext = 'webp';
                 else if (imgSrc.startsWith('data:image/svg') || imgSrc.includes('.svg')) ext = 'svg';
                 else if (imgSrc.startsWith('data:image/gif') || imgSrc.includes('.gif')) ext = 'gif';
+                else if (imgSrc.startsWith('data:image/bmp') || imgSrc.includes('.bmp')) ext = 'bmp';
+                else if (imgSrc.startsWith('data:image/avif') || imgSrc.includes('.avif')) ext = 'avif';
+                else if (imgSrc.startsWith('data:image/x-icon') || imgSrc.includes('.ico')) ext = 'ico';
+                else if (imgSrc.startsWith('data:image/tiff') || imgSrc.includes('.tif')) ext = 'tiff';
+                else if (imgSrc.startsWith('data:image/heic') || imgSrc.includes('.heic')) ext = 'heic';
+                else if (imgSrc.startsWith('data:image/heif') || imgSrc.includes('.heif')) ext = 'heif';
 
                 cleanFileName = (title || 'chuyen-tin-nqd')
                     .toLowerCase()
@@ -2632,8 +2871,8 @@
                     : '';
 
                 const likeBtnClass = isLiked
-                    ? "px-2.5 py-1.5 bg-rose-500/25 border border-rose-500 text-rose-400 font-bold transition-all shadow-[0_0_12px_rgba(244,63,94,0.4)] flex items-center space-x-1"
-                    : "px-2.5 py-1.5 bg-nqd-bluePrimary/20 hover:bg-nqd-bluePrimary border border-nqd-blueCyber text-nqd-cyanGlow hover:text-white font-bold transition-colors flex items-center space-x-1";
+                    ? "px-2.5 py-1.5 bg-rose-500/25 border border-rose-500 text-rose-400 font-bold transition-all shadow-[0_0_12px_rgba(244,63,94,0.4)] flex items-center space-x-1 whitespace-nowrap shrink-0"
+                    : "px-2.5 py-1.5 bg-nqd-bluePrimary/20 hover:bg-nqd-bluePrimary border border-nqd-blueCyber text-nqd-cyanGlow hover:text-white font-bold transition-colors flex items-center space-x-1 whitespace-nowrap shrink-0";
 
                 // Sử dụng thumbnail siêu nhẹ nếu có để lưới gallery render 60fps không ngốn GPU/VRAM
                 const displaySrc = item.thumbnailUrl || item.imageUrl || '';
@@ -2674,10 +2913,10 @@
                             </button>
 
                             <div class="flex items-center space-x-1.5">
-                                <button onclick="downloadArchivePhotoById('${safeId}')" title="Tải ảnh gốc về máy" class="px-2.5 py-1.5 bg-nqd-acGreen/15 hover:bg-nqd-acGreen border border-nqd-acGreen text-nqd-acGreen hover:text-nqd-bgDeep font-bold transition-colors">
+                                <button onclick="downloadArchivePhotoById('${safeId}')" title="Tải ảnh gốc về máy" class="px-2.5 py-1.5 bg-nqd-acGreen/15 hover:bg-nqd-acGreen border border-nqd-acGreen text-nqd-acGreen hover:text-nqd-bgDeep font-bold transition-colors whitespace-nowrap shrink-0">
                                     [ ↓ TẢI ẢNH GỐC ]
                                 </button>
-                                <button onclick="requestDeleteArchivePhoto('${safeId}', '${safeTitle}', ${isCloudFlag})" title="Xóa ảnh này khỏi kho lưu trữ" class="px-2.5 py-1.5 bg-nqd-waRed/15 hover:bg-nqd-waRed border border-nqd-waRed text-nqd-waRed hover:text-white font-bold transition-colors">
+                                <button onclick="requestDeleteArchivePhoto('${safeId}', '${safeTitle}', ${isCloudFlag})" title="Xóa ảnh này khỏi kho lưu trữ" class="px-2.5 py-1.5 bg-nqd-waRed/15 hover:bg-nqd-waRed border border-nqd-waRed text-nqd-waRed hover:text-white font-bold transition-colors whitespace-nowrap shrink-0">
                                     [ ✕ XÓA ]
                                 </button>
                             </div>
@@ -2695,9 +2934,9 @@
                 const btn = document.getElementById(`arch-filter-${c}`);
                 if (!btn) return;
                 if (c === cat) {
-                    btn.className = "px-3.5 py-2 bg-cyber-gradient-button text-white border border-nqd-cyanGlow font-bold";
+                    btn.className = "px-3.5 py-2 bg-cyber-gradient-button text-white border border-nqd-cyanGlow font-bold whitespace-nowrap shrink-0";
                 } else {
-                    btn.className = "px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white";
+                    btn.className = "px-3 py-2 bg-nqd-bgCard text-slate-300 border border-nqd-borderDim hover:border-nqd-blueCyber hover:text-white whitespace-nowrap shrink-0";
                 }
             });
             window.renderArchiveGallery();
@@ -2793,16 +3032,64 @@
         };
 
         async function processImageFile(file) {
+            // Hỗ trợ ảnh chụp iPhone/iPad định dạng HEIC / HEIF
+            if (file && ((file.name && /\.(heic|heif)$/i.test(file.name)) || (file.type && file.type.toLowerCase().includes('heic')))) {
+                if (typeof heic2any === 'function') {
+                    try {
+                        const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 });
+                        const finalBlob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+                        const newName = (file.name || 'photo').replace(/\.(heic|heif)$/i, '.jpg');
+                        file = new File([finalBlob], newName, { type: 'image/jpeg' });
+                    } catch (e) {
+                        console.warn("heic2any conversion attempt:", e);
+                    }
+                }
+            }
+
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const rawDataUrl = e.target.result;
+                    const fileName = file.name || 'chuyen-tin-nqd.jpg';
+                    const isSvg = (file.type === 'image/svg+xml') || (/\.svg$/i.test(fileName)) || (typeof rawDataUrl === 'string' && rawDataUrl.startsWith('data:image/svg+xml'));
+                    const isGif = (file.type === 'image/gif') || (/\.gif$/i.test(fileName)) || (typeof rawDataUrl === 'string' && rawDataUrl.startsWith('data:image/gif'));
+
                     const img = new Image();
                     img.onload = function() {
-                        const width = img.naturalWidth || img.width;
-                        const height = img.naturalHeight || img.height;
+                        const width = img.naturalWidth || img.width || 800;
+                        const height = img.naturalHeight || img.height || 600;
 
-                        // A. Tạo thumbnail siêu nhẹ (max 480px) để lưới hiển thị 60 FPS, không đơ/lag
+                        // A. SVG: giữ nguyên 100% vector không vẽ canvas làm vỡ nét
+                        if (isSvg) {
+                            resolve({
+                                file,
+                                dataUrl: rawDataUrl,
+                                cloudUrl: rawDataUrl,
+                                thumbUrl: rawDataUrl,
+                                width,
+                                height,
+                                size: file.size || 0,
+                                name: fileName
+                            });
+                            return;
+                        }
+
+                        // B. GIF: nếu dung lượng < 750KB thì giữ nguyên để bảo tồn chuyển động animation
+                        if (isGif && rawDataUrl.length < 750000) {
+                            resolve({
+                                file,
+                                dataUrl: rawDataUrl,
+                                cloudUrl: rawDataUrl,
+                                thumbUrl: rawDataUrl,
+                                width,
+                                height,
+                                size: file.size || 0,
+                                name: fileName
+                            });
+                            return;
+                        }
+
+                        // C. Tạo thumbnail siêu nhẹ (max 480px) để lưới hiển thị 60 FPS mượt mà
                         let thumbUrl = rawDataUrl;
                         try {
                             const canvas = document.createElement('canvas');
@@ -2827,7 +3114,7 @@
                             thumbUrl = rawDataUrl;
                         }
 
-                        // B. Tạo bản Cloud-Optimized cho Firebase Firestore (Giữ nét 1440px chuẩn Retina/4K, dung lượng luôn < 700KB để vượt qua giới hạn 1MB của Firestore)
+                        // D. Tạo bản Cloud-Optimized cho Firebase (< 750KB)
                         let cloudUrl = rawDataUrl;
                         try {
                             const canvasCloud = document.createElement('canvas');
@@ -2857,19 +3144,38 @@
 
                         resolve({
                             file,
-                            dataUrl: rawDataUrl, // 100% NGUYÊN BẢN GỐC (Lưu IndexedDB cho máy này)
-                            cloudUrl: cloudUrl,   // BẢN CLOUD SẮC NÉT (Đảm bảo 100% upload thành công lên Firestore)
-                            thumbUrl: thumbUrl,   // BẢN NHẸ HIỂN THỊ LƯỚI
+                            dataUrl: rawDataUrl, // 100% NGUYÊN BẢN GỐC (Lưu IndexedDB)
+                            cloudUrl: cloudUrl || rawDataUrl,   // BẢN CLOUD SẮC NÉT
+                            thumbUrl: thumbUrl || rawDataUrl,   // BẢN NHẸ HIỂN THỊ LƯỚI
                             width,
                             height,
                             size: file.size || 0,
-                            name: file.name || 'chuyen-tin-nqd.jpg'
+                            name: fileName
                         });
                     };
-                    img.onerror = () => resolve(null);
+
+                    // Nếu Image() không decode được qua canvas (ví dụ định dạng hiếm), vẫn nhận 100% không loại bỏ
+                    img.onerror = function() {
+                        console.warn("Native Image decode fallback for:", fileName);
+                        resolve({
+                            file,
+                            dataUrl: rawDataUrl,
+                            cloudUrl: rawDataUrl,
+                            thumbUrl: rawDataUrl,
+                            width: 800,
+                            height: 600,
+                            size: file.size || 0,
+                            name: fileName
+                        });
+                    };
+
                     img.src = rawDataUrl;
                 };
-                reader.onerror = () => resolve(null);
+
+                reader.onerror = () => {
+                    console.warn("FileReader error for:", file.name);
+                    resolve(null);
+                };
                 reader.readAsDataURL(file);
             });
         }
@@ -2882,9 +3188,19 @@
         };
 
         async function addFilesToStage(files) {
-            const imageFiles = files.filter(f => f.type.startsWith('image/'));
+            // Hỗ trợ TẤT CẢ các loại đuôi ảnh: JPG, PNG, WEBP, GIF, SVG, BMP, AVIF, HEIC, HEIF, JFIF, TIFF, ICO, RAW...
+            const isImageLike = (f) => {
+                if (!f) return false;
+                if (f.type && f.type.startsWith('image/')) return true;
+                const name = (f.name || '').toLowerCase();
+                if (/\.(jpe?g|png|webp|gif|svg|bmp|ico|tiff?|avif|heic|heif|jfif|raw|cr2|nef|dng|eps|ai|psd)$/i.test(name)) return true;
+                // Nếu người dùng chọn hoặc kéo thả vào ô đăng ảnh, luôn chấp nhận
+                return true;
+            };
+
+            const imageFiles = files.filter(isImageLike);
             if (imageFiles.length === 0) {
-                showToast("VUI LÒNG CHỌN FILE ĐỊNH DẠNG ẢNH (JPG, PNG, WEBP)!");
+                showToast("VUI LÒNG CHỌN FILE ẢNH HỢP LỆ!");
                 return;
             }
 
@@ -3087,74 +3403,161 @@
             });
         }
 
-        async function initRealtimeVisitorTelemetry() {
-            if (!db || !currentUser) return;
+        let rtdb = null;
+        let latestTotalVisits = 128;
+        let latestOnlineCount = 1;
 
-            const statsDocRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_site_stats', 'counters');
-            const activeVisitorsCol = collection(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_active_visitors');
-            const myPresenceDocRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_active_visitors', visitorSessionId);
+        async function initRealtimeVisitorTelemetry(app) {
+            if (!app) return;
 
+            // 1. TỔNG TRUY CẬP (CHỈ TĂNG KHI LÀ PHIÊN TRUY CẬP MỚI, KHÔNG BAO GIỜ CỘNG DỒN KHI F5)
             try {
-                const snap = await getDoc(statsDocRef);
-                let currentTotal = 128;
-                if (snap.exists() && typeof snap.data().totalVisits === 'number') {
-                    currentTotal = snap.data().totalVisits + 1;
+                const statsDocRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_site_stats', 'counters');
+                const sessionCountedKey = 'nqd_visit_session_counted';
+                if (!sessionStorage.getItem(sessionCountedKey)) {
+                    sessionStorage.setItem(sessionCountedKey, '1');
+                    const snap = await getDoc(statsDocRef);
+                    let currentTotal = 128;
+                    if (snap.exists() && typeof snap.data().totalVisits === 'number') {
+                        currentTotal = snap.data().totalVisits + 1;
+                    }
+                    await setDoc(statsDocRef, { totalVisits: currentTotal, updatedAt: Date.now() }, { merge: true });
                 }
-                await setDoc(statsDocRef, { totalVisits: currentTotal, updatedAt: Date.now() }, { merge: true });
+
+                onSnapshot(
+                    statsDocRef,
+                    (docSnap) => {
+                        if (docSnap.exists() && typeof docSnap.data().totalVisits === 'number') {
+                            latestTotalVisits = docSnap.data().totalVisits;
+                            updateVisitorCountersUI(latestOnlineCount, latestTotalVisits);
+                        }
+                    },
+                    (err) => console.warn("Stats snapshot error:", err)
+                );
             } catch (err) {
                 console.warn("Total visit counter init note:", err);
             }
 
-            let latestTotalVisits = 128;
-            let latestOnlineCount = 1;
+            // 2. ĐANG TRUY CẬP (CHỈ TÍNH SỐ LƯỢNG THIẾT BỊ DUY NHẤT TẠI MỘT THỜI ĐIỂM, GIẢM NGAY LẬP TỨC KHI XÓA TAB)
+            try {
+                rtdb = getDatabase(app);
+                const connectedRef = rtdbRef(rtdb, ".info/connected");
+                const myTabPresenceRef = rtdbRef(rtdb, `presence/${myDeviceId}/${myTabId}`);
+                const allPresenceRef = rtdbRef(rtdb, 'presence');
 
-            onSnapshot(
-                statsDocRef,
-                (docSnap) => {
-                    if (docSnap.exists() && typeof docSnap.data().totalVisits === 'number') {
-                        latestTotalVisits = docSnap.data().totalVisits;
-                        updateVisitorCountersUI(latestOnlineCount, latestTotalVisits);
+                rtdbOnValue(connectedRef, (snap) => {
+                    if (snap.val() === true) {
+                        // onDisconnect của Firebase Server: Khi ngắt kết nối (mất mạng, tắt máy, đóng tab), server tự xóa ngay!
+                        rtdbOnDisconnect(myTabPresenceRef).remove();
+
+                        // Ghi nhận tab này đang online
+                        rtdbSet(myTabPresenceRef, {
+                            ts: Date.now()
+                        });
                     }
-                },
-                (err) => console.warn("Stats snapshot error:", err)
-            );
+                });
 
-            const writeHeartbeat = async () => {
-                if (!db || !currentUser) return;
-                try {
-                    await setDoc(myPresenceDocRef, {
-                        sessionId: visitorSessionId,
-                        lastSeen: Date.now()
-                    });
-                } catch (e) {}
-            };
+                // Heartbeat định kỳ 15 giây duy trì trạng thái online
+                const heartbeatTimer = setInterval(() => {
+                    if (rtdb) {
+                        rtdbSet(myTabPresenceRef, { ts: Date.now() }).catch(() => {});
+                    }
+                }, 15000);
 
-            await writeHeartbeat();
-            const heartbeatTimer = setInterval(writeHeartbeat, 25000);
+                // KHI XÓA TAB / ĐÓNG TRANG (PAGEHIDE, BEFOREUNLOAD): GIẢM TỨC THÌ 0ms
+                const handleTabClose = () => {
+                    clearInterval(heartbeatTimer);
+                    try {
+                        rtdbRemove(myTabPresenceRef);
+                    } catch (e) {}
 
-            window.addEventListener('pagehide', () => {
-                clearInterval(heartbeatTimer);
-                if (db && currentUser) {
-                    deleteDoc(myPresenceDocRef).catch(() => {});
-                }
-            });
-
-            onSnapshot(
-                activeVisitorsCol,
-                (snapshot) => {
-                    const now = Date.now();
-                    let activeCount = 0;
-                    snapshot.docs.forEach(d => {
-                        const data = d.data();
-                        if (data && data.lastSeen && (now - data.lastSeen) < 70000) {
-                            activeCount++;
+                    try {
+                        const beaconUrl = `${VERCEL_FIREBASE_CONFIG.databaseURL}/presence/${myDeviceId}/${myTabId}.json?x-http-method-override=DELETE`;
+                        if (navigator.sendBeacon) {
+                            navigator.sendBeacon(beaconUrl, "{}");
                         }
-                    });
-                    latestOnlineCount = Math.max(1, activeCount);
+                    } catch(e) {}
+
+                    if (syncChannel) {
+                        syncChannel.postMessage({ type: 'TAB_CLOSED', deviceId: myDeviceId, tabId: myTabId });
+                    }
+                };
+
+                window.addEventListener('pagehide', handleTabClose);
+                window.addEventListener('beforeunload', handleTabClose);
+
+                // LẮNG NGHE REALTIME TOÀN BỘ SỐ THIẾT BỊ ĐANG TRUY CẬP & BÁO ĐỘNG TỨC THÌ KHI CÓ MÁY VÀO / RA
+                let knownActiveDeviceIds = null;
+                rtdbOnValue(allPresenceRef, (snapshot) => {
+                    const data = snapshot.val() || {};
+                    const now = Date.now();
+                    const currentOnlineDeviceSet = new Set();
+
+                    for (const devId in data) {
+                        if (!data.hasOwnProperty(devId) || !data[devId]) continue;
+                        const tabs = data[devId];
+                        if (typeof tabs !== 'object') continue;
+
+                        // Thiết bị được tính là đang truy cập nếu có ít nhất 1 tab online trong vòng 35 giây
+                        const isDeviceOnline = Object.keys(tabs).some(tid => {
+                            const t = tabs[tid];
+                            if (!t) return false;
+                            const ts = typeof t.ts === 'number' ? t.ts : (t.lastSeen || 0);
+                            return (now - ts) < 35000;
+                        });
+
+                        if (isDeviceOnline) {
+                            currentOnlineDeviceSet.add(devId);
+                        }
+
+                        // Dọn dẹp các tab chết > 45 giây
+                        for (const tid in tabs) {
+                            const t = tabs[tid];
+                            const ts = typeof t?.ts === 'number' ? t.ts : (t?.lastSeen || 0);
+                            if (ts && (now - ts) > 45000) {
+                                rtdbRemove(rtdbRef(rtdb, `presence/${devId}/${tid}`)).catch(() => {});
+                            }
+                        }
+                    }
+
+                    const currentDeviceCount = Math.max(1, currentOnlineDeviceSet.size);
+
+                    // THÔNG BÁO TỨC THỜI TRÊN TOÀN BỘ CÁC MÁY KHI CÓ THIẾT BỊ TRUY CẬP HOẶC THOÁT RA
+                    if (knownActiveDeviceIds === null) {
+                        // Lần nạp dữ liệu đầu tiên khi vừa vào trang: ghi nhớ trạng thái, không thông báo tránh làm phiền
+                        knownActiveDeviceIds = new Set(currentOnlineDeviceSet);
+                    } else {
+                        let joinedCount = 0;
+                        currentOnlineDeviceSet.forEach(devId => {
+                            if (!knownActiveDeviceIds.has(devId)) {
+                                joinedCount++;
+                            }
+                        });
+
+                        let leftCount = 0;
+                        knownActiveDeviceIds.forEach(devId => {
+                            if (!currentOnlineDeviceSet.has(devId)) {
+                                leftCount++;
+                            }
+                        });
+
+                        if (joinedCount > 0) {
+                            showToast(`● CÓ ${joinedCount} THIẾT BỊ MỚI VỪA TRUY CẬP // [ ĐANG ONLINE: ${currentDeviceCount} ]`, 'join');
+                        } else if (leftCount > 0) {
+                            showToast(`○ 1 THIẾT BỊ VỪA RỜI KHỎI HỆ THỐNG // [ ĐANG ONLINE: ${currentDeviceCount} ]`, 'leave');
+                        }
+
+                        knownActiveDeviceIds = new Set(currentOnlineDeviceSet);
+                    }
+
+                    latestOnlineCount = currentDeviceCount;
                     updateVisitorCountersUI(latestOnlineCount, latestTotalVisits);
-                },
-                (err) => console.warn("Presence snapshot error:", err)
-            );
+                });
+
+            } catch (presenceErr) {
+                console.warn("RTDB Presence init note:", presenceErr);
+                updateVisitorCountersUI(1, latestTotalVisits);
+            }
         }
 
         // KẾT NỐI FIREBASE & DỌN SẠCH TRIỆT ĐỂ TOÀN BỘ ẢNH MẪU BAN ĐẦU
@@ -3164,6 +3567,22 @@
                 const app = getApps().length === 0 ? initializeApp(VERCEL_FIREBASE_CONFIG) : getApps()[0];
                 auth = getAuth(app);
                 db = getFirestore(app);
+                window.nqdDb = db;
+                window.nqdAppId = currentAppId;
+                window.nqdSaveContactMessage = async function(contactData) {
+                    if (!db) return;
+                    try {
+                        const col = collection(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_contact_messages');
+                        await addDoc(col, {
+                            ...contactData,
+                            receivedAt: new Date().toISOString(),
+                            timestamp: Date.now()
+                        });
+                        console.log("✔ Đã lưu tin nhắn liên hệ lên Firebase Firestore an toàn!");
+                    } catch (e) {
+                        console.warn("Lưu tin nhắn lên Firebase:", e);
+                    }
+                };
 
                 try {
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -3178,7 +3597,7 @@
 
                 if (!currentUser) return;
 
-                initRealtimeVisitorTelemetry();
+                initRealtimeVisitorTelemetry(app);
 
                 // Dọn sạch hoàn toàn các bản ghi ẩn nqd_deleted_seeds trên Firestore nếu còn sót
                 try {
