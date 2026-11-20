@@ -2741,7 +2741,7 @@
     <script type="module">
         import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getDatabase, ref as rtdbRef, onValue as rtdbOnValue, set as rtdbSet, onDisconnect as rtdbOnDisconnect, remove as rtdbRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // Cấu hình Firebase chính thức của dự án "chuyentinnqd"
@@ -2845,6 +2845,23 @@
                 }
             };
         }
+
+        // LẮNG NGHE SỰ KIỆN STORAGE CHO CÁC TAB CÙNG ORIGIN (DỰ PHÒNG 100% CÙNG BROADCASTCHANNEL)
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'nqd_archive_cross_tab_reaction' && event.newValue) {
+                try {
+                    const data = JSON.parse(event.newValue);
+                    if (data && data.photoId) {
+                        const target = cloudArchiveItems.find(x => String(x.id) === String(data.photoId)) || localArchiveItems.find(x => String(x.id) === String(data.photoId));
+                        if (target) {
+                            target.likes = Number(data.likes) || 0;
+                            if (data.reactions) target.reactions = { ...data.reactions };
+                            window.renderArchiveGallery();
+                        }
+                    }
+                } catch(e) {}
+            }
+        });
 
         // Tự động dọn sạch test reaction và bình luận rác từ các phiên kiểm thử
         try {
@@ -3040,7 +3057,7 @@
 
             const target = localArchiveItems.find(x => String(x.id) === String(photoId));
             const cloudTarget = cloudArchiveItems.find(x => String(x.id) === String(photoId));
-            const itemRef = target || cloudTarget;
+            const itemRef = (isCloudReady && cloudTarget) ? cloudTarget : (cloudTarget || target);
             if (!itemRef) return;
 
             if (!itemRef.comments) itemRef.comments = [...getPhotoComments(photoId)];
@@ -3063,7 +3080,7 @@
 
             openCommentDrawers.add(photoId);
 
-            if (isCloud && db && currentUser) {
+            if (isCloud && db) {
                 try {
                     const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
                     await updateDoc(docRef, { comments: itemRef.comments });
@@ -3082,9 +3099,9 @@
 
         window.likePhotoComment = async function(photoId, cIdx, isCloud, event) {
             if (event) event.stopPropagation();
-            const target = localArchiveItems.find(x => x.id === photoId);
-            const cloudTarget = cloudArchiveItems.find(x => x.id === photoId);
-            const itemRef = target || cloudTarget;
+            const target = localArchiveItems.find(x => String(x.id) === String(photoId));
+            const cloudTarget = cloudArchiveItems.find(x => String(x.id) === String(photoId));
+            const itemRef = (isCloudReady && cloudTarget) ? cloudTarget : (cloudTarget || target);
             if (!itemRef || !itemRef.comments || !itemRef.comments[cIdx]) return;
 
             const cmt = itemRef.comments[cIdx];
@@ -3119,7 +3136,7 @@
 
             openCommentDrawers.add(photoId);
 
-            if (isCloud && db && currentUser) {
+            if (isCloud && db) {
                 try {
                     const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
                     await updateDoc(docRef, { comments: itemRef.comments });
@@ -3135,9 +3152,9 @@
 
         window.deletePhotoComment = async function(photoId, cIdx, isCloud, event) {
             if (event) event.stopPropagation();
-            const target = localArchiveItems.find(x => x.id === photoId);
-            const cloudTarget = cloudArchiveItems.find(x => x.id === photoId);
-            const itemRef = target || cloudTarget;
+            const target = localArchiveItems.find(x => String(x.id) === String(photoId));
+            const cloudTarget = cloudArchiveItems.find(x => String(x.id) === String(photoId));
+            const itemRef = (isCloudReady && cloudTarget) ? cloudTarget : (cloudTarget || target);
             if (!itemRef || !itemRef.comments || !itemRef.comments[cIdx]) return;
 
             itemRef.comments.splice(cIdx, 1);
@@ -3150,7 +3167,7 @@
 
             openCommentDrawers.add(photoId);
 
-            if (isCloud && db && currentUser) {
+            if (isCloud && db) {
                 try {
                     const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
                     await updateDoc(docRef, { comments: itemRef.comments });
@@ -3337,7 +3354,7 @@
 
             try {
                 // 1. Luôn xóa trực tiếp trên Cloud Firestore để các thiết bị khác (điện thoại, máy khác) cập nhật tức thì
-                if (db && currentUser) {
+                if (db) {
                     try {
                         const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
                         await deleteDoc(docRef);
@@ -3706,7 +3723,7 @@
 
             const target = localArchiveItems.find(x => String(x.id) === String(photoId));
             const cloudTarget = cloudArchiveItems.find(x => String(x.id) === String(photoId));
-            const itemRef = target || cloudTarget;
+            const itemRef = (isCloudReady && cloudTarget) ? cloudTarget : (cloudTarget || target);
             if (!itemRef) return;
 
             let likes = Number(itemRef.likes) || Number(currentLikes) || 0;
@@ -3750,8 +3767,21 @@
                 toastMsg = `ĐÃ THẢ CẢM XÚC ${emoji}`;
             }
 
+            // Chuẩn hóa tất cả 5 biểu tượng để Firestore không bao giờ giữ lại key ma (phantom keys)
+            const cleanReactions = {};
+            ['👍', '❤️', '🤣', '😭', '😡'].forEach(e => {
+                cleanReactions[e] = Math.max(0, Number(itemRef.reactions[e]) || 0);
+            });
+
+            // Chỉ giữ lại các key > 0 cho UI hiển thị
+            const activeReactionsMap = {};
+            ['👍', '❤️', '🤣', '😭', '😡'].forEach(e => {
+                if (cleanReactions[e] > 0) activeReactionsMap[e] = cleanReactions[e];
+            });
+            itemRef.reactions = activeReactionsMap;
+
             // TỔNG SỐ LƯỢT LIKE BẮT BUỘC BẰNG TỔNG CỘNG CHÍNH XÁC CỦA CÁC BIỂU TƯỢNG ĐÃ THẢ
-            const nextLikes = Object.values(itemRef.reactions).reduce((sum, v) => sum + (Number(v) || 0), 0);
+            const nextLikes = Object.values(activeReactionsMap).reduce((sum, v) => sum + (Number(v) || 0), 0);
             itemRef.likes = nextLikes;
 
             saveUserReactionsMap(reactionsMap);
@@ -3759,11 +3789,11 @@
             // Cập nhật đồng bộ cả 2 mảng local và cloud
             if (target) {
                 target.likes = nextLikes;
-                target.reactions = { ...itemRef.reactions };
+                target.reactions = { ...activeReactionsMap };
             }
             if (cloudTarget) {
                 cloudTarget.likes = nextLikes;
-                cloudTarget.reactions = { ...itemRef.reactions };
+                cloudTarget.reactions = { ...activeReactionsMap };
             }
 
             // Lưu vào IndexedDB dự phòng
@@ -3775,7 +3805,7 @@
                     const req = store.get(photoId);
                     req.onsuccess = () => {
                         if (req.result) {
-                            store.put({ ...req.result, likes: nextLikes, reactions: { ...itemRef.reactions } });
+                            store.put({ ...req.result, likes: nextLikes, reactions: { ...activeReactionsMap } });
                         }
                     };
                 }).catch(() => {});
@@ -3785,7 +3815,7 @@
             if (isCloud && db) {
                 try {
                     const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', String(photoId));
-                    updateDoc(docRef, { likes: nextLikes, reactions: itemRef.reactions }).catch(err => {
+                    updateDoc(docRef, { likes: nextLikes, reactions: cleanReactions }).catch(err => {
                         console.warn("Cloud reaction sync note:", err);
                     });
                 } catch (err) {
@@ -3793,15 +3823,23 @@
                 }
             }
 
-            // Bắn tín hiệu sang các tab khác qua BroadcastChannel
+            // Bắn tín hiệu sang các tab khác qua BroadcastChannel và localStorage
             if (syncChannel) {
                 syncChannel.postMessage({ 
                     type: 'TOGGLE_LIKE', 
                     photoId, 
                     likes: nextLikes,
-                    reactions: itemRef.reactions
+                    reactions: activeReactionsMap
                 });
             }
+            try {
+                localStorage.setItem('nqd_archive_cross_tab_reaction', JSON.stringify({
+                    photoId: String(photoId),
+                    likes: nextLikes,
+                    reactions: activeReactionsMap,
+                    _ts: Date.now()
+                }));
+            } catch (e) {}
 
             window.renderArchiveGallery();
             showToast(toastMsg);
