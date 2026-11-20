@@ -2829,28 +2829,60 @@
                     window.renderArchiveGallery();
                 } else if (data.type === 'TOGGLE_LIKE') {
                     const { photoId, likes, reactions } = data;
-                    const target = cloudArchiveItems.find(x => x.id === photoId) || localArchiveItems.find(x => x.id === photoId);
+                    const target = cloudArchiveItems.find(x => String(x.id) === String(photoId)) || localArchiveItems.find(x => String(x.id) === String(photoId));
                     if (target) {
                         target.likes = likes;
-                        if (reactions) target.reactions = reactions;
+                        if (reactions) target.reactions = { ...reactions };
+                        window.renderArchiveGallery();
+                    }
+                } else if (data.type === 'UPDATE_COMMENTS') {
+                    const { photoId, comments } = data;
+                    const target = cloudArchiveItems.find(x => x.id === photoId) || localArchiveItems.find(x => x.id === photoId);
+                    if (target) {
+                        target.comments = comments;
                         window.renderArchiveGallery();
                     }
                 }
             };
         }
 
+        // Tự động dọn sạch test reaction và bình luận rác từ các phiên kiểm thử
+        try {
+            if (!localStorage.getItem('NQD_CLEAN_CORRUPTED_TEST_DATA_V4')) {
+                localStorage.removeItem('NQD_USER_REACTIONS');
+                localStorage.removeItem('NQD_LIKED_PHOTOS_SET');
+                localStorage.removeItem('NQD_PHOTO_COMMENTS_MAP');
+                localStorage.setItem('NQD_CLEAN_CORRUPTED_TEST_DATA_V4', 'true');
+            }
+        } catch(e) {}
+
         // Quản lý Reaction Cảm Xúc (FB Style: 👍 ❤️ 🤣 😭 😡)
         function getUserReactionsMap() {
             try {
                 const raw = localStorage.getItem('NQD_USER_REACTIONS');
-                if (raw) return JSON.parse(raw);
-                const oldRaw = localStorage.getItem('NQD_LIKED_PHOTOS_SET');
-                const map = {};
-                if (oldRaw) {
-                    const arr = JSON.parse(oldRaw);
-                    if (Array.isArray(arr)) {
-                        arr.forEach(id => { map[id] = '❤️'; });
+                let map = {};
+                if (raw) {
+                    map = JSON.parse(raw);
+                } else {
+                    const oldRaw = localStorage.getItem('NQD_LIKED_PHOTOS_SET');
+                    if (oldRaw) {
+                        const arr = JSON.parse(oldRaw);
+                        if (Array.isArray(arr)) {
+                            arr.forEach(id => { map[id] = '❤️'; });
+                        }
                     }
+                }
+                // Chỉ chấp nhận 5 emoji hợp lệ chuẩn FB
+                const validEmojis = new Set(['👍', '❤️', '🤣', '😭', '😡']);
+                let changed = false;
+                Object.keys(map).forEach(k => {
+                    if (map[k] && !validEmojis.has(map[k])) {
+                        delete map[k];
+                        changed = true;
+                    }
+                });
+                if (changed) {
+                    try { localStorage.setItem('NQD_USER_REACTIONS', JSON.stringify(map)); } catch(e) {}
                 }
                 return map;
             } catch(e) {
@@ -2869,38 +2901,269 @@
             return new Set(Object.keys(map).filter(k => !!map[k]));
         }
 
-        // Lấy danh sách các cảm xúc đang được thả trên bức ảnh (FB Style: hiện like, tim, haha, v.v...)
+        // Lấy danh sách các cảm xúc đang được thả trên bức ảnh (FB Style: hiện like, tim, cười, khóc, phẫn)
         function getPhotoActiveReactions(item, userReaction) {
             if (!item) return [];
             let reactions = item.reactions;
-            const likes = Number(item.likes) || 0;
-
-            if (!reactions || Object.keys(reactions).length === 0) {
+            if (!reactions || typeof reactions !== 'object' || Array.isArray(reactions)) {
                 reactions = {};
+            } else {
+                reactions = { ...reactions };
+            }
+            let likes = Number(item.likes) || 0;
+
+            // Khởi tạo chỉ Like & Tim chuẩn theo số likes nếu chưa có bất kỳ cảm xúc nào
+            if (Object.keys(reactions).length === 0) {
                 if (likes >= 2) {
-                    // Mặc định ảnh có sẵn lượt tương tác hiển thị cả Like & Tim (FB style)
                     reactions['👍'] = Math.ceil(likes / 2);
                     reactions['❤️'] = Math.floor(likes / 2);
                 } else if (likes === 1) {
-                    reactions[userReaction || '❤️'] = 1;
+                    reactions['❤️'] = 1;
                 }
-                item.reactions = reactions;
             }
 
-            if (userReaction && (!reactions[userReaction] || reactions[userReaction] <= 0)) {
-                reactions[userReaction] = 1;
+            // ĐẢM BẢO TUYỆT ĐỐI: Nếu người dùng trên máy này đã thả cảm xúc (userReaction),
+            // cảm xúc đó BẮT BUỘC phải luôn tồn tại trong reactions với số lượng ít nhất là 1!
+            if (userReaction && ['👍', '❤️', '🤣', '😭', '😡'].includes(userReaction)) {
+                reactions[userReaction] = Math.max(1, Number(reactions[userReaction]) || 1);
             }
+
+            // Xóa mọi emoji có số lượng <= 0
+            Object.keys(reactions).forEach(k => {
+                if (!reactions[k] || Number(reactions[k]) <= 0) delete reactions[k];
+            });
+
+            // TỔNG SỐ LIKE BẮT BUỘC 100% BẰNG TỔNG CỦA TỪNG CẢM XÚC (KHÔNG BAO GIỜ LỆCH)
+            const trueTotal = Object.values(reactions).reduce((sum, v) => sum + (Number(v) || 0), 0);
+            item.likes = trueTotal;
+            item.reactions = reactions;
 
             const emojiOrder = ['👍', '❤️', '🤣', '😭', '😡'];
             const active = emojiOrder.filter(e => (reactions[e] || 0) > 0);
 
-            if (active.length === 0 && likes > 0) {
+            if (active.length === 0 && trueTotal > 0) {
                 active.push('❤️');
-                if (likes > 1) active.unshift('👍');
+                if (trueTotal > 1) active.unshift('👍');
             }
 
             return active;
         }
+
+        // =========================================================================
+        // QUẢN LÝ BÌNH LUẬN ẢNH (COMMENTS & TIMESTAMPS)
+        // =========================================================================
+        function getPhotoCommentsMap() {
+            try {
+                const raw = localStorage.getItem('NQD_PHOTO_COMMENTS_MAP');
+                if (!raw) return {};
+                const map = JSON.parse(raw);
+                // Xóa sạch mọi bình luận mẫu cũ nếu có
+                let changed = false;
+                Object.keys(map).forEach(pid => {
+                    if (Array.isArray(map[pid])) {
+                        const origLen = map[pid].length;
+                        map[pid] = map[pid].filter(c => c && c.id !== 'c1' && c.id !== 'c2' && c.id !== 'c3');
+                        if (map[pid].length !== origLen) changed = true;
+                    }
+                });
+                if (changed) {
+                    try { localStorage.setItem('NQD_PHOTO_COMMENTS_MAP', JSON.stringify(map)); } catch(e) {}
+                }
+                return map;
+            } catch(e) {
+                return {};
+            }
+        }
+        function savePhotoCommentsMap(map) {
+            try {
+                localStorage.setItem('NQD_PHOTO_COMMENTS_MAP', JSON.stringify(map));
+            } catch(e) {}
+        }
+        function getPhotoComments(photoId) {
+            const map = getPhotoCommentsMap();
+            return map[photoId] || [];
+        }
+
+        function formatCommentTime(ts) {
+            if (!ts) return '';
+            const now = Date.now();
+            const diffMs = now - ts;
+            const diffSec = Math.floor(diffMs / 1000);
+            const diffMin = Math.floor(diffSec / 60);
+            const diffHour = Math.floor(diffMin / 60);
+
+            const d = new Date(ts);
+            const timeStr = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+            const dateStr = d.toLocaleDateString('vi-VN');
+
+            if (diffSec < 45) return 'Vừa xong';
+            if (diffMin < 60) return `${diffMin} phút trước (${timeStr})`;
+            if (diffHour < 24) return `${diffHour} giờ trước (${timeStr})`;
+            return `${timeStr} • ${dateStr}`;
+        }
+
+        const openCommentDrawers = new Set();
+        window.togglePhotoCommentSection = function(photoId, event) {
+            if (event) event.stopPropagation();
+            const drawer = document.getElementById(`photo-comments-drawer-${photoId}`);
+            if (!drawer) return;
+
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                openCommentDrawers.add(photoId);
+                setTimeout(() => {
+                    const input = document.getElementById(`cmt-text-${photoId}`);
+                    if (input) input.focus();
+                }, 100);
+            } else {
+                drawer.classList.add('hidden');
+                openCommentDrawers.delete(photoId);
+            }
+        };
+
+        window.submitPhotoComment = async function(photoId, event, isCloud) {
+            event.preventDefault();
+            const authorInput = document.getElementById(`cmt-author-${photoId}`);
+            const textInput = document.getElementById(`cmt-text-${photoId}`);
+            if (!authorInput || !textInput) return;
+
+            const author = authorInput.value.trim();
+            const text = textInput.value.trim();
+            if (!author || !text) {
+                showToast("VUI LÒNG NHẬP ĐẦY ĐỦ TÊN VÀ NỘI DUNG BÌNH LUẬN!");
+                return;
+            }
+
+            try {
+                localStorage.setItem('NQD_COMMENT_AUTHOR', author);
+            } catch(e) {}
+
+            const target = localArchiveItems.find(x => String(x.id) === String(photoId));
+            const cloudTarget = cloudArchiveItems.find(x => String(x.id) === String(photoId));
+            const itemRef = target || cloudTarget;
+            if (!itemRef) return;
+
+            if (!itemRef.comments) itemRef.comments = [...getPhotoComments(photoId)];
+
+            const newCmt = {
+                id: 'cmt-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+                author,
+                text,
+                createdAt: Date.now(),
+                likes: 0
+            };
+
+            itemRef.comments.push(newCmt);
+            if (target && target !== itemRef) target.comments = itemRef.comments;
+            if (cloudTarget && cloudTarget !== itemRef) cloudTarget.comments = itemRef.comments;
+
+            const map = getPhotoCommentsMap();
+            map[photoId] = itemRef.comments;
+            savePhotoCommentsMap(map);
+
+            openCommentDrawers.add(photoId);
+
+            if (isCloud && db && currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
+                    await updateDoc(docRef, { comments: itemRef.comments });
+                } catch(err) {
+                    console.warn("Cloud comment sync note:", err);
+                }
+            }
+
+            if (syncChannel) {
+                syncChannel.postMessage({ type: 'UPDATE_COMMENTS', photoId, comments: itemRef.comments });
+            }
+
+            window.renderArchiveGallery();
+            showToast("ĐÃ GỬI BÌNH LUẬN THÀNH CÔNG 💬");
+        };
+
+        window.likePhotoComment = async function(photoId, cIdx, isCloud, event) {
+            if (event) event.stopPropagation();
+            const target = localArchiveItems.find(x => x.id === photoId);
+            const cloudTarget = cloudArchiveItems.find(x => x.id === photoId);
+            const itemRef = target || cloudTarget;
+            if (!itemRef || !itemRef.comments || !itemRef.comments[cIdx]) return;
+
+            const cmt = itemRef.comments[cIdx];
+            const likedKey = 'NQD_LIKED_COMMENTS_SET';
+            let likedSet = new Set();
+            try {
+                const raw = localStorage.getItem(likedKey);
+                if (raw) likedSet = new Set(JSON.parse(raw));
+            } catch(e) {}
+
+            const cmtKey = `${photoId}_${cmt.id || cIdx}`;
+            if (likedSet.has(cmtKey)) {
+                likedSet.delete(cmtKey);
+                cmt.likes = Math.max(0, (cmt.likes || 1) - 1);
+                showToast("ĐÃ BỎ THÍCH BÌNH LUẬN");
+            } else {
+                likedSet.add(cmtKey);
+                cmt.likes = (cmt.likes || 0) + 1;
+                showToast("ĐÃ THẢ TIM BÌNH LUẬN ❤️");
+            }
+
+            try {
+                localStorage.setItem(likedKey, JSON.stringify(Array.from(likedSet)));
+            } catch(e) {}
+
+            if (target && target !== itemRef) target.comments = itemRef.comments;
+            if (cloudTarget && cloudTarget !== itemRef) cloudTarget.comments = itemRef.comments;
+
+            const map = getPhotoCommentsMap();
+            map[photoId] = itemRef.comments;
+            savePhotoCommentsMap(map);
+
+            openCommentDrawers.add(photoId);
+
+            if (isCloud && db && currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
+                    await updateDoc(docRef, { comments: itemRef.comments });
+                } catch(e) {}
+            }
+
+            if (syncChannel) {
+                syncChannel.postMessage({ type: 'UPDATE_COMMENTS', photoId, comments: itemRef.comments });
+            }
+
+            window.renderArchiveGallery();
+        };
+
+        window.deletePhotoComment = async function(photoId, cIdx, isCloud, event) {
+            if (event) event.stopPropagation();
+            const target = localArchiveItems.find(x => x.id === photoId);
+            const cloudTarget = cloudArchiveItems.find(x => x.id === photoId);
+            const itemRef = target || cloudTarget;
+            if (!itemRef || !itemRef.comments || !itemRef.comments[cIdx]) return;
+
+            itemRef.comments.splice(cIdx, 1);
+            if (target && target !== itemRef) target.comments = itemRef.comments;
+            if (cloudTarget && cloudTarget !== itemRef) cloudTarget.comments = itemRef.comments;
+
+            const map = getPhotoCommentsMap();
+            map[photoId] = itemRef.comments;
+            savePhotoCommentsMap(map);
+
+            openCommentDrawers.add(photoId);
+
+            if (isCloud && db && currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
+                    await updateDoc(docRef, { comments: itemRef.comments });
+                } catch(e) {}
+            }
+
+            if (syncChannel) {
+                syncChannel.postMessage({ type: 'UPDATE_COMMENTS', photoId, comments: itemRef.comments });
+            }
+
+            window.renderArchiveGallery();
+            showToast("ĐÃ XÓA BÌNH LUẬN");
+        };
         function saveLikedPhotosSet(set) {
             const map = getUserReactionsMap();
             Object.keys(map).forEach(id => {
@@ -3186,9 +3449,22 @@
             }
 
             const userReactions = getUserReactionsMap();
+            let savedCommentAuthor = '';
+            try { savedCommentAuthor = localStorage.getItem('NQD_COMMENT_AUTHOR') || ''; } catch(e) {}
+
+            // Dọn sạch hoàn toàn mọi bình luận mẫu, để trống 100% cho người dùng tự viết
+            filtered.forEach(item => {
+                if (item.comments && Array.isArray(item.comments)) {
+                    item.comments = item.comments.filter(c => c && c.id !== 'c1' && c.id !== 'c2' && c.id !== 'c3');
+                }
+            });
 
             grid.innerHTML = filtered.map(item => {
-                const dateStr = new Date(item.createdAt || Date.now()).toLocaleDateString('vi-VN');
+                const photoDate = new Date(item.createdAt || Date.now());
+                const photoTimeStr = photoDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+                const photoDateStr = photoDate.toLocaleDateString('vi-VN');
+                const photoFullTime = `${photoTimeStr} • ${photoDateStr}`;
+
                 const safeId = escapeHtml(String(item.id));
                 const safeTitle = escapeHtml(item.title || '');
                 const safeDesc = escapeHtml(item.desc || '');
@@ -3198,9 +3474,13 @@
                 const origW = item.originalWidth || 0;
                 const origH = item.originalHeight || 0;
                 const userReaction = userReactions[item.id] || null;
-                const likesCount = Number(item.likes) || 0;
                 const activeReactions = getPhotoActiveReactions(item, userReaction);
+                const likesCount = Number(item.likes) || 0;
                 const hasReactions = activeReactions.length > 0 || likesCount > 0;
+
+                // Danh sách bình luận & trạng thái mở drawer
+                const comments = (item.comments && Array.isArray(item.comments) && item.comments.length > 0) ? item.comments : (getPhotoComments(item.id) || []);
+                const isDrawerOpen = openCommentDrawers.has(item.id);
 
                 const dimBadge = (origW && origH) 
                     ? `<span class="px-2 py-0.5 bg-nqd-bgDeep/90 border border-nqd-acGreen font-mono text-[9px] text-nqd-acGreen font-semibold">${origW}×${origH} GỐC</span>` 
@@ -3219,32 +3499,41 @@
                 return `
                     <article class="tech-box corner-accents flex flex-col justify-between overflow-visible group relative focus-within:z-30 hover:z-20">
                         <div>
-                            <!-- Image Container (Click mở Lightbox qua ID - Tuyệt đối không truyền chuỗi base64 qua onclick) -->
-                            <div onclick="openLightboxById('${safeId}')" class="relative h-56 w-full bg-[#020611] border-b border-nqd-borderDim overflow-hidden cursor-pointer">
+                            <!-- Image Container -->
+                            <div onclick="openLightboxById('${safeId}')" class="relative h-56 w-full bg-[#020611] border-b border-nqd-borderDim overflow-hidden cursor-pointer group/img">
                                 <img src="${displaySrc}" alt="${safeTitle}" loading="lazy" onerror="this.src='https://placehold.co/800x500/061431/00F0FF?text=CHUYEN+TIN+NQD'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
+                                
+                                <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap z-10">
                                     <span class="px-2.5 py-1 bg-nqd-bgDeep/90 border border-nqd-cyanGlow font-mono text-[10px] text-nqd-cyanGlow font-bold">
                                         ${safeCat}
                                     </span>
                                     ${dimBadge}
                                 </div>
+
+                                <!-- Nút Xóa ảnh đưa lên góc phải trên bức ảnh -->
+                                <button type="button" onclick="event.stopPropagation(); requestDeleteArchivePhoto('${safeId}', '${safeTitle}', ${isCloudFlag})" title="Xóa ảnh này khỏi kho lưu trữ" class="absolute top-2.5 right-2.5 px-2 py-1 bg-[#020716]/85 hover:bg-rose-600 border border-rose-500/50 hover:border-rose-400 text-rose-400 hover:text-white font-mono text-[10px] font-bold transition-all shadow-md z-10 flex items-center gap-1 backdrop-blur-sm cursor-pointer">
+                                    [ ✕ XÓA ]
+                                </button>
+
                                 <div class="absolute bottom-2 right-2 px-2 py-0.5 bg-nqd-bgDeep/85 border border-nqd-borderDim font-mono text-[10px] text-slate-300">
                                     [ PHÓNG TO ↗ ]
                                 </div>
                             </div>
 
-                            <!-- Card Body -->
+                            <!-- Card Body: Có đầy đủ thời gian đăng ảnh (Giờ:Phút • Ngày/Tháng/Năm) -->
                             <div class="p-5 space-y-2.5">
                                 <div class="flex items-center justify-between font-mono text-[11px] text-slate-400">
-                                    <span class="text-nqd-acGreen font-semibold truncate max-w-[70%]">@${safeAuthor}</span>
-                                    <span>${dateStr}</span>
+                                    <span class="text-nqd-acGreen font-semibold truncate max-w-[50%]">@${safeAuthor}</span>
+                                    <span class="text-slate-400 text-[10px] shrink-0 font-mono" title="Thời gian đăng ảnh: ${photoTimeStr} ngày ${photoDateStr}">
+                                        🕒 ${photoFullTime}
+                                    </span>
                                 </div>
                                 <h3 class="font-display font-bold text-lg text-white leading-snug">${safeTitle}</h3>
                                 <p class="text-xs text-slate-300 leading-relaxed line-clamp-3">${safeDesc || 'Khoảnh khắc kỷ niệm đáng nhớ của tập thể Chuyên Tin THPT Chuyên Nguyễn Quang Diêu.'}</p>
                             </div>
                         </div>
 
-                        <!-- Card Footer: Cảm Xúc (FB Style: hiện like, tim... + Tải Ảnh Gốc + Xóa Ảnh) -->
+                        <!-- Card Footer: Cảm xúc + Tải ảnh + Nút biểu tượng Bình Luận (Không dùng chữ 'bình luận') -->
                         <div class="px-3.5 sm:px-4 py-3 bg-[#030A1C] border-t border-nqd-borderDim flex items-center justify-between gap-1.5 sm:gap-2 font-mono text-[11px] overflow-visible">
                             <div class="relative reaction-container shrink-0">
                                 <!-- Popover Reaction Bar: 2 hàng (Hàng trên: 5 biểu tượng để chọn; Hàng dưới: số lượng đầy đủ từng biểu tượng đã thả) -->
@@ -3280,35 +3569,95 @@
                                     `}
                                 </div>
 
-                                <!-- Reaction Trigger Button (FB Style: hiện tất cả biểu tượng đã thả như like + tim kèm tổng số, nếu >3 thì có ô thứ 4 dấu +) -->
+                                <!-- Reaction Trigger Button -->
                                 <button type="button" onclick="toggleArchiveReactionPicker('${safeId}', event)" class="${reactionBtnClass}" title="Bấm để chọn cảm xúc">
                                     ${hasReactions
                                         ? `
                                             <span class="inline-flex items-center -space-x-1.5 shrink-0">
-                                                ${activeReactions.slice(0, 3).map((emoji, idx) => `
-                                                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-xs leading-none bg-[#081226] border border-[#1E293B] shadow-sm select-none" style="z-index: ${idx + 1};">
-                                                        ${emoji}
-                                                    </span>
-                                                `).join('')}
-                                                ${activeReactions.length > 3 ? `
-                                                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold text-nqd-cyanGlow bg-[#081226] border border-[#1E293B] shadow-sm select-none" style="z-index: 4;" title="Và các cảm xúc khác">+</span>
-                                                ` : ''}
+                                                ${(() => {
+                                                    // Đưa cảm xúc của người dùng hiện tại lên ĐẦU TIÊN để luôn nhìn thấy biểu tượng mình vừa thả
+                                                    let btnIcons = [...activeReactions];
+                                                    if (userReaction && btnIcons.includes(userReaction)) {
+                                                        btnIcons = [userReaction, ...btnIcons.filter(e => e !== userReaction)];
+                                                    }
+                                                    const visibleIcons = btnIcons.slice(0, 3);
+                                                    const hasMore = btnIcons.length > 3;
+                                                    return visibleIcons.map((emoji, idx) => `
+                                                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-xs leading-none bg-[#081226] border border-[#1E293B] shadow-sm select-none" style="z-index: ${idx + 1};">
+                                                            ${emoji}
+                                                        </span>
+                                                    `).join('') + (hasMore ? `
+                                                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold text-nqd-cyanGlow bg-[#081226] border border-[#1E293B] shadow-sm select-none" style="z-index: 4;" title="Và các cảm xúc khác">+</span>
+                                                    ` : '');
+                                                })()}
                                             </span>
-                                            <span class="font-bold text-white text-xs ml-0.5">${likesCount || activeReactions.length}</span>
+                                            <span class="font-bold text-white text-xs ml-0.5">${likesCount}</span>
                                         `
                                         : `<span>♡ Tim</span>`
                                     }
                                 </button>
                             </div>
 
+                            <!-- Right controls: Nút Tải + Nút biểu tượng Bình Luận (Chỉ có icon, không có chữ 'bình luận') -->
                             <div class="flex items-center space-x-1.5 shrink-0">
                                 <button onclick="downloadArchivePhotoById('${safeId}')" title="Tải ảnh gốc về máy" class="px-2 sm:px-2.5 py-1.5 bg-nqd-acGreen/15 hover:bg-nqd-acGreen border border-nqd-acGreen text-nqd-acGreen hover:text-nqd-bgDeep font-bold transition-colors whitespace-nowrap shrink-0">
                                     [ ↓ TẢI<span class="hidden sm:inline"> ẢNH GỐC</span> ]
                                 </button>
-                                <button onclick="requestDeleteArchivePhoto('${safeId}', '${safeTitle}', ${isCloudFlag})" title="Xóa ảnh này khỏi kho lưu trữ" class="px-2 sm:px-2.5 py-1.5 bg-nqd-waRed/15 hover:bg-nqd-waRed border border-nqd-waRed text-nqd-waRed hover:text-white font-bold transition-colors whitespace-nowrap shrink-0">
-                                    [ ✕ XÓA ]
+                                <button type="button" onclick="togglePhotoCommentSection('${safeId}', event)" title="Bình luận bức ảnh" class="px-2.5 py-1.5 ${isDrawerOpen ? 'bg-cyan-500/20 border-[#38BDF8] text-white shadow-[0_0_10px_rgba(56,189,248,0.25)]' : 'bg-[#08132B] hover:bg-[#0E1E45] border border-[#1E3A8A] hover:border-[#38BDF8] text-slate-300 hover:text-nqd-cyanGlow'} font-bold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer">
+                                    <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24">
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                                    </svg>
+                                    ${comments.length > 0 ? `<span class="font-bold text-nqd-cyanGlow text-[10px]">${comments.length}</span>` : ''}
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- Expandable Comment Drawer (Hiển thị danh sách bình luận + thời gian + form gửi bình luận) -->
+                        <div id="photo-comments-drawer-${safeId}" class="photo-comments-drawer ${isDrawerOpen ? '' : 'hidden'} border-t border-[#1E293B] bg-[#020716] p-3.5 space-y-3 font-mono text-xs">
+                            <div class="flex items-center justify-between text-slate-400 text-[11px] pb-2 border-b border-[#1E293B]/70">
+                                <span class="font-bold text-white flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-nqd-cyanGlow fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                                    BÌNH LUẬN (${comments.length})
+                                </span>
+                                <button type="button" onclick="togglePhotoCommentSection('${safeId}', event)" class="text-slate-400 hover:text-white text-[10px]">[ ✕ ĐÓNG ]</button>
+                            </div>
+
+                            <!-- Danh sách bình luận -->
+                            <div class="space-y-2 max-h-52 overflow-y-auto pr-1" id="comments-list-${safeId}">
+                                ${comments.length === 0 ? `
+                                    <div class="text-slate-500 text-[11px] py-2.5 text-center italic">Chưa có bình luận nào. Hãy gửi lời nhắn đầu tiên!</div>
+                                ` : comments.map((cmt, cIdx) => `
+                                    <div class="p-2.5 bg-[#050E23] border border-[#1E293B] space-y-1">
+                                        <div class="flex items-center justify-between text-[10px]">
+                                            <span class="text-nqd-acGreen font-bold truncate max-w-[60%]">@${escapeHtml(cmt.author || 'Ẩn danh')}</span>
+                                            <span class="text-slate-400 font-mono text-[9px] shrink-0" title="Thời gian đăng bình luận">${formatCommentTime(cmt.createdAt)}</span>
+                                        </div>
+                                        <p class="text-slate-200 text-xs leading-relaxed break-words font-sans">${escapeHtml(cmt.text || '')}</p>
+                                        <div class="flex items-center justify-between pt-1 border-t border-[#1E293B]/40 text-[10px]">
+                                            <button type="button" onclick="likePhotoComment('${safeId}', ${cIdx}, ${isCloudFlag}, event)" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors cursor-pointer">
+                                                <span>${(cmt.likes || 0) > 0 ? '❤️' : '♡'}</span>
+                                                <span>${(cmt.likes || 0) > 0 ? cmt.likes : 'Thích'}</span>
+                                            </button>
+                                            <button type="button" onclick="deletePhotoComment('${safeId}', ${cIdx}, ${isCloudFlag}, event)" title="Xóa bình luận này" class="text-slate-500 hover:text-rose-400 text-[10px] cursor-pointer">
+                                                ✕
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <!-- Form gửi bình luận -->
+                            <form onsubmit="submitPhotoComment('${safeId}', event, ${isCloudFlag})" class="space-y-1.5 pt-2.5 border-t border-[#1E293B]/70">
+                                <div>
+                                    <input type="text" id="cmt-author-${safeId}" value="${escapeHtml(savedCommentAuthor)}" placeholder="Tên của bạn..." required class="w-full px-2.5 py-1.5 bg-[#030919] border border-[#1E293B] focus:border-[#38BDF8] text-white text-[11px] outline-none">
+                                </div>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="cmt-text-${safeId}" placeholder="Nhập bình luận..." required class="flex-1 px-2.5 py-1.5 bg-[#030919] border border-[#1E293B] focus:border-[#38BDF8] text-white text-[11px] outline-none">
+                                    <button type="submit" class="px-4 py-1.5 bg-[#0066FF] hover:bg-[#0052CC] border border-[#38BDF8] text-white font-bold text-[11px] shrink-0 transition-colors cursor-pointer">
+                                        GỬI ↵
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </article>
                 `;
@@ -3355,73 +3704,90 @@
             const reactionsMap = getUserReactionsMap();
             const prevReaction = reactionsMap[photoId];
 
-            const target = localArchiveItems.find(x => x.id === photoId);
-            const cloudTarget = cloudArchiveItems.find(x => x.id === photoId);
+            const target = localArchiveItems.find(x => String(x.id) === String(photoId));
+            const cloudTarget = cloudArchiveItems.find(x => String(x.id) === String(photoId));
             const itemRef = target || cloudTarget;
+            if (!itemRef) return;
 
-            let nextLikes = Number(currentLikes) || 0;
-            let toastMsg = "";
+            let likes = Number(itemRef.likes) || Number(currentLikes) || 0;
 
-            // Khởi tạo reactions object nếu chưa có
-            if (itemRef) {
-                if (!itemRef.reactions || Object.keys(itemRef.reactions).length === 0) {
-                    itemRef.reactions = {};
-                    if (nextLikes >= 2) {
-                        itemRef.reactions['👍'] = Math.ceil(nextLikes / 2);
-                        itemRef.reactions['❤️'] = Math.floor(nextLikes / 2);
-                    } else if (nextLikes === 1) {
-                        itemRef.reactions[prevReaction || '❤️'] = 1;
-                    }
+            // Khởi tạo reactions object an toàn tuyệt đối
+            if (!itemRef.reactions || typeof itemRef.reactions !== 'object' || Array.isArray(itemRef.reactions)) {
+                itemRef.reactions = {};
+            }
+            if (Object.keys(itemRef.reactions).length === 0) {
+                if (likes >= 2) {
+                    itemRef.reactions['👍'] = Math.ceil(likes / 2);
+                    itemRef.reactions['❤️'] = Math.floor(likes / 2);
+                } else if (likes === 1) {
+                    itemRef.reactions['❤️'] = 1;
                 }
             }
 
+            let toastMsg = "";
+
             if (prevReaction === emoji) {
-                // Bấm lại đúng emoji đã chọn -> Hủy cảm xúc (quay về Tim ban đầu)
+                // Bấm lại đúng emoji đã chọn -> Hủy cảm xúc (quay về ban đầu)
                 delete reactionsMap[photoId];
-                nextLikes = Math.max(0, nextLikes - 1);
-                if (itemRef && itemRef.reactions) {
-                    itemRef.reactions[emoji] = Math.max(0, (itemRef.reactions[emoji] || 1) - 1);
+                if (itemRef.reactions[emoji]) {
+                    itemRef.reactions[emoji] = Math.max(0, (Number(itemRef.reactions[emoji]) || 1) - 1);
                     if (itemRef.reactions[emoji] <= 0) delete itemRef.reactions[emoji];
                 }
                 toastMsg = "ĐÃ HỦY CẢM XÚC";
             } else if (prevReaction) {
-                // Đổi cảm xúc sang emoji khác -> Số lượng giữ nguyên
+                // Đổi cảm xúc sang emoji khác -> Giảm emoji cũ 1 lượt, tăng emoji mới 1 lượt
                 reactionsMap[photoId] = emoji;
-                if (itemRef && itemRef.reactions) {
-                    itemRef.reactions[prevReaction] = Math.max(0, (itemRef.reactions[prevReaction] || 1) - 1);
+                if (itemRef.reactions[prevReaction]) {
+                    itemRef.reactions[prevReaction] = Math.max(0, (Number(itemRef.reactions[prevReaction]) || 1) - 1);
                     if (itemRef.reactions[prevReaction] <= 0) delete itemRef.reactions[prevReaction];
-                    itemRef.reactions[emoji] = (itemRef.reactions[emoji] || 0) + 1;
                 }
+                itemRef.reactions[emoji] = (Number(itemRef.reactions[emoji]) || 0) + 1;
                 toastMsg = `ĐÃ ĐỔI CẢM XÚC THÀNH ${emoji}`;
             } else {
-                // Thả cảm xúc mới -> Tăng 1 lượt
+                // Thả cảm xúc mới -> Tăng emoji mới 1 lượt
                 reactionsMap[photoId] = emoji;
-                nextLikes = nextLikes + 1;
-                if (itemRef && itemRef.reactions) {
-                    itemRef.reactions[emoji] = (itemRef.reactions[emoji] || 0) + 1;
-                }
+                itemRef.reactions[emoji] = (Number(itemRef.reactions[emoji]) || 0) + 1;
                 toastMsg = `ĐÃ THẢ CẢM XÚC ${emoji}`;
             }
 
+            // TỔNG SỐ LƯỢT LIKE BẮT BUỘC BẰNG TỔNG CỘNG CHÍNH XÁC CỦA CÁC BIỂU TƯỢNG ĐÃ THẢ
+            const nextLikes = Object.values(itemRef.reactions).reduce((sum, v) => sum + (Number(v) || 0), 0);
+            itemRef.likes = nextLikes;
+
             saveUserReactionsMap(reactionsMap);
 
-            // Cập nhật cả 2 mảng local và cloud
+            // Cập nhật đồng bộ cả 2 mảng local và cloud
             if (target) {
                 target.likes = nextLikes;
-                if (itemRef && itemRef.reactions) target.reactions = { ...itemRef.reactions };
+                target.reactions = { ...itemRef.reactions };
             }
             if (cloudTarget) {
                 cloudTarget.likes = nextLikes;
-                if (itemRef && itemRef.reactions) cloudTarget.reactions = { ...itemRef.reactions };
+                cloudTarget.reactions = { ...itemRef.reactions };
             }
 
-            // Đồng bộ Firebase nếu là ảnh Cloud
-            if (isCloud && db && currentUser) {
+            // Lưu vào IndexedDB dự phòng
+            try {
+                openPhotoDB().then(idb => {
+                    if (!idb) return;
+                    const tx = idb.transaction(IDB_STORE, 'readwrite');
+                    const store = tx.objectStore(IDB_STORE);
+                    const req = store.get(photoId);
+                    req.onsuccess = () => {
+                        if (req.result) {
+                            store.put({ ...req.result, likes: nextLikes, reactions: { ...itemRef.reactions } });
+                        }
+                    };
+                }).catch(() => {});
+            } catch (e) {}
+
+            // Đồng bộ Firebase nếu là ảnh Cloud (không chặn currentUser)
+            if (isCloud && db) {
                 try {
-                    const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', photoId);
-                    const updatePayload = { likes: nextLikes };
-                    if (itemRef && itemRef.reactions) updatePayload.reactions = itemRef.reactions;
-                    await updateDoc(docRef, updatePayload);
+                    const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'nqd_photo_archive', String(photoId));
+                    updateDoc(docRef, { likes: nextLikes, reactions: itemRef.reactions }).catch(err => {
+                        console.warn("Cloud reaction sync note:", err);
+                    });
                 } catch (err) {
                     console.warn("Cloud reaction sync note:", err);
                 }
@@ -3433,7 +3799,7 @@
                     type: 'TOGGLE_LIKE', 
                     photoId, 
                     likes: nextLikes,
-                    reactions: itemRef && itemRef.reactions ? itemRef.reactions : null
+                    reactions: itemRef.reactions
                 });
             }
 
@@ -4104,11 +4470,49 @@
                                 if (data.author && data.author.includes('Test User')) return false;
                                 return true;
                             })
-                            .map(docSnap => ({
-                                id: docSnap.id,
-                                isCloud: true,
-                                ...docSnap.data()
-                            }));
+                            .map(docSnap => {
+                                const data = docSnap.data() || {};
+
+                                // Dọn sạch hoàn toàn các bình luận mẫu c1, c2, c3
+                                if (data.comments && Array.isArray(data.comments)) {
+                                    data.comments = data.comments.filter(c => c && c.id !== 'c1' && c.id !== 'c2' && c.id !== 'c3');
+                                } else {
+                                    data.comments = [];
+                                }
+
+                                // Đồng bộ cảm xúc chuẩn xác từ Firestore
+                                let reactions = data.reactions || {};
+                                if (typeof reactions !== 'object' || Array.isArray(reactions)) reactions = {};
+                                else reactions = { ...reactions };
+
+                                let likes = Number(data.likes) || 0;
+                                if (Object.keys(reactions).length === 0) {
+                                    if (likes >= 2) {
+                                        reactions['👍'] = Math.ceil(likes / 2);
+                                        reactions['❤️'] = Math.floor(likes / 2);
+                                    } else if (likes === 1) {
+                                        reactions['❤️'] = 1;
+                                    }
+                                }
+
+                                Object.keys(reactions).forEach(k => {
+                                    if (!reactions[k] || Number(reactions[k]) <= 0) delete reactions[k];
+                                });
+
+                                // Tính lại tổng số likes chuẩn xác từ reactions
+                                const trueLikes = Object.keys(reactions).length > 0
+                                    ? Object.values(reactions).reduce((sum, v) => sum + (Number(v) || 0), 0)
+                                    : (Number(data.likes) || 0);
+
+                                return {
+                                    id: docSnap.id,
+                                    isCloud: true,
+                                    ...data,
+                                    likes: trueLikes,
+                                    reactions: reactions,
+                                    comments: data.comments
+                                };
+                            });
 
                         // Đồng bộ làm sạch IndexedDB trên máy này để không bị giữ lại ảnh đã xóa từ máy khác
                         try {
