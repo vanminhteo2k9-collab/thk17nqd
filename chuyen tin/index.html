@@ -2882,7 +2882,7 @@
         import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getDatabase, ref as rtdbRef, onValue as rtdbOnValue, set as rtdbSet, onDisconnect as rtdbOnDisconnect, remove as rtdbRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+        import { getDatabase, ref as rtdbRef, onValue as rtdbOnValue, set as rtdbSet, onDisconnect as rtdbOnDisconnect, remove as rtdbRemove, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // Cấu hình Firebase chính thức của dự án "chuyentinnqd"
         const VERCEL_FIREBASE_CONFIG = {
@@ -4434,7 +4434,7 @@
                     const el = document.getElementById(id);
                     if (el) {
                         if (id === 'box-online-visitors') {
-                            el.className = "font-mono font-bold text-3xl sm:text-4xl text-white bg-nqd-bgDeep px-4 py-2 border border-nqd-acGreen shadow-[0_0_15px_rgba(16,185,129,0.3)]";
+                            el.className = "font-mono font-bold text-3xl sm:text-4xl text-white bg-nqd-bgDeep px-4 py-2 border border-nqd-acGreen shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center justify-center min-h-[52px]";
                         }
                         el.textContent = validOnline.toLocaleString('vi-VN');
                     }
@@ -4450,7 +4450,7 @@
                     const el = document.getElementById(id);
                     if (el) {
                         if (id === 'box-total-visits') {
-                            el.className = "font-mono font-bold text-3xl sm:text-4xl text-nqd-cyanGlow bg-nqd-bgDeep px-4 py-2 border border-nqd-cyanGlow shadow-[0_0_15px_rgba(0,240,255,0.3)]";
+                            el.className = "font-mono font-bold text-3xl sm:text-4xl text-nqd-cyanGlow bg-nqd-bgDeep px-4 py-2 border border-nqd-cyanGlow shadow-[0_0_15px_rgba(0,240,255,0.3)] flex items-center justify-center min-h-[52px]";
                         }
                         el.textContent = validTotal.toLocaleString('vi-VN');
                     }
@@ -4493,31 +4493,54 @@
                 console.warn("Total visit counter init note:", err);
             }
 
-            // 2. ĐANG TRUY CẬP (CHỈ TÍNH SỐ LƯỢNG THIẾT BỊ DUY NHẤT TẠI MỘT THỜI ĐIỂM, GIẢM NGAY LẬP TỨC KHI XÓA TAB)
+            // 2. ĐANG TRUY CẬP (ĐỒNG BỘ THỜI GIAN THỰC SERVER FIREBASE 100%, CHUẨN XÁC TRÊN MỌI MÁY)
             try {
                 rtdb = getDatabase(app);
                 const connectedRef = rtdbRef(rtdb, ".info/connected");
+                const offsetRef = rtdbRef(rtdb, ".info/serverTimeOffset");
                 const myTabPresenceRef = rtdbRef(rtdb, `presence/${myDeviceId}/${myTabId}`);
                 const allPresenceRef = rtdbRef(rtdb, 'presence');
 
+                // Đồng bộ độ lệch thời gian giữa máy khách và máy chủ Firebase (triệt tiêu 100% lệch đồng hồ giữa các máy)
+                let serverTimeOffset = 0;
+                rtdbOnValue(offsetRef, (snap) => {
+                    serverTimeOffset = typeof snap.val() === 'number' ? snap.val() : 0;
+                });
+
+                let isRtdbConnected = false;
                 rtdbOnValue(connectedRef, (snap) => {
-                    if (snap.val() === true) {
+                    isRtdbConnected = (snap.val() === true);
+                    if (isRtdbConnected) {
                         // onDisconnect của Firebase Server: Khi ngắt kết nối (mất mạng, tắt máy, đóng tab), server tự xóa ngay!
                         rtdbOnDisconnect(myTabPresenceRef).remove();
 
-                        // Ghi nhận tab này đang online
+                        // Ghi nhận tab này đang online với serverTimestamp() chuẩn từ server Firebase
                         rtdbSet(myTabPresenceRef, {
-                            ts: Date.now()
+                            ts: serverTimestamp(),
+                            devId: myDeviceId
                         });
                     }
                 });
 
-                // Heartbeat định kỳ 15 giây duy trì trạng thái online
+                // Heartbeat định kỳ 15 giây duy trì trạng thái online với serverTimestamp
                 const heartbeatTimer = setInterval(() => {
-                    if (rtdb) {
-                        rtdbSet(myTabPresenceRef, { ts: Date.now() }).catch(() => {});
+                    if (rtdb && isRtdbConnected) {
+                        rtdbSet(myTabPresenceRef, {
+                            ts: serverTimestamp(),
+                            devId: myDeviceId
+                        }).catch(() => {});
                     }
                 }, 15000);
+
+                // Khi tab được kích hoạt lại (quay lại tab): làm mới timestamp ngay lập tức
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'visible' && rtdb && isRtdbConnected) {
+                        rtdbSet(myTabPresenceRef, {
+                            ts: serverTimestamp(),
+                            devId: myDeviceId
+                        }).catch(() => {});
+                    }
+                });
 
                 // KHI XÓA TAB / ĐÓNG TRANG (PAGEHIDE, BEFOREUNLOAD): GIẢM TỨC THÌ 0ms
                 const handleTabClose = () => {
@@ -4541,38 +4564,39 @@
                 window.addEventListener('pagehide', handleTabClose);
                 window.addEventListener('beforeunload', handleTabClose);
 
-                // LẮNG NGHE REALTIME TOÀN BỘ SỐ THIẾT BỊ ĐANG TRUY CẬP & BÁO ĐỘNG TỨC THÌ KHI CÓ MÁY VÀO / RA
+                // LẮNG NGHE REALTIME TOÀN BỘ SỐ THIẾT BỊ ĐANG TRUY CẬP (ĐỒNG BỘ 100% GIỮA TẤT CẢ CÁC MÁY)
                 let knownActiveDeviceIds = null;
                 rtdbOnValue(allPresenceRef, (snapshot) => {
                     const data = snapshot.val() || {};
-                    const now = Date.now();
+                    // Thời gian thực chuẩn từ server Firebase (triệt tiêu 100% lệch đồng hồ)
+                    const estimatedServerNow = Date.now() + serverTimeOffset;
                     const currentOnlineDeviceSet = new Set();
 
                     for (const devId in data) {
                         if (!data.hasOwnProperty(devId) || !data[devId]) continue;
                         const tabs = data[devId];
-                        if (typeof tabs !== 'object') continue;
+                        if (typeof tabs !== 'object' || tabs === null) continue;
 
-                        // Thiết bị được tính là đang truy cập nếu có ít nhất 1 tab online trong vòng 35 giây
+                        // Thiết bị được tính là đang truy cập nếu có ít nhất 1 tab online
                         const isDeviceOnline = Object.keys(tabs).some(tid => {
                             const t = tabs[tid];
                             if (!t) return false;
-                            const ts = typeof t.ts === 'number' ? t.ts : (t.lastSeen || 0);
-                            return (now - ts) < 35000;
+                            const ts = typeof t.ts === 'number' ? t.ts : (typeof t.lastSeen === 'number' ? t.lastSeen : null);
+                            // Nếu ts chưa có số (đang được serverTimestamp ghi) -> coi là đang online
+                            if (ts === null) return true;
+                            // Ngưỡng 70s cho phép tối đa 4 nhịp heartbeat 15s (tránh rớt mạng tạm thời hoặc tab mobile ngầm)
+                            const age = estimatedServerNow - ts;
+                            return age < 70000;
                         });
 
                         if (isDeviceOnline) {
                             currentOnlineDeviceSet.add(devId);
                         }
+                    }
 
-                        // Dọn dẹp các tab chết > 45 giây
-                        for (const tid in tabs) {
-                            const t = tabs[tid];
-                            const ts = typeof t?.ts === 'number' ? t.ts : (t?.lastSeen || 0);
-                            if (ts && (now - ts) > 45000) {
-                                rtdbRemove(rtdbRef(rtdb, `presence/${devId}/${tid}`)).catch(() => {});
-                            }
-                        }
+                    // Nếu thiết bị hiện tại đã kết nối Firebase, luôn đảm bảo có mặt trong danh sách online
+                    if (isRtdbConnected) {
+                        currentOnlineDeviceSet.add(myDeviceId);
                     }
 
                     const currentDeviceCount = Math.max(1, currentOnlineDeviceSet.size);
